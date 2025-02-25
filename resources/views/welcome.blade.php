@@ -213,6 +213,10 @@
         </div>
         
         <!-- Loading State -->
+        <div id="loading" class="hidden text-center py-5 animate-in">
+            <div class="spinner mx-auto mb-2"></div>
+            <p class="text-gray-600 dark:text-gray-400">Analyzing delivery history...</p>
+        </div>
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-in" style="animation-delay: 0.2s">
             <!-- Left Panel -->
@@ -269,11 +273,6 @@
 
             <!-- Right Panel -->
             <div class="lg:col-span-2">
-
-                <div id="loading" class="hidden text-center py-10 animate-in">
-                    <div class="spinner mx-auto mb-4"></div>
-                    <p class="text-gray-600 dark:text-gray-400">Analyzing delivery history...</p>
-                </div>
                 <!-- Results Container -->
                 <div id="resultsContainer" class="hidden">
                     <!-- Message Box -->
@@ -548,7 +547,27 @@ function updateUI(data) {
     const messageBox = document.getElementById('messageBox');
 
     // Set rating and UI elements based on success ratio
-    if (successRatio >= 90) {
+
+    if(successRatio == 0){
+        rating.textContent = 'New';
+        ratingMessage.textContent = 'This customer is new and has no delivery history.';
+        riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-gray-500 flex items-center justify-center';
+        riskIndicator.innerHTML = '<i class="fas fa-question-circle mr-2"></i> <span>No Data Available</span>';
+        quoteBox.textContent = '"Reliability is the foundation of trust. This customer\'s no record to speaks volumes."';
+
+        // ratingMessage.textContent = 'This customer has an excellent delivery history.';
+        // riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-green-500 flex items-center justify-center';
+        // riskIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i> <span>Low Fraud Risk</span>';
+
+        messageBox.className = 'bg-green-100 border-l-4 border-green-500 p-4 rounded-xl mb-6 flex items-center gap-4 dark:bg-green-900 dark:border-green-700 animate-in';
+        messageBox.innerHTML = `
+            <i class="fas fa-check-circle text-green-500 text-2xl dark:text-green-300"></i>
+            <div>
+                <strong>Your may trust this Customer:</strong> This customer has no delivery history with a ${successRatio.toFixed(1)}% success rate.
+            </div>
+        `;
+    }
+    else if (successRatio >= 90) {
         rating.textContent = 'Excellent';
         ratingMessage.textContent = 'This customer has an excellent delivery history.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-green-500 flex items-center justify-center';
@@ -890,6 +909,8 @@ document.getElementById('searchButton').addEventListener('click', async function
         return;
     }
 
+    document.getElementById('searchButton').disabled = true;
+
     // Show loading, hide results and empty state
     document.getElementById('loading').classList.remove('hidden');
     document.getElementById('resultsContainer').classList.add('hidden');
@@ -908,6 +929,7 @@ document.getElementById('searchButton').addEventListener('click', async function
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
+        document.getElementById('searchButton').disabled = false;
         const data = response.data;
         
         
