@@ -6,7 +6,8 @@
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5TNKX5N9');</script>
+    })(window,document,'script','dataLayer','GTM-5TNKX5N9');
+    </script>
     <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -351,6 +352,8 @@
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 dark:bg-gray-900 dark:text-gray-100">
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TNKX5N9"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- Header -->
     <header class="bg-white shadow-lg py-4 sticky top-0 z-50 glass-effect dark:bg-gray-800">
         <div class="container mx-auto px-4 flex justify-between items-center">
@@ -748,8 +751,6 @@
         </div>
     </footer>
     <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TNKX5N9"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
