@@ -1,9 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5TNKX5N9');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudShield - Courier Fraud Detection</title>
+    <title>FraudShield - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Courier Fraud Detection</title>
+    <meta name="description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।">
+    <meta name="keywords" content="courier fraud bangladesh, fraud detection system, bangladeshi courier check, courier ফ্রড, কুরিয়ার ফ্রড চেক, কুরিয়ার নাম্বার চেক, courier check bangladesh">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://courier-fraud.laravel.cloud">
+    <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
+    <meta property="og:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
+    <meta property="og:image" content="{{asset('assets/banner.jpg')}}">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="{{asset('assets/banner.jpg')}}">
+    <meta property="twitter:url" content="https://courier-fraud.laravel.cloud">
+    <meta property="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
+    <meta property="twitter:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
+    <meta property="twitter:image" content="{{asset('assets/banner.jpg')}}">
+    
+    <!-- Canonical URL -->
+    <meta rel="canonical" href="https://courier-fraud.laravel.cloud">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{asset('assets/favicon.png')}}">
+    <link rel="apple-touch-icon" href="{{asset('assets/favicon.png')}}">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
+      "url": "https://courier-fraud.laravel.cloud",
+      "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "All",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BDT"
+      },
+      "author": {
+        "@type": "Organization",
+        "name": "Tyrodevs",
+        "url": "https://tyrodevs.com"
+      }
+    }
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -169,6 +222,132 @@
             background-clip: text;
             color: transparent;
         }
+
+        @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .faq-container {
+      max-width: auto;
+      margin: 0 auto;
+      padding: 2rem;
+      font-family: 'Hind Siliguri', 'Bangla', sans-serif;
+    }
+    
+    .faq-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      position: relative;
+    }
+    
+    .faq-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: #2C3E50;
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .faq-title::after {
+      content: "";
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 4px;
+      background: linear-gradient(90deg, #3498DB, #2ECC71);
+      border-radius: 2px;
+    }
+    
+    .faq-description {
+      color: #7F8C8D;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .faq-items {
+      display: grid;
+      gap: 1.25rem;
+    }
+    
+    .faq-item {
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+      border-left: 5px solid #3498DB;
+      animation: fadeIn 0.5s ease forwards;
+      animation-delay: calc(var(--order) * 0.1s);
+      opacity: 0;
+    }
+    
+    .faq-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .faq-question {
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1.125rem;
+      color: #2C3E50;
+    }
+    
+    .faq-answer {
+      padding: 0 1.5rem 1.25rem 1.5rem;
+      color: #5D6D7E;
+      line-height: 1.6;
+    }
+    
+    .faq-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #EBF5FB;
+      color: #3498DB;
+      transition: all 0.3s ease;
+    }
+    
+    /* Dark mode styles */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #1E293B;
+        color: #E5E7EB;
+      }
+      
+      .faq-item {
+        background-color: #2D3748;
+        border-left: 5px solid #38B2AC;
+      }
+      
+      .faq-title {
+        color: #E5E7EB;
+      }
+      
+      .faq-question {
+        color: #E5E7EB;
+      }
+      
+      .faq-answer {
+        color: #CBD5E0;
+      }
+      
+      .faq-icon {
+        background: #2C5282;
+        color: #90CDF4;
+      }
+    }
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 dark:bg-gray-900 dark:text-gray-100">
@@ -191,7 +370,17 @@
             </div>
         </div>
     </header>
-
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</h1>
+            <p class="text-xl mb-6">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।</p>
+            <div class="flex justify-center">
+                <a href="#search-section" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+                    <i class="fas fa-search mr-2"></i> অনুসন্ধান শুরু করুন
+                </a>
+            </div>
+        </div>
+    </section>
     <!-- Main Content -->
     <main class="flex-1 container mx-auto px-4 py-8">
         {{-- <h1 class="text-2xl md:text-2xl font-bold mb-6 text-center animate-in">Courier Fraud Detection System</h1> --}}
@@ -385,6 +574,111 @@
             </div>
         </div>
     </main>
+    <section class="container mx-auto px-4 py-12">
+        <div class="bg-white rounded-xl shadow-custom p-6 dark:bg-gray-800">
+            <h2 class="text-2xl font-bold mb-6 text-center">কেন কুরিয়ার ফ্রড চেক করা প্রয়োজন?</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="p-5 border border-gray-200 rounded-lg text-center">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">ব্যবসা সুরক্ষা</h3>
+                    <p class="text-gray-600 dark:text-gray-400">আপনার ব্যবসাকে সম্ভাব্য কুরিয়ার ফ্রড থেকে রক্ষা করুন। প্রতি মাসে হাজার হাজার টাকা সাশ্রয় করুন।</p>
+                </div>
+                <div class="p-5 border border-gray-200 rounded-lg text-center">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">ডেলিভারি সাফল্য বাড়ান</h3>
+                    <p class="text-gray-600 dark:text-gray-400">বিশ্বস্ত গ্রাহকদের চিহ্নিত করে আপনার ডেলিভারি সাফল্যের হার বাড়ান এবং ব্যবসার লাভ বৃদ্ধি করুন।</p>
+                </div>
+                <div class="p-5 border border-gray-200 rounded-lg text-center">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-history text-2xl text-indigo-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">রিয়েল-টাইম ডাটা</h3>
+                    <p class="text-gray-600 dark:text-gray-400">সর্বাধিক আপডেটেড ডাটা দিয়ে গ্রাহকের আচরণ বিশ্লেষণ করুন এবং সঠিক সিদ্ধান্ত নিন।</p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
+                <h3 class="text-xl font-semibold mb-4">বাংলাদেশে কুরিয়ার ফ্রড সম্পর্কে জানুন</h3>
+                <p class="mb-4">বাংলাদেশে প্রতি বছর হাজার হাজার ব্যবসায়ী কুরিয়ার ফ্রডের শিকার হন। কুরিয়ার ফ্রড হল যখন একজন গ্রাহক ইচ্ছাকৃতভাবে পণ্য গ্রহণ করে না বা ডেলিভারি বাতিল করে। এর ফলে ব্যবসায়ীদের আর্থিক ক্ষতি হয় এবং সময় নষ্ট হয়।</p>
+                <p class="mb-4">FraudShield আপনাকে একটি গ্রাহকের পূর্ববর্তী ডেলিভারি ইতিহাস দেখার সুযোগ দেয়, যাতে আপনি সিদ্ধান্ত নিতে পারেন যে তাদের কাছে পণ্য পাঠানো নিরাপদ কিনা।</p>
+                <p>আমাদের সিস্টেম বাংলাদেশের সকল প্রধান কুরিয়ার সার্ভিসের ডাটা ব্যবহার করে এবং একটি বিশ্বস্ত ফ্রড স্কোর প্রদান করে।</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="faq-container">
+        <div class="faq-header">
+          <h2 class="faq-title">সাধারণ জিজ্ঞাসা (FAQ)</h2>
+          <p class="faq-description">আপনার FraudShield সম্পর্কিত সব প্রশ্নের উত্তর এখানে পাবেন</p>
+        </div>
+        
+        <div class="faq-items">
+          <div class="faq-item" style="--order: 1">
+            <div class="faq-question">
+              <span>FraudShield কীভাবে কাজ করে?</span>
+              <span class="faq-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="faq-answer">
+              FraudShield বাংলাদেশের বিভিন্ন কুরিয়ার সার্ভিস থেকে ডাটা সংগ্রহ করে এবং ডেলিভারি সাফল্য, বাতিল হার এবং অন্যান্য ফ্যাক্টর ব্যবহার করে ফ্রড স্কোর তৈরি করে। এই স্কোরিং সিস্টেম আপনাকে সঠিক সিদ্ধান্ত নিতে সাহায্য করে।
+            </div>
+          </div>
+          
+          <div class="faq-item" style="--order: 2">
+            <div class="faq-question">
+              <span>FraudShield ব্যবহার করার খরচ কত?</span>
+              <span class="faq-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="faq-answer">
+              FraudShield বর্তমানে বিনামূল্যে ব্যবহার করা যায়। ভবিষ্যতে আমরা প্রিমিয়াম প্ল্যান চালু করব যেখানে আরও উন্নত ফিচার থাকবে। আমাদের লক্ষ্য হল সমস্ত ব্যবসার জন্য একটি সাশ্রয়ী মূল্যের সলিউশন প্রদান করা।
+            </div>
+          </div>
+          
+          <div class="faq-item" style="--order: 3">
+            <div class="faq-question">
+              <span>FraudShield এর ডাটা কতটা নির্ভরযোগ্য?</span>
+              <span class="faq-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="faq-answer">
+              আমরা বাংলাদেশের সকল প্রধান কুরিয়ার সার্ভিস থেকে রিয়েল-টাইম ডাটা সংগ্রহ করি এবং আমাদের এলগরিদম 95% এরও বেশি সঠিকতার সাথে ফ্রড সনাক্ত করতে পারে। আমাদের সিস্টেম নিয়মিত আপডেট হয় নতুন ফ্রড প্যাটার্ন অনুসারে।
+            </div>
+          </div>
+          
+          <div class="faq-item" style="--order: 4">
+            <div class="faq-question">
+              <span>আমি কীভাবে আমার ব্যবসার জন্য FraudShield ইন্টিগ্রেট করতে পারি?</span>
+              <span class="faq-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                  <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+                </svg>
+              </span>
+            </div>
+            <div class="faq-answer">
+              আমাদের API ব্যবহার করে আপনি আপনার ওয়েবসাইট বা অ্যাপে FraudShield ইন্টিগ্রেট করতে পারেন। বিস্তারিত জানতে আমাদের সাথে যোগাযোগ করুন। আমাদের টেকনিক্যাল টিম আপনাকে সম্পূর্ণ ইন্টিগ্রেশন গাইড প্রদান করবে।
+            </div>
+          </div>
+        </div>
+      </section>
 
     <!-- Footer -->
     <footer class="bg-gradient-to-r from-indigo-800 to-purple-800 text-white py-8 mt-auto">
@@ -453,6 +747,10 @@
             </div>
         </div>
     </footer>
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TNKX5N9"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script>
        // Theme Toggle Functionality
@@ -978,6 +1276,116 @@ window.addEventListener('resize', () => {
     if (dataChart) {
         dataChart.resize();
     }
+});
+    </script>
+    <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Set page title based on search results
+    const setDynamicPageTitle = (phoneNumber) => {
+        if (phoneNumber) {
+            document.title = `${phoneNumber} - কুরিয়ার ডেলিভারি হিস্টরি | FraudShield`;
+            
+            // Update meta description
+            let metaDescription = document.querySelector('meta[name="description"]');
+            if (metaDescription) {
+                metaDescription.setAttribute('content', `${phoneNumber} নম্বরের কুরিয়ার ডেলিভারি হিস্টরি এবং ফ্রড রিস্ক রিপোর্ট। FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।`);
+            }
+        }
+    };
+    
+    // Handle search button click
+    const searchButton = document.getElementById('searchButton');
+    const phoneInput = document.getElementById('phoneInput');
+    
+    if (searchButton && phoneInput) {
+        searchButton.addEventListener('click', function() {
+            const phoneNumber = phoneInput.value.trim();
+            if (phoneNumber) {
+                setDynamicPageTitle(phoneNumber);
+                
+                // Add phone number to URL for shareable links
+                const url = new URL(window.location);
+                url.searchParams.set('phone', phoneNumber);
+                window.history.pushState({}, '', url);
+            }
+        });
+        
+        // Check URL parameters on page load
+        const urlParams = new URLSearchParams(window.location.search);
+        const phoneParam = urlParams.get('phone');
+        if (phoneParam) {
+            phoneInput.value = phoneParam;
+            searchButton.click(); // Trigger search
+        }
+    }
+    
+    // Add structured breadcrumbs for search results
+    const addBreadcrumbs = (phoneNumber) => {
+        if (!phoneNumber) return;
+        
+        const breadcrumbsData = {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "হোম",
+                    "item": "https://courier-fraud.laravel.cloud"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "কুরিয়ার চেক",
+                    "item": "https://courier-fraud.laravel.cloud/check"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": `${phoneNumber} নম্বর চেক`,
+                    "item": `https://courier-fraud.laravel.cloud/check?phone=${phoneNumber}`
+                }
+            ]
+        };
+        
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.text = JSON.stringify(breadcrumbsData);
+        document.head.appendChild(script);
+    };
+    
+    // Implement smooth scrolling for better UX
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+    const questions = document.querySelectorAll('.faq-question');
+      
+      questions.forEach(question => {
+        question.addEventListener('click', () => {
+          const answer = question.nextElementSibling;
+          const icon = question.querySelector('.faq-icon svg');
+          
+          if (answer.style.display === 'none' || !answer.style.display) {
+            answer.style.display = 'block';
+            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>';
+          } else {
+            answer.style.display = 'none';
+            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
+          }
+        });
+      });
 });
     </script>
 </body>
