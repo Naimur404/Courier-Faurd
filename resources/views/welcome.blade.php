@@ -371,7 +371,10 @@
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <div class="text-xl font-bold">
-                    <span class="gradient-text">Fraud</span><span class="text-gray-800 dark:text-white">Shield</span>
+                    <a href="/"> <!-- Corrected href attribute -->
+                        <span class="gradient-text">Fraud</span>
+                        <span class="text-gray-800 dark:text-white">Shield</span>
+                    </a>
                 </div>
             </div>
             <div class="flex items-center gap-4">
@@ -384,7 +387,7 @@
     </header>
     <section class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</h1>
+            <h1 class="text-3xl md:text-4xl font-bold mb-4">কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</h1>
             <p class="text-xl mb-6">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।</p>
             <div class="flex justify-center">
                 <a href="#search-section" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
@@ -1314,27 +1317,27 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('searchButton');
     const phoneInput = document.getElementById('phoneInput');
     
-    if (searchButton && phoneInput) {
-        searchButton.addEventListener('click', function() {
-            const phoneNumber = phoneInput.value.trim();
-            if (phoneNumber) {
-                setDynamicPageTitle(phoneNumber);
+    // if (searchButton && phoneInput) {
+    //     searchButton.addEventListener('click', function() {
+    //         const phoneNumber = phoneInput.value.trim();
+    //         if (phoneNumber) {
+    //             setDynamicPageTitle(phoneNumber);
                 
-                // Add phone number to URL for shareable links
-                const url = new URL(window.location);
-                url.searchParams.set('phone', phoneNumber);
-                window.history.pushState({}, '', url);
-            }
-        });
+    //             // Add phone number to URL for shareable links
+    //             const url = new URL(window.location);
+    //             url.searchParams.set('phone', phoneNumber);
+    //             window.history.pushState({}, '', url);
+    //         }
+    //     });
         
-        // Check URL parameters on page load
-        const urlParams = new URLSearchParams(window.location.search);
-        const phoneParam = urlParams.get('phone');
-        if (phoneParam) {
-            phoneInput.value = phoneParam;
-            searchButton.click(); // Trigger search
-        }
-    }
+    //     // Check URL parameters on page load
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     const phoneParam = urlParams.get('phone');
+    //     if (phoneParam) {
+    //         phoneInput.value = phoneParam;
+    //         searchButton.click(); // Trigger search
+    //     }
+    // }
     
     // Add structured breadcrumbs for search results
     const addBreadcrumbs = (phoneNumber) => {
