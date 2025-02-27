@@ -1237,10 +1237,10 @@ document.getElementById('searchButton').addEventListener('click', async function
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
-        document.getElementById('searchButton').disabled = false;
+       
         const data = response.data;
         
-        
+        document.getElementById('searchButton').disabled = false;
         // For demo purposes, use sample data
         // const data = sampleData;
         
@@ -1253,7 +1253,13 @@ document.getElementById('searchButton').addEventListener('click', async function
     } catch (error) {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('emptyState').classList.remove('hidden');
-        alert('Error fetching data. Please try again.');
+        Toastify({
+  text: "Error fetching data. Please try again.",
+  className: "error",
+  style: {
+    background: "linear-gradient(to right, red, red)",
+  }
+}).showToast();
         console.error('Error:', error);
     }
 });

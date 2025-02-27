@@ -28,6 +28,8 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+    'token' => env('COURIER_TOKEN'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
