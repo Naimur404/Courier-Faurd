@@ -358,6 +358,60 @@
         color: #90CDF4;
       }
     }
+
+    /* Additional CSS for rating and review system */
+.rating-star {
+    transition: transform 0.1s ease-in-out;
+}
+
+.rating-star:hover {
+    transform: scale(1.2);
+}
+
+/* Animation for the new review being added */
+@keyframes highlight {
+    0% { background-color: rgba(99, 102, 241, 0.1); }
+    100% { background-color: transparent; }
+}
+
+#reviewsList > div:first-child {
+    animation: highlight 2s ease-out;
+}
+
+/* Modal animation */
+#ratingModal {
+    transition: opacity 0.3s ease;
+}
+
+#ratingModal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#ratingModal:not(.hidden) {
+    opacity: 1;
+}
+
+#ratingModal > div {
+    transition: transform 0.3s ease;
+    transform: scale(0.9);
+}
+
+#ratingModal:not(.hidden) > div {
+    transform: scale(1);
+}
+
+/* Make reviews section responsive */
+@media (max-width: 640px) {
+    #customerReviewsSection h2, 
+    #customerReviewsSection button {
+        font-size: 0.95rem;
+    }
+    
+    #addReviewBtn {
+        padding: 0.5rem 0.75rem;
+    }
+}
     </style>
 </head>
 <body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 dark:bg-gray-900 dark:text-gray-100">
@@ -564,6 +618,88 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Rating and Comment Modal -->
+<div id="ratingModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-bold">Rate This Customer</h3>
+        <button id="closeRatingModal" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      
+      <p class="text-gray-600 dark:text-gray-300 mb-4">
+        Share your experience with <span id="ratingPhoneNumber" class="font-medium"></span>
+      </p>
+      
+      <form id="ratingForm">
+        <div class="mb-4">
+            <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="ownNumber">
+              আপনার নম্বর
+            </label>
+            <input type="text" id="ownNumber" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="আপনার নম্বর লিখুন" required>
+          </div>
+
+        <div class="mb-4">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="userName">
+            আপনার নাম
+          </label>
+          <input type="text" id="userName" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="আপনার নাম লিখুন" required>
+        </div>
+        
+        <div class="mb-4">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+            রেটিং দিন
+          </label>
+          <div class="flex space-x-2 text-2xl">
+            <i class="far fa-star cursor-pointer hover:text-yellow-500 rating-star" data-rating="1"></i>
+            <i class="far fa-star cursor-pointer hover:text-yellow-500 rating-star" data-rating="2"></i>
+            <i class="far fa-star cursor-pointer hover:text-yellow-500 rating-star" data-rating="3"></i>
+            <i class="far fa-star cursor-pointer hover:text-yellow-500 rating-star" data-rating="4"></i>
+            <i class="far fa-star cursor-pointer hover:text-yellow-500 rating-star" data-rating="5"></i>
+          </div>
+          <input type="hidden" id="ratingValue" value="0" required>
+        </div>
+        
+        <div class="mb-6">
+          <label class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2" for="userComment">
+            আপনার মন্তব্য
+          </label>
+          <textarea id="userComment" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="আপনার অভিজ্ঞতা শেয়ার করুন" rows="3" required></textarea>
+        </div>
+        
+        <div class="text-right">
+          <button type="submit" class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:opacity-90 transition duration-300">
+            <i class="fas fa-paper-plane mr-2"></i> জমা দিন
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Customer Reviews Section (To be added to the resultsContainer) -->
+  <div id="customerReviewsSection" class="bg-white rounded-xl shadow-custom p-6 dark:bg-gray-800 mt-6 animate-in" style="animation-delay: 0.3s">
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-xl font-bold flex items-center">
+        <i class="fas fa-comments mr-2 text-indigo-600"></i>
+        গ্রাহক রিভিউ
+      </h2>
+      <button id="addReviewBtn" class="bg-indigo-100 text-indigo-700 px-4 py-2 rounded-lg font-medium hover:bg-indigo-200 transition duration-300 dark:bg-indigo-900 dark:text-indigo-300 dark:hover:bg-indigo-800">
+        <i class="fas fa-plus mr-2"></i> নতুন রিভিউ
+      </button>
+    </div>
+    
+    <div id="noReviewsMsg" class="text-center py-10 text-gray-500 dark:text-gray-400">
+      <i class="fas fa-comment-slash text-4xl mb-4"></i>
+      <p>এই নাম্বারের জন্য কোন রিভিউ নেই</p>
+      <p class="text-sm mt-2">প্রথম রিভিউ দিয়ে অন্যদের সাহায্য করুন</p>
+    </div>
+    
+    <div id="reviewsList" class="space-y-4 hidden">
+      <!-- Reviews will be populated dynamically here -->
+    </div>
+  </div>
                 </div>
                 
                 <!-- Empty State -->
@@ -882,7 +1018,7 @@ function updateUI(data) {
         rating.textContent = 'Excellent';
         ratingMessage.textContent = 'This customer has an excellent delivery history.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-green-500 flex items-center justify-center';
-        riskIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i> <span>Low Fraud Risk</span>';
+        riskIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i> <span>Low Risk</span>';
         quoteBox.textContent = '"Reliability is the foundation of trust. This customer\'s excellent record speaks volumes."';
 
         messageBox.className = 'bg-green-100 border-l-4 border-green-500 p-4 rounded-xl mb-6 flex items-center gap-4 dark:bg-green-900 dark:border-green-700 animate-in';
@@ -896,7 +1032,7 @@ function updateUI(data) {
         rating.textContent = 'Good';
         ratingMessage.textContent = 'This customer has a good delivery history with a few cancellations.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-yellow-500 flex items-center justify-center';
-        riskIndicator.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i> <span>Medium Fraud Risk</span>';
+        riskIndicator.innerHTML = '<i class="fas fa-exclamation-circle mr-2"></i> <span>Medium Risk</span>';
         quoteBox.textContent = '"Trust but verify. While the history is mostly good, occasional issues suggest caution."';
 
         messageBox.className = 'bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-xl mb-6 flex items-center gap-4 dark:bg-yellow-900 dark:border-yellow-700 animate-in';
@@ -910,7 +1046,7 @@ function updateUI(data) {
         rating.textContent = 'Poor';
         ratingMessage.textContent = 'This customer has a concerning number of cancelled orders.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-red-500 flex items-center justify-center';
-        riskIndicator.innerHTML = '<i class="fas fa-times-circle mr-2"></i> <span>High Fraud Risk</span>';
+        riskIndicator.innerHTML = '<i class="fas fa-times-circle mr-2"></i> <span>High Risk</span>';
         quoteBox.textContent = '"Past behavior predicts future actions. The high cancellation rate signals significant risk."';
 
         messageBox.className = 'bg-red-100 border-l-4 border-red-500 p-4 rounded-xl mb-6 flex items-center gap-4 dark:bg-red-900 dark:border-red-700 animate-in';
@@ -1405,6 +1541,339 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         });
       });
+});
+    </script>
+    <script>
+
+        // Rating and comment system functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Add the customer reviews section to resultsContainer
+    const resultsContainer = document.getElementById('resultsContainer');
+    if (resultsContainer) {
+        // Check if the customerReviewsSection is already appended
+        if (!document.getElementById('customerReviewsSection')) {
+            // Append after the chart and table container
+            const customerReviewsSection = document.createElement('div');
+            customerReviewsSection.innerHTML = document.getElementById('customerReviewsSection').outerHTML;
+            resultsContainer.appendChild(customerReviewsSection);
+        }
+    }
+
+    // Rating stars functionality
+    const ratingStars = document.querySelectorAll('.rating-star');
+    ratingStars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            document.getElementById('ratingValue').value = rating;
+            
+            // Update star display
+            ratingStars.forEach(s => {
+                const starRating = parseInt(s.getAttribute('data-rating'));
+                if (starRating <= rating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                    s.classList.add('text-yellow-500');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.remove('text-yellow-500');
+                    s.classList.add('far');
+                }
+            });
+        });
+    });
+
+    // Open rating modal
+    const addReviewBtn = document.getElementById('addReviewBtn');
+    const ratingModal = document.getElementById('ratingModal');
+    
+    if (addReviewBtn) {
+        addReviewBtn.addEventListener('click', function() {
+            // Set the current phone number in the modal
+            const phoneNumber = document.getElementById('phoneInput').value;
+            document.getElementById('ratingPhoneNumber').textContent = phoneNumber;
+            
+            // Show modal
+            ratingModal.classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('ratingForm').reset();
+            ratingStars.forEach(s => {
+                s.classList.remove('fas');
+                s.classList.remove('text-yellow-500');
+                s.classList.add('far');
+            });
+            document.getElementById('ratingValue').value = 0;
+        });
+    }
+
+    // Close rating modal
+    const closeRatingModal = document.getElementById('closeRatingModal');
+    if (closeRatingModal) {
+        closeRatingModal.addEventListener('click', function() {
+            ratingModal.classList.add('hidden');
+        });
+    }
+
+    // Click outside to close modal
+    window.addEventListener('click', function(event) {
+        if (event.target === ratingModal) {
+            ratingModal.classList.add('hidden');
+        }
+    });
+
+    // Handle form submission
+    const ratingForm = document.getElementById('ratingForm');
+    if (ratingForm) {
+        ratingForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const phoneNumber = document.getElementById('phoneInput').value;
+            const ownNumber = document.getElementById('ownNumber').value;
+
+            const userName = document.getElementById('userName').value;
+            const rating = document.getElementById('ratingValue').value;
+            const comment = document.getElementById('userComment').value;
+            
+            if (!phoneNumber || !userName || rating === '0' || !comment) {
+                Toastify({
+                    text: "সব তথ্য পূরণ করুন",
+                    className: "error",
+                    style: {
+                        background: "linear-gradient(to right, red, red)",
+                    }
+                }).showToast();
+                return;
+            }
+            
+            try {
+                // Show loading state
+                const submitBtn = ratingForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> অপেক্ষা করুন...';
+                submitBtn.disabled = true;
+                
+                // In a real implementation, you would make an actual API call:
+                
+                const response = await axios.post('/customer-review', {
+                    phone: phoneNumber,
+                    ownNumber: ownNumber,
+                    name: userName,
+                    rating: rating,
+                    comment: comment
+                }, {
+                    headers: {
+                        'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+                // Simulate API call delay
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // Add the new review to the UI
+                addReviewToUI({
+                    name: userName,
+                    rating: parseInt(rating),
+                    comment: comment,
+                    date: new Date().toISOString()
+                });
+                
+                // Hide modal
+                ratingModal.classList.add('hidden');
+                
+                // Show success message
+                Toastify({
+                    text: "আপনার রিভিউ সফলভাবে যোগ করা হয়েছে!",
+                    className: "success",
+                    style: {
+                        background: "linear-gradient(to right, #10b981, #059669)",
+                    }
+                }).showToast();
+                
+                // Reset form and button
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+                ratingForm.reset();
+                
+            } catch (error) {
+                console.error('Error submitting review:', error);
+                
+                Toastify({
+                    text: error.response?.data?.message || "কিছু ভুল হয়েছে। আবার চেষ্টা করুন।",
+                    className: "error",
+                    style: {
+                        background: "linear-gradient(to right, red, red)",
+                    }
+                }).showToast();
+                
+                // Reset button
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+                ratingForm.reset();
+            }
+        });
+    }
+    
+    // Function to fetch reviews when a phone number is searched
+    const searchButton = document.getElementById('searchButton');
+    if (searchButton) {
+        const originalSearchBtnClick = searchButton.onclick;
+        
+        searchButton.onclick = async function(event) {
+            // Call the original click handler
+            if (originalSearchBtnClick) {
+                originalSearchBtnClick.call(this, event);
+            }
+            
+            const phoneNumber = document.getElementById('phoneInput').value;
+            if (!phoneNumber) return;
+            
+            try {
+                // In a real implementation, you would fetch reviews:
+
+                const response = await axios.get(`/customer-reviews/${phoneNumber}`, {
+                    headers: {
+                        'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+                const reviews = response.data.data;
+               
+                // displayReviews(reviews);
+                
+                // For demo, simulate fetching reviews after a delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Sample reviews data (for demo purposes)
+                const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
+                
+                if (hasReviews) {
+                    const sampleReviews = [
+                        {
+                            name: "রফিক হোসেন",
+                            rating: 5,
+                            comment: "খুব ভালো মানের পণ্য। সময়মতো পেমেন্ট করেন। আমি ৫ বার ডেলিভারি দিয়েছি, প্রতিবারই কোন সমস্যা ছিল না।",
+                            date: "2024-10-15T10:30:00"
+                        },
+                        {
+                            name: "আবিদ হাসান",
+                            rating: 4,
+                            comment: "ভালো কাস্টমার। পণ্য নিয়ে কোন কমপ্লেইন নেই। পেমেন্ট নিয়মিত করেন।",
+                            date: "2024-09-20T14:45:00"
+                        }
+                    ];
+                    
+                    // Display the reviews
+                    displayReviews(reviews);
+                } else {
+                    // No reviews found
+                    document.getElementById('noReviewsMsg').classList.remove('hidden');
+                    document.getElementById('reviewsList').classList.add('hidden');
+                }
+                
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                // Show no reviews message
+                document.getElementById('noReviewsMsg').classList.remove('hidden');
+                document.getElementById('reviewsList').classList.add('hidden');
+            }
+        };
+    }
+    
+    // Function to display reviews
+    function displayReviews(reviews) {
+        const reviewsList = document.getElementById('reviewsList');
+        const noReviewsMsg = document.getElementById('noReviewsMsg');
+        
+        if (!reviews || reviews.length === 0) {
+            noReviewsMsg.classList.remove('hidden');
+            reviewsList.classList.add('hidden');
+            return;
+        }
+        
+        // Hide no reviews message and show reviews list
+        noReviewsMsg.classList.add('hidden');
+        reviewsList.classList.remove('hidden');
+        
+        // Clear previous reviews
+        reviewsList.innerHTML = '';
+        
+        // Add each review
+        reviews.forEach(review => {
+            const reviewElement = createReviewElement(review);
+            reviewsList.appendChild(reviewElement);
+        });
+    }
+    
+    // Function to create a review element
+    function createReviewElement(review) {
+        const reviewDiv = document.createElement('div');
+        reviewDiv.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
+        
+        // Format date
+        const reviewDate = new Date(review.created_at);
+        const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Generate star rating HTML
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= review.rating) {
+                starsHtml += '<i class="fas fa-star text-yellow-500"></i>';
+            } else {
+                starsHtml += '<i class="far fa-star text-gray-400"></i>';
+            }
+        }
+
+      // Create a function to mask the phone number
+function maskPhoneNumber(phone) {
+    if (!phone || phone.length < 4) return phone;
+    
+    // Keep the first 3 digits and last 2 digits visible
+    const firstPart = phone.substring(0, 3);
+    const lastPart = phone.substring(phone.length - 2);
+    
+    // Replace the middle with asterisks
+    const maskedPart = '*'.repeat(phone.length - 5);
+    
+    return firstPart + maskedPart + lastPart;
+}
+
+// Then update your HTML template
+reviewDiv.innerHTML = `
+    <div class="flex justify-between items-start mb-2">
+        <div>
+            <h4 class="font-semibold">${review.name} (${maskPhoneNumber(review.commenter_phone)})</h4>
+            <div class="text-sm text-yellow-500 my-1">
+                ${starsHtml}
+            </div>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">
+            ${formattedDate}
+        </div>
+    </div>
+    <p class="text-gray-700 dark:text-gray-300">${review.comment}</p>
+`;
+        
+        return reviewDiv;
+    }
+    
+    // Function to add a new review to the UI
+    function addReviewToUI(review) {
+        const reviewsList = document.getElementById('reviewsList');
+        const noReviewsMsg = document.getElementById('noReviewsMsg');
+        
+        // Hide no reviews message and show reviews list
+        noReviewsMsg.classList.add('hidden');
+        reviewsList.classList.remove('hidden');
+        
+        // Create and add the new review to the top of the list
+        const reviewElement = createReviewElement(review);
+        reviewsList.insertBefore(reviewElement, reviewsList.firstChild);
+    }
 });
     </script>
 </body>
