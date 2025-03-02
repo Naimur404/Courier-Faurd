@@ -1741,9 +1741,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 await new Promise(resolve => setTimeout(resolve, 2000));
                 
                 // Sample reviews data (for demo purposes)
-                const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
+                // const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
                 
-                if (hasReviews) {
+                if (reviews.length > 0) {
                     const sampleReviews = [
                         {
                             name: "রফিক হোসেন",
