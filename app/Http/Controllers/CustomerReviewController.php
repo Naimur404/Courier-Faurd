@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Models\CustomerReview;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CustomerReviewController extends Controller
 {
@@ -12,7 +13,14 @@ class CustomerReviewController extends Controller
     {
         $request->validate([
             'phone' => 'required|numeric',
-            'ownNumber' => 'required|numeric|unique:customer_reviews,commenter_phone',
+            'ownNumber' => [
+                'required',
+                'numeric',
+                Rule::unique('customer_reviews', 'commenter_phone')
+                    ->where(function ($query) use ($request) {
+                        return $query->where('phone', $request->phone);
+                    })
+            ],
             'name' => 'required|string',
             'rating' => 'required|numeric',
             'comment' => 'required|string',
@@ -31,7 +39,7 @@ class CustomerReviewController extends Controller
 
         return response()->json([
             'message' => 'Customer review created successfully',
-            'data' => [$customerReview],
+            'data' => $customerReview,
         ]);
     }
 

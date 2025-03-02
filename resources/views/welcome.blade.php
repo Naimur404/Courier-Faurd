@@ -1671,12 +1671,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
                 // Add the new review to the UI
-                addReviewToUI({
-                    name: userName,
-                    rating: parseInt(rating),
-                    comment: comment,
-                    date: new Date().toISOString()
-                });
+                const reviews = response.data.data;
+                addReviewToUI(reviews);
                 
                 // Hide modal
                 ratingModal.classList.add('hidden');
