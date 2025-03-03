@@ -10,12 +10,21 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
     <style>
         :root {
             --primary: #4f46e5;
             --primary-dark: #4338ca;
             --primary-light: #eef2ff;
-            --success: #10b981;
+            --secondary: #10b981;
+            --secondary-light: #d1fae5;
             --danger: #ef4444;
             --warning: #f59e0b;
             --dark: #1e293b;
@@ -32,9 +41,9 @@
         
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9;
+            background-color: #f8fafc;
             color: #334155;
-            line-height: 1.5;
+            line-height: 1.6;
         }
         
         .container {
@@ -47,19 +56,19 @@
         .card {
             background-color: white;
             border-radius: 1rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 5px 15px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03), 0 5px 10px rgba(0, 0, 0, 0.02);
             overflow: hidden;
             transition: transform 0.2s, box-shadow 0.2s;
         }
         
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06), 0 10px 25px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 10px 25px rgba(0, 0, 0, 0.03);
         }
         
         .header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
         
         .header-logo {
@@ -71,6 +80,11 @@
             justify-content: center;
             background-color: var(--primary-light);
             border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .header-logo:hover {
+            transform: rotate(5deg) scale(1.05);
         }
         
         .header-logo svg {
@@ -82,11 +96,11 @@
         .title {
             font-size: 2.25rem;
             font-weight: 700;
-            color: var(--primary);
             margin-bottom: 0.5rem;
             background: linear-gradient(to right, var(--primary), #818cf8);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            letter-spacing: -0.025em;
         }
         
         .subtitle {
@@ -154,7 +168,7 @@
             border-radius: 0.75rem;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
             gap: 0.5rem;
         }
         
@@ -166,11 +180,13 @@
         .btn-primary:hover {
             background: linear-gradient(to right, var(--primary-dark), #6366f1);
             box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            transform: translateY(-1px);
         }
         
         .btn-primary:disabled {
             opacity: 0.7;
             cursor: not-allowed;
+            transform: none;
         }
         
         .btn-block {
@@ -207,51 +223,162 @@
             color: white;
         }
         
-        .table-container {
-            overflow-x: auto;
+        /* Data visualization improvements */
+        .data-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+            margin-bottom: 1rem;
+            overflow: hidden;
+            transition: all 0.2s;
+            border: 1px solid var(--border);
         }
         
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
+        .data-card:hover {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-light);
         }
         
-        thead th {
-            padding: 1rem 1.5rem;
-            font-size: 0.75rem;
+        .data-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            background-color: #fafafa;
+        }
+        
+        .data-card-title {
             font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--gray);
-            background-color: #f8fafc;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
+            font-size: 1rem;
+            color: var(--dark);
         }
         
-        tbody td {
-            padding: 1.25rem 1.5rem;
+        .data-card-subtitle {
             font-size: 0.875rem;
-            border-bottom: 1px solid var(--border);
+            color: var(--gray);
         }
         
-        tr:last-child td {
-            border-bottom: none;
+        .data-card-body {
+            padding: 1.25rem;
         }
         
-        tbody tr:hover {
-            background-color: #f8fafc;
+        .data-field {
+            margin-bottom: 0.5rem;
+        }
+        
+        .data-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--gray);
+            display: block;
+        }
+        
+        .data-value {
+            font-size: 1rem;
+            color: var(--dark);
+            font-weight: 500;
         }
         
         .json-data {
             font-family: 'Fira Code', monospace;
-            font-size: 0.75rem;
+            font-size: 0.875rem;
             padding: 1rem;
-            background-color: #f1f5f9;
+            background-color: #f9fafb;
             border-radius: 0.5rem;
             max-height: 150px;
             overflow-y: auto;
             color: #334155;
+            border: 1px solid #f1f5f9;
+            white-space: pre-wrap;
+        }
+        
+        .json-data::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .json-data::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .json-data::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 6px;
+        }
+        
+        .status-tag {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-success {
+            background-color: var(--secondary-light);
+            color: var(--secondary);
+        }
+        
+        .status-warning {
+            background-color: #fef3c7;
+            color: var(--warning);
+        }
+        
+        .status-error {
+            background-color: #fee2e2;
+            color: var(--danger);
+        }
+        
+        .data-metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .metric-card {
+            flex: 1;
+            min-width: 120px;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #f1f5f9;
+            transition: all 0.2s;
+        }
+        
+        .metric-card:hover {
+            background-color: var(--primary-light);
+            border-color: var(--primary-light);
+        }
+        
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .metric-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .ratio-bar {
+            height: 8px;
+            background-color: #f1f5f9;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+        }
+        
+        .ratio-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), #818cf8);
+            border-radius: 4px;
         }
         
         .empty-state {
@@ -291,67 +418,218 @@
             }
         }
         
-        /* Pagination styles */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-            gap: 0.5rem;
-        }
-        
-        .pagination-info {
-            font-size: 0.875rem;
-            color: var(--gray);
-            margin: 0 1rem;
-        }
-        
-        .pagination-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 2.5rem;
-            height: 2.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border);
-            background-color: white;
+        /* DataTables customization */
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter,
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_processing,
+        .dataTables_wrapper .dataTables_paginate {
             color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .dataTables_wrapper .dataTables_length select,
+        .dataTables_wrapper .dataTables_filter input {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            margin-left: 0.5rem;
+        }
+        
+        .dataTables_wrapper .dataTables_filter input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            min-width: 2rem;
+            padding: 0.375rem 0.75rem;
+            margin: 0 0.25rem;
+            border-radius: 0.5rem;
+            color: var(--dark) !important;
+            border: 1px solid var(--border) !important;
+            background: white;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            color: white !important;
+            border: 1px solid var(--primary) !important;
+            background: var(--primary) !important;
+        }
+        
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            color: var(--primary) !important;
+            border: 1px solid var(--primary-light) !important;
+            background: var(--primary-light) !important;
+        }
+        
+        /* Custom table styling */
+        table.dataTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        
+        table.dataTable thead th {
+            background-color: #f8fafc;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid #e2e8f0;
+            padding: 1rem;
+        }
+        
+        table.dataTable tbody td {
+            padding: 1rem;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+        
+        table.dataTable tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        
+        /* Expandable JSON preview */
+        .json-preview {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .json-preview-toggle {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background-color: #f1f5f9;
+            border-radius: 0.25rem;
+            color: var(--primary);
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s;
+            margin-bottom: 0.5rem;
         }
         
-        .pagination-button:hover {
+        .json-preview-toggle:hover {
             background-color: var(--primary-light);
-            color: var(--primary);
-            border-color: var(--primary-light);
-        }
-        
-        .pagination-button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background-color: #f8fafc;
-        }
-        
-        .pagination-button.active {
-            background-color: var(--primary);
-            color: white;
-            border-color: var(--primary);
         }
         
         /* Responsive adjustments */
         @media (max-width: 768px) {
             .card-section {
-                padding: 1.5rem;
+                padding: 1.25rem;
+            }
+            
+            .card-section-header {
+                padding: 1.25rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
             }
             
             .title {
                 font-size: 1.75rem;
             }
             
-            .pagination {
-                flex-wrap: wrap;
+            .data-metrics {
+                flex-direction: column;
             }
+            
+            .metric-card {
+                min-width: 100%;
+            }
+            
+            .json-data {
+                max-height: 100px;
+                font-size: 0.75rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .card-section {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 1.5rem;
+            }
+            
+            .header-logo {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .header-logo svg {
+                width: 30px;
+                height: 30px;
+            }
+        }
+        
+        /* Modern Display for JSON Data */
+        .json-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+            overflow: hidden;
+        }
+        
+        .json-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .json-card-header {
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .json-card-title {
+            font-weight: 500;
+            font-size: 0.875rem;
+            color: var(--dark);
+        }
+        
+        .json-card-body {
+            padding: 0;
+            position: relative;
+        }
+        
+        .json-pretty {
+            margin: 0;
+            padding: 0.75rem;
+            background-color: #ffffff;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            color: #374151;
+        }
+        
+        .json-key {
+            color: #8b5cf6;
+            font-weight: 500;
+        }
+        
+        .json-string {
+            color: #10b981;
+        }
+        
+        .json-number {
+            color: #3b82f6;
+        }
+        
+        .json-boolean {
+            color: #f59e0b;
+        }
+        
+        .json-null {
+            color: #ef4444;
         }
     </style>
 </head>
@@ -370,7 +648,7 @@
 
         <div class="card" x-data="customerApp()">
             <div class="card-section">
-                <form @submit.prevent="fetchCustomers" class="space-y-4">
+                <form @submit.prevent="authenticate" class="space-y-4">
                     <div class="form-group">
                         <label for="token" class="form-label">Access Token</label>
                         <div class="input-group">
@@ -410,71 +688,29 @@
                 </form>
             </div>
 
-            <!-- Customer Data Table (shown if data exists) -->
-            <div x-show="customers.length > 0" x-cloak>
+            <!-- Customer Data Table (shown if authenticated) -->
+            <div x-show="isAuthenticated" x-cloak>
                 <div class="card-section-header">
                     <h2 class="section-title">Customer Data</h2>
-                    <span class="badge">
-                        <span>Total records:</span>
-                        <span x-text="customers.length" class="ml-1"></span>
+                    <span class="badge" id="total-records">
+                        <span>Loading...</span>
                     </span>
                 </div>
                 
-                <div class="table-container">
-                    <table>
+                <div class="card-section">
+                    <table id="customers-table" class="display responsive nowrap w-full" style="width:100%">
                         <thead>
                             <tr>
+                                <th>ID</th>
                                 <th>Phone</th>
                                 <th>Count</th>
                                 <th>Data</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <template x-for="customer in paginatedCustomers" :key="customer.id">
-                                <tr>
-                                    <td class="font-medium" x-text="formatPhone(customer.phone)"></td>
-                                    <td x-text="customer.count"></td>
-                                    <td>
-                                        <template x-if="customer.data">
-                                            <div>
-                                                <pre class="json-data" x-text="formatJson(customer.data)"></pre>
-                                            </div>
-                                        </template>
-                                        <template x-if="!customer.data">
-                                            <span class="text-gray italic">No data</span>
-                                        </template>
-                                    </td>
-                                </tr>
-                            </template>
+                            <!-- Data will be loaded by DataTables -->
                         </tbody>
                     </table>
-                </div>
-                
-                <!-- Pagination Controls -->
-                <div class="pagination" x-show="totalPages > 1">
-                    <button 
-                        class="pagination-button" 
-                        @click="goToPage(currentPage - 1)" 
-                        :disabled="currentPage === 1"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    
-                    <div class="pagination-info">
-                        Page <span x-text="currentPage"></span> of <span x-text="totalPages"></span>
-                    </div>
-                    
-                    <button 
-                        class="pagination-button"
-                        @click="goToPage(currentPage + 1)"
-                        :disabled="currentPage === totalPages"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
                 </div>
             </div>
 
@@ -493,40 +729,21 @@
         function customerApp() {
             return {
                 token: '',
-                customers: [],
                 isLoading: false,
                 errorMessage: '',
+                isAuthenticated: false,
                 showEmptyState: false,
-                currentPage: 1,
-                itemsPerPage: 5,
+                dataTable: null,
                 
-                get totalPages() {
-                    return Math.ceil(this.customers.length / this.itemsPerPage);
-                },
-                
-                get paginatedCustomers() {
-                    const start = (this.currentPage - 1) * this.itemsPerPage;
-                    const end = start + this.itemsPerPage;
-                    return this.customers.slice(start, end);
-                },
-                
-                goToPage(page) {
-                    if (page >= 1 && page <= this.totalPages) {
-                        this.currentPage = page;
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
-                },
-                
-                fetchCustomers() {
+                authenticate() {
                     this.isLoading = true;
                     this.errorMessage = '';
                     this.showEmptyState = false;
-                    this.currentPage = 1;
                     
                     // Get CSRF token
                     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                     
-                    axios.post('/customer-list', {
+                    axios.post('/authenticate', {
                         token: this.token
                     }, {
                         headers: {
@@ -538,10 +755,14 @@
                     .then(response => {
                         this.isLoading = false;
                         if (response.data.success) {
-                            this.customers = response.data.customers;
-                            this.showEmptyState = this.customers.length === 0;
+                            this.isAuthenticated = true;
+                            
+                            // Initialize DataTable after a short delay to ensure the DOM is updated
+                            setTimeout(() => {
+                                this.initDataTable();
+                            }, 100);
                         } else {
-                            this.errorMessage = response.data.message || 'An error occurred';
+                            this.errorMessage = response.data.message || 'Authentication failed';
                         }
                     })
                     .catch(error => {
@@ -549,7 +770,74 @@
                         if (error.response && error.response.data && error.response.data.message) {
                             this.errorMessage = error.response.data.message;
                         } else {
-                            this.errorMessage = 'An error occurred while fetching data';
+                            this.errorMessage = 'Authentication failed';
+                        }
+                    });
+                },
+                
+                initDataTable() {
+                    // If DataTable is already initialized, destroy it first
+                    if (this.dataTable) {
+                        this.dataTable.destroy();
+                    }
+                    
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    const self = this;
+                    
+                    // Initialize DataTable with server-side processing
+                    this.dataTable = $('#customers-table').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        responsive: true,
+                        ajax: {
+                            url: '/customer-data',
+                            type: 'POST',
+                            data: function(d) {
+                                d.token = self.token;
+                                return d;
+                            },
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken
+                            },
+                            error: function(xhr) {
+                                self.errorMessage = 'Error loading data. Please try again.';
+                                if (xhr.responseJSON && xhr.responseJSON.message) {
+                                    self.errorMessage = xhr.responseJSON.message;
+                                }
+                            },
+                            dataSrc: function(json) {
+                                if (json.recordsTotal === 0) {
+                                    self.showEmptyState = true;
+                                }
+                                
+                                // Update total records badge
+                                document.getElementById('total-records').innerText = 'Total records: ' + json.recordsTotal;
+                                
+                                return json.data;
+                            }
+                        },
+                        columns: [
+                            { data: 'id' },
+                            { 
+                                data: 'phone',
+                                render: function(data) {
+                                    return self.formatPhone(data);
+                                }
+                            },
+                            { data: 'count' },
+                            { 
+                                data: 'data',
+                                render: function(data) {
+                                    if (!data) return '<span class="text-gray italic">No data</span>';
+                                    return '<pre class="json-data">' + self.formatJson(data) + '</pre>';
+                                }
+                            }
+                        ],
+                        order: [[0, 'asc']],
+                        pageLength: 10,
+                        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                        language: {
+                            processing: '<div class="flex justify-center p-4"><svg class="spinner h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg></div>'
                         }
                     });
                 },
@@ -566,7 +854,7 @@
                 },
                 
                 formatPhone(phone) {
-                    // Format phone number as needed
+                    // Format phone number
                     if (!phone) return '';
                     // Basic international format
                     return phone.replace(/(\d{2})(\d{3})(\d{3})(\d{4})/, '+$1 $2 $3 $4');
