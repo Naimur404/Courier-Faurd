@@ -995,7 +995,7 @@ function updateUI(data) {
 
     // Set rating and UI elements based on success ratio
 
-    if(successRatio == 0){
+    if(successRatio == 0 && summary.total_parcel == 0) {
         rating.textContent = 'New';
         ratingMessage.textContent = 'This customer is new and has no delivery history.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-gray-500 flex items-center justify-center';
