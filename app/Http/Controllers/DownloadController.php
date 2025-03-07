@@ -27,7 +27,9 @@ class DownloadController extends Controller
     
     public function download()
     {
-        AppDownloadTrack::track(request()->ip());
+        AppDownloadTrack::create([
+           "ip_address" => request()->ip()
+        ]);
 
         $file = public_path('assets/FraudShield.apk');
         
