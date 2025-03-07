@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourierController;
 use App\Http\Controllers\CustomerReviewController;
+use App\Http\Controllers\DownloadController;
 use App\Http\Middleware\VerifyRequestOrigin;
 
 Route::get('/', function () {
@@ -21,3 +22,7 @@ Route::post('/customer-data', [CourierController::class, 'getCustomerData']);
 
 // Keep the original route for backward compatibility
 Route::post('/customer-list', [CourierController::class, 'list']);
+
+
+Route::get('/download', [DownloadController::class, 'index']);
+Route::get('/download-apk', [DownloadController::class, 'download'])->name('download.apk');
