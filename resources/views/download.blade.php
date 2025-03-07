@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Download Our App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
@@ -115,32 +116,38 @@
         }
 
         .home-button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
-  }
-  
-  .home-button {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    color: #6f42c1;
-    padding: 8px 20px;
-    border-radius: 30px;
-    text-decoration: none;
-    font-weight: 500;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-  }
-  
-  .home-button:hover {
-    background: #6f42c1;
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .home-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #6f42c1;
+            padding: 8px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .home-button:hover {
+            background: #6f42c1;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Add loading spinner styles */
+        .spinner-border {
+            display: none;
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -149,7 +156,7 @@
           <i class="fas fa-home"></i>
           <span>হোম পেজ</span>
         </a>
-      </div>
+    </div>
     <div class="container mt-5">
         <div class="card download-card">
             <div class="card-header text-center">
@@ -179,14 +186,16 @@
                 
                 <div class="row align-items-center justify-content-center my-4">
                     <div class="col-md-6 mb-3 mb-md-0">
-                        <a href="{{ route('download.apk') }}" class="btn btn-primary download-btn">
+                        <button id="downloadBtn" class="btn btn-primary download-btn">
+                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             <i class="fas fa-download me-2"></i> Download APK
-                        </a>
+                        </button>
                     </div>
                     <div class="col-md-6">
                         <div class="qr-code-container">
                             <div class="card p-3 qr-card">
-                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('download.apk')) }}" 
+                                <!-- Update the QR code to point to the download intent endpoint -->
+                                <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ urlencode(route('track.download.intent')) }}" 
                                      alt="QR Code for Download" class="img-fluid">
                                 <div class="mt-2 small text-muted">Scan to download</div>
                             </div>
@@ -227,5 +236,46 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Add the AJAX download script -->
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Show loading spinner
+            const spinner = this.querySelector('.spinner-border');
+            spinner.style.display = 'inline-block';
+            this.disabled = true;
+            
+            // First, track the intent
+            fetch('{{ route("track.download.intent") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Then initiate the actual download with the tracking ID
+                    window.location.href = '{{ route("download.apk") }}?track_id=' + data.track_id;
+                    
+                    // Reset button after a short delay
+                    setTimeout(() => {
+                        spinner.style.display = 'none';
+                        this.disabled = false;
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Reset button on error
+                spinner.style.display = 'none';
+                this.disabled = false;
+            });
+        });
+    </script>
 </body>
 </html>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class AppDownloadTrack extends Model
 {
-    protected $fillable = ['ip_address'];
+    protected $fillable = ['ip_address', 'status', 'completed_at'];
 
     public static function track($ipAddress)
 {
