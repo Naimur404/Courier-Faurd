@@ -113,9 +113,43 @@
             color: #6f42c1;
             margin-right: 10px;
         }
+
+        .home-button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .home-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #6f42c1;
+    padding: 8px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  
+  .home-button:hover {
+    background: #6f42c1;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
     </style>
 </head>
 <body>
+    <div class="home-button-container">
+        <a href="https://courier-fraud.laravel.cloud" class="home-button">
+          <i class="fas fa-home"></i>
+          <span>হোম পেজ</span>
+        </a>
+      </div>
     <div class="container mt-5">
         <div class="card download-card">
             <div class="card-header text-center">
