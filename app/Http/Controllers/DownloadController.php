@@ -10,17 +10,15 @@ class DownloadController extends Controller
 {
     public function index()
     {
-        // Get the download count
-        $downloadCount = AppDownloadTrack::count();
+        // Count only completed downloads
+        $downloadCount = AppDownloadTrack::where('status', 'completed')->count();
         
         // Get the last download time
-        $lastDownload = AppDownloadTrack::latest('created_at')->first();
-        $lastDownloadTime = null;
-        
-        if ($lastDownload) {
-            // Format the last download time nicely
-            $lastDownloadTime = $lastDownload->created_at->diffForHumans();
-        }
+        $lastDownload = AppDownloadTrack::where('status', 'completed')
+            ->latest('created_at')
+            ->first();
+            
+        $lastDownloadTime = $lastDownload ? $lastDownload->created_at->diffForHumans() : null;
         
         return view('download', compact('downloadCount', 'lastDownloadTime'));
     }
