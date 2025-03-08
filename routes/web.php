@@ -25,7 +25,7 @@ Route::post('/customer-list', [CourierController::class, 'list']);
 
 
 Route::get('/download', [DownloadController::class, 'index']);
-// Route::get('/download-apk', [DownloadController::class, 'download'])->name('download.apk');
+Route::get('/download-apk', [DownloadController::class, 'download2'])->name('download.apk2');
 
 Route::post('/track-download-intent', [DownloadController::class, 'trackIntent'])->name('track.download.intent');
 Route::get('/download-app', [DownloadController::class, 'download'])->name('download.apk');

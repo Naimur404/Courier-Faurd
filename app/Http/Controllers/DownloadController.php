@@ -54,4 +54,21 @@ class DownloadController extends Controller
             'Content-Type' => 'application/vnd.android.package-archive'
         ]);
     }
+
+    public function download2()
+    {
+        // Update the existing record if a track_id is provided
+       
+            AppDownloadTrack::create([
+                    'status' => 'completed',
+                    'completed_at' => now(),
+                    'ip_address' => request()->ip()
+                ]);
+        
+        $file = public_path('assets/FraudShield.apk');
+        
+        return response()->download($file, 'FraudShield.apk', [
+            'Content-Type' => 'application/vnd.android.package-archive'
+        ]);
+    }
 }

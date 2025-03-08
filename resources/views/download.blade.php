@@ -177,7 +177,7 @@
                     
                     <div class="flex-1 flex flex-col items-center">
                         <div class="p-2 bg-white rounded-xl mb-3 transform transition hover:rotate-3 hover:scale-105 duration-300">
-                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data={{ urlencode(route('track.download.intent')) }}" 
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data={{ urlencode(route('download.apk2')) }}" 
                                  alt="QR Code for Download" class="w-32 h-32">
                         </div>
                         <p class="text-gray-400 text-sm">Or scan this QR code with your device</p>
