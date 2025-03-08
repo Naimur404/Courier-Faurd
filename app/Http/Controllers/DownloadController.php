@@ -58,12 +58,19 @@ class DownloadController extends Controller
     public function download2()
     {
         // Update the existing record if a track_id is provided
-       
+       $checkIp = AppDownloadTrack::where('ip_address', request()->ip())->first();
+        if ($checkIp) {
+            $checkIp->update([
+                'status' => 'completed',
+                'completed_at' => now()
+            ]);
+        } else {
             AppDownloadTrack::create([
-                    'status' => 'completed',
-                    'completed_at' => now(),
-                    'ip_address' => request()->ip()
-                ]);
+                'status' => 'completed',
+                'completed_at' => now(),
+                'ip_address' => request()->ip()
+            ]);
+        }
         
         $file = public_path('assets/FraudShield.apk');
         
