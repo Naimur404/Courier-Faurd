@@ -12,5 +12,8 @@ class Customer extends Model
         'phone',
         'count',
         'data',
+        'search_by',
+        'ip_address',
+        'last_searched_at',
     ];
 }

@@ -704,6 +704,9 @@
                                 <th>ID</th>
                                 <th>Phone</th>
                                 <th>Count</th>
+                                <th>Search By</th>
+                                <th>Ip Address</th>
+                                <th>Last Searched at</th>
                                 <th>Data</th>
                             </tr>
                         </thead>
@@ -825,6 +828,9 @@
                                 }
                             },
                             { data: 'count' },
+                            { data: 'search_by' },
+                            { data: 'ip_address' },
+                            { data: 'last_searched_at' },
                             { 
                                 data: 'data',
                                 render: function(data) {
