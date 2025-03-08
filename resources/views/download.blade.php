@@ -85,24 +85,26 @@
 </head>
 <body class="bg-dark-950 text-gray-100 min-h-screen">
     <!-- Home button -->
-    <div class="bg-black py-3 px-4 flex justify-center">
-        <a href="https://courier-fraud.laravel.cloud" class="flex items-center gap-2 px-5 py-1.5 text-sm font-medium text-white bg-white/10 rounded-full transition-all duration-300 hover:bg-white/20">
-            <i class="fas fa-home"></i>
-            <span>হোম পেজ</span>
-        </a>
-    </div>
+  
     
     <!-- Hero Section with gradient background -->
     <section class="relative overflow-hidden">
+        
         <!-- Top gradient background -->
         <div class="absolute inset-0 bg-gradient-to-b from-primary-800/20 to-transparent pointer-events-none"></div>
-        
+    
         <!-- Animated background elements -->
         <div class="absolute top-20 left-10 w-64 h-64 bg-primary-600/10 rounded-full blur-3xl animate-pulse-slow"></div>
         <div class="absolute top-40 right-10 w-72 h-72 bg-primary-800/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
-        
+        <div class="bg-dark-950 py-3 px-4 flex justify-center">
+            <a href="https://courier-fraud.laravel.cloud" class="flex items-center gap-2 px-5 py-1.5 text-sm font-medium text-white bg-white/10 rounded-full transition-all duration-300 hover:bg-white/20">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+        </div>
         <!-- Hero content -->
         <div class="relative container mx-auto px-4 pt-24 pb-64 text-center">
+          
             <div class="flex flex-col items-center">
                 <!-- App logo -->
                 <div class="relative mb-6 animate-float">
