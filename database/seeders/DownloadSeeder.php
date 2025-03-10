@@ -2,13 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\Customer;
+use App\Models\AppDownloadTrack;
+use App\Models\DownloadTracker;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
-class CustomerSeeder extends Seeder
+class DownloadSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -18,7 +19,7 @@ class CustomerSeeder extends Seeder
         $this->command->info('Starting Customer seeder...');
         
         // Path to the CSV file
-        $csvFile = database_path('customer.csv');
+        $csvFile = database_path('analytics_data.csv');
         
         // Check if file exists
         if (!file_exists($csvFile)) {
@@ -56,7 +57,7 @@ class CustomerSeeder extends Seeder
                 $customerData = $this->processCustomerData($data);
                 
                 // Create customer record
-                Customer::create($customerData);
+                AppDownloadTrack::create($customerData);
                 
                 $count++;
                 
@@ -67,7 +68,7 @@ class CustomerSeeder extends Seeder
             }
             
             DB::commit();
-            $this->command->info("Customer seeding completed. Total records: $count");
+            $this->command->info("Download seeding completed. Total records: $count");
             
         } catch (\Exception $e) {
             DB::rollBack();
@@ -97,42 +98,20 @@ class CustomerSeeder extends Seeder
                     // $result['id'] = $value;
                     break;
                     
-                case 'phone':
-                    $result['phone'] = $value;
-                    break;
-                    
-                case 'count':
-                    $result['count'] = (int) $value;
-                    break;
-                    
-                case 'data':
-                    // Handle JSON data
-                    try {
-                        // If it's a JSON string, decode it
-                        if (!empty($value) && $this->isJson($value)) {
-                            $result['data'] = $value;
-                        } else {
-                            $result['data'] = $value;
-                        }
-                    } catch (\Exception $e) {
-                        $result['data'] = $value;
-                    }
-                    break;
-                    
-                case 'search_by':
-                    $result['search_by'] = $value;
-                    break;
-                    
                 case 'ip_address':
                     $result['ip_address'] = $value;
                     break;
+
+                    case 'status':
+                        $result['status'] = $value;
+                        break;
                     
-                case 'last_searched_at':
+                case 'completed_at':
                     // Convert date string to proper datetime format
                     try {
-                        $result['last_searched_at'] = !empty($value) ? Carbon::parse($value) : null;
+                        $result['completed_at'] = !empty($value) ? Carbon::parse($value) : null;
                     } catch (\Exception $e) {
-                        $result['last_searched_at'] = null;
+                        $result['completed_at'] = null;
                     }
                     break;
                     
@@ -161,23 +140,12 @@ class CustomerSeeder extends Seeder
         if (!isset($result['updated_at'])) {
             $result['updated_at'] = now();
         }
+        // if (!isset($result['track_id'])) {
+        //     $result['track_id'] = rand(1,6);
+        // }
+        
         
         return $result;
     }
     
-    /**
-     * Check if a string is valid JSON
-     *
-     * @param string $string
-     * @return bool
-     */
-    private function isJson($string)
-    {
-        if (!is_string($string)) {
-            return false;
-        }
-        
-        json_decode($string);
-        return json_last_error() === JSON_ERROR_NONE;
-    }
 }
