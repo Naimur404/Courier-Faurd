@@ -108,20 +108,13 @@ class DownloadController extends Controller
         ]);
     }
     
-    /**
-     * Download CSV data
-     * 
-     * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\StreamedResponse
-     */
     public function downloadCsv(Request $request)
     {
-        // Get the tracking ID from the request
         $trackId = $request->query('track_id');
         
         // Update the download status if tracking ID exists
         if ($trackId) {
-            DownloadTracker::where('track_id', $trackId)
+            AppDownloadTrack::where('track_id', $trackId)
                 ->where('status', 'intent')
                 ->update([
                     'status' => 'completed',
@@ -129,6 +122,20 @@ class DownloadController extends Controller
                 ]);
         }
         
+        // Handle based on requested file type
+        $fileType = $request->query('file_type', 'customer'); // Default to customer file
+        
+        if ($fileType === 'customer') {
+            return $this->downloadCustomerData();
+        } else if ($fileType === 'analytics') {
+            return $this->downloadAnalyticsData();
+        } else {
+            return response()->json(['error' => 'Invalid file type requested'], 400);
+        }
+    }
+    
+    private function downloadCustomerData()
+    {
         // Generate CSV data
         $headers = [
             'Content-Type' => 'text/csv',
@@ -155,7 +162,6 @@ class DownloadController extends Controller
             ]);
             
             // Fetch records from database and add to CSV
-            // Example: Fetch customer data in batches to avoid memory issues
             Customer::chunk(100, function($customers) use ($file) {
                 foreach ($customers as $customer) {
                     fputcsv($file, [
@@ -175,11 +181,52 @@ class DownloadController extends Controller
             fclose($file);
         };
         
-        // Update download count
-        
         return response()->stream($callback, 200, $headers);
     }
     
+    private function downloadAnalyticsData()
+    {
+        // Generate CSV data for analytics
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="analytics_data_'.date('Y-m-d').'.csv"',
+            'Pragma' => 'no-cache',
+            'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
+            'Expires' => '0'
+        ];
+        
+        // Create a streamed response with CSV data
+        $callback = function() {
+            $file = fopen('php://output', 'w');
+            
+            // Add CSV headers for analytics data
+            fputcsv($file, [
+                'ID', 
+                'IP Address', 
+                'Status',
+                'Completed At',
+                'Created At'
+            ]);
+            
+            // Fetch analytics records from database and add to CSV
+            AppDownloadTrack::chunk(100, function($records) use ($file) {
+                foreach ($records as $record) {
+                    fputcsv($file, [
+                        $record->id,
+                        $record->ip_address,
+                        $record->status,
+                        $record->completed_at,
+                        $record->created_at
+                    ]);
+                }
+            });
+            
+            // Close the file
+            fclose($file);
+        };
+        
+        return response()->stream($callback, 200, $headers);
+    }
     /**
      * Update download count in the system
      */

@@ -668,9 +668,6 @@
                         <span class="absolute inset-0 rounded-md bg-gradient-to-r from-indigo-400/40 to-indigo-600/40 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
                     </span>
                 </button>
-                <span class="badge" id="total-records">
-                    <span>Loading...</span>
-                </span>
             </div>
         </div>
 
@@ -924,13 +921,19 @@
                     .then(data => {
                         if (data.success) {
                             // Then initiate the actual CSV download with the tracking ID and token
-                            window.location.href = '/download-csv?track_id=' + data.track_id + '&token=' + encodeURIComponent(document.getElementById('token').value);
-                            
-                            // Reset button after a short delay
-                            setTimeout(() => {
-                                spinner.classList.add('hidden');
-                                this.disabled = false;
-                            }, 2000);
+                            // window.location.href = '/download-csv?track_id=' + data.track_id + '&token=' + encodeURIComponent(document.getElementById('token').value);
+
+                            const track_id = data.track_id;
+        
+        // Use pre-generated route URLs with placeholders
+        const customerUrl = '{{ route("download.csv", ["file_type" => "customer", "track_id" => "__TRACK_ID__"]) }}'.replace('__TRACK_ID__', track_id);
+        const analyticsUrl = '{{ route("download.csv", ["file_type" => "analytics", "track_id" => "__TRACK_ID__"]) }}'.replace('__TRACK_ID__', track_id);
+        
+        window.open(customerUrl, '_blank');
+        
+        setTimeout(function() {
+            window.open(analyticsUrl, '_blank');
+        }, 500);
                         }
                     })
                     .catch(error => {

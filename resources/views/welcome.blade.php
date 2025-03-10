@@ -1873,7 +1873,7 @@ reviewDiv.innerHTML = `
 });
     </script>
     <div class="fixed bottom-8 right-8 z-50">
-        <a href="https://courier-fraud.laravel.cloud/download" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-full font-semibold hover:shadow-lg hover:opacity-90 transition duration-300 shadow-xl animate-pulse">
+        <a href="{{ route('download.page') }}" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-full font-semibold hover:shadow-lg hover:opacity-90 transition duration-300 shadow-xl animate-pulse">
           <i class="fas fa-download"></i>
           <span>অ্যাপ ডাউনলোড করুন</span>
         </a>
