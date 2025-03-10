@@ -29,3 +29,8 @@ Route::get('/download-apk', [DownloadController::class, 'download2'])->name('dow
 
 Route::post('/track-download-intent', [DownloadController::class, 'trackIntent'])->name('track.download.intent');
 Route::get('/download-app', [DownloadController::class, 'download'])->name('download.apk');
+
+Route::post('/track-download-intent', [DownloadController::class, 'trackDownloadIntent'])->name('track.download.intent');
+
+// Download CSV data
+Route::get('/download-csv', [DownloadController::class, 'downloadCsv'])->name('download.csv');

@@ -644,6 +644,34 @@
             </div>
             <h1 class="title">Customer Portal</h1>
             <p class="subtitle">Enter your access token to view customer data</p>
+        </div><div class="card-section-header flex justify-between items-center">
+            <h2 class="section-title">Customer Data</h2>
+            <div class="flex items-center gap-3">
+                <button 
+                    id="downloadBtn" 
+                    class="group relative inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md overflow-hidden transition-all duration-300 hover:bg-indigo-700 hover:shadow-md active:scale-95"
+                    x-show="isAuthenticated"
+                >
+                    <span class="relative z-10 flex items-center">
+                        <svg id="spinner" class="hidden w-4 h-4 mr-2 -ml-1 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                        </svg>
+                        Export CSV
+                    </span>
+                    
+                    <!-- Button hover effect -->
+                    <span class="absolute inset-0 overflow-hidden rounded-md">
+                        <span class="absolute inset-0 rounded-md bg-gradient-to-r from-indigo-400/40 to-indigo-600/40 -translate-x-full group-hover:translate-x-0 transition-transform duration-500"></span>
+                    </span>
+                </button>
+                <span class="badge" id="total-records">
+                    <span>Loading...</span>
+                </span>
+            </div>
         </div>
 
         <div class="card" x-data="customerApp()">
@@ -867,6 +895,51 @@
                 }
             };
         }
+
+
+        document.getElementById('downloadBtn').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Show loading spinner
+                    const spinner = document.getElementById('spinner');
+                    spinner.classList.remove('hidden');
+                    this.disabled = true;
+                    
+                    // Get CSRF token
+                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                    
+                    // First, track the intent
+                    fetch('/track-download-intent', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({
+                            token: document.getElementById('token').value,
+                            format: 'csv'
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Then initiate the actual CSV download with the tracking ID and token
+                            window.location.href = '/download-csv?track_id=' + data.track_id + '&token=' + encodeURIComponent(document.getElementById('token').value);
+                            
+                            // Reset button after a short delay
+                            setTimeout(() => {
+                                spinner.classList.add('hidden');
+                                this.disabled = false;
+                            }, 2000);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Reset button on error
+                        spinner.classList.add('hidden');
+                        this.disabled = false;
+                    });
+                });
     </script>
 </body>
 </html>
