@@ -339,7 +339,7 @@
             .then(data => {
                 if (data.success) {
                     // Then initiate the actual download with the tracking ID
-                    window.location.href = '{{ route("download.apk") }}?track_id=' + data.track_id;
+                    window.location.href = '{{ route("download.apk2") }}?track_id=' + data.track_id;
                     
                     // Reset button after a short delay
                     setTimeout(() => {

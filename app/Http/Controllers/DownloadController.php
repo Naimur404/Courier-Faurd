@@ -58,7 +58,7 @@ class DownloadController extends Controller
         ]);
     }
 
-    public function download2()
+    public function download2(Request $request)
     {
         // Update the existing record if a track_id is provided
        $checkIp = AppDownloadTrack::where('ip_address', request()->ip())->first();
