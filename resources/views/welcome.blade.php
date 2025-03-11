@@ -26,20 +26,20 @@
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://courier-fraud.laravel.cloud">
+    <meta property="og:url" content="https://fraudshieldbd.site">
     <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
     <meta property="og:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
     <meta property="og:image" content="{{asset('assets/banner.jpg')}}">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="{{asset('assets/banner.jpg')}}">
-    <meta property="twitter:url" content="https://courier-fraud.laravel.cloud">
+    <meta property="twitter:url" content="https://fraudshieldbd.site">
     <meta property="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
     <meta property="twitter:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
     <meta property="twitter:image" content="{{asset('assets/banner.jpg')}}">
     
     <!-- Canonical URL -->
-    <meta rel="canonical" href="https://courier-fraud.laravel.cloud">
+    <meta rel="canonical" href="https://fraudshieldbd.site">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{asset('assets/favicon.png')}}">
@@ -51,7 +51,7 @@
       "@context": "https://schema.org",
       "@type": "WebApplication",
       "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
-      "url": "https://courier-fraud.laravel.cloud",
+      "url": "https://fraudshieldbd.site",
       "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "All",
@@ -1487,19 +1487,19 @@ document.addEventListener('DOMContentLoaded', function() {
                     "@type": "ListItem",
                     "position": 1,
                     "name": "হোম",
-                    "item": "https://courier-fraud.laravel.cloud"
+                    "item": "https://fraudshieldbd.site"
                 },
                 {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "কুরিয়ার চেক",
-                    "item": "https://courier-fraud.laravel.cloud/check"
+                    "item": "https://fraudshieldbd.site/check"
                 },
                 {
                     "@type": "ListItem",
                     "position": 3,
                     "name": `${phoneNumber} নম্বর চেক`,
-                    "item": `https://courier-fraud.laravel.cloud/check?phone=${phoneNumber}`
+                    "item": `https://fraudshieldbd.site/check?phone=${phoneNumber}`
                 }
             ]
         };
