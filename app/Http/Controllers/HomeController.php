@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function home(){
         
-        return redirect('https://fraudshieldbd.site');
+        return view('welcome');
     }
 }

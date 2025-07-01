@@ -12,81 +12,117 @@ use Yajra\DataTables\Facades\DataTables;
 
 class CourierController extends Controller
 {
-    public function check(Request $request)
-    {
-        $phone = $request->input('phone');
+   public function check(Request $request)
+{
+    $phone = $request->input('phone');
 
-        $response = Http::withHeaders([
-            'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
-        ])->post('https://bdcourier.com/api/courier-check', [
-            'phone' => $phone,
-        ]);
+    // Get existing customer data before making API call
+    $existingCustomer = Customer::where('phone', $phone)->first();
+    $oldData = null;
+    $oldTotalParcel = 0;
 
-        $responseData = $response->json(); // Get response as array
-        $jsonData = json_encode($responseData); // Convert array to JSON
-
-        $check = Customer::where('phone', $phone)->first();
-
-        if ($check) {
-            $check->update([
-                'search_by' => 'web',
-                'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
-                'count' => $check->count + 1,
-                'data' => $jsonData
-            ]); // Store as JSON
-        } else {
-            Customer::create([
-                'phone' => $phone,
-                'search_by' => 'web',
-                'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
-                'count' => 1,
-                'data' => $jsonData, // Store as JSON
-            ]);
-        }
-
-        return $responseData;
+    if ($existingCustomer && $existingCustomer->data) {
+        $oldData = json_decode($existingCustomer->data, true);
+        $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
     }
 
+    $response = Http::withHeaders([
+        'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
+    ])->post('https://bdcourier.com/api/courier-check', [
+        'phone' => $phone,
+    ]);
 
-    public function checkFromApi(Request $request)
-    {
-        $phone = $request->input('phone');
+    $responseData = $response->json(); // Get response as array
+    $newTotalParcel = $responseData['courierData']['summary']['total_parcel'] ?? 0;
 
-        $response = Http::withHeaders([
-            'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
-        ])->post('https://bdcourier.com/api/courier-check', [
-            'phone' => $phone,
-        ]);
+    // Determine which data to return
+    $dataToReturn = $responseData;
+    $dataToStore = json_encode($responseData);
 
-        $responseData = $response->json(); // Get response as array
-        $jsonData = json_encode($responseData); // Convert array to JSON
-
-        $check = Customer::where('phone', $phone)->first();
-
-        if ($check) {
-            $check->update([
-                'search_by' => 'app',
-                'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
-                'count' => $check->count + 1,
-                'data' => $jsonData
-            ]); // Store as JSON
-            // Store as JSON
-        } else {
-            Customer::create([
-                'phone' => $phone,
-                'search_by' => 'app',
-                'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
-                'count' => 1,
-                'data' => $jsonData, // Store as JSON
-            ]);
-        }
-
-        return $responseData;
+    // If new total parcel is less than old total parcel, return old data
+    if ($oldData && $newTotalParcel < $oldTotalParcel) {
+        $dataToReturn = $oldData;
+        // Still store the new data but return the old one
     }
+
+    // Update or create customer record
+    if ($existingCustomer) {
+        $existingCustomer->update([
+            'search_by' => 'web',
+            'ip_address' => $request->ip(),
+            'last_searched_at' => now(),
+            'count' => $existingCustomer->count + 1,
+            'data' => $dataToStore // Always store the latest API response
+        ]);
+    } else {
+        Customer::create([
+            'phone' => $phone,
+            'search_by' => 'web',
+            'ip_address' => $request->ip(),
+            'last_searched_at' => now(),
+            'count' => 1,
+            'data' => $dataToStore,
+        ]);
+    }
+
+    return $dataToReturn; // Return either old or new data based on total_parcel comparison
+}
+
+public function checkFromApi(Request $request)
+{
+    $phone = $request->input('phone');
+
+    // Get existing customer data before making API call
+    $existingCustomer = Customer::where('phone', $phone)->first();
+    $oldData = null;
+    $oldTotalParcel = 0;
+
+    if ($existingCustomer && $existingCustomer->data) {
+        $oldData = json_decode($existingCustomer->data, true);
+        $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
+    }
+
+    $response = Http::withHeaders([
+        'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
+    ])->post('https://bdcourier.com/api/courier-check', [
+        'phone' => $phone,
+    ]);
+
+    $responseData = $response->json(); // Get response as array
+    $newTotalParcel = $responseData['courierData']['summary']['total_parcel'] ?? 0;
+
+    // Determine which data to return
+    $dataToReturn = $responseData;
+    $dataToStore = json_encode($responseData);
+
+    // If new total parcel is less than old total parcel, return old data
+    if ($oldData && $newTotalParcel < $oldTotalParcel) {
+        $dataToReturn = $oldData;
+        // Still store the new data but return the old one
+    }
+
+    // Update or create customer record
+    if ($existingCustomer) {
+        $existingCustomer->update([
+            'search_by' => 'app',
+            'ip_address' => $request->ip(),
+            'last_searched_at' => now(),
+            'count' => $existingCustomer->count + 1,
+            'data' => $dataToStore // Always store the latest API response
+        ]);
+    } else {
+        Customer::create([
+            'phone' => $phone,
+            'search_by' => 'app',
+            'ip_address' => $request->ip(),
+            'last_searched_at' => now(),
+            'count' => 1,
+            'data' => $dataToStore,
+        ]);
+    }
+
+    return $dataToReturn; // Return either old or new data based on total_parcel comparison
+}
 
     /**
      * Authenticate user by token
