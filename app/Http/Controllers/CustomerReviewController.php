@@ -52,4 +52,40 @@ class CustomerReviewController extends Controller
             'data' => $customerReviews,
         ]);
     }
+
+    /**
+     * Get reviews with additional metadata about reports
+     */
+    public function getReviewsWithReports($phone)
+    {
+        $customerReviews = CustomerReview::where('phone', $phone)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Separate reviews into reports (rating = 1.0) and regular reviews
+        $reports = $customerReviews->where('rating', 1.0)->values()->map(function($review) {
+            // For reports, the structure is:
+            // - phone: the number being reported
+            // - name: name of the person being reported  
+            // - commenter_phone: user ID of who made the report (prefixed with 'user_')
+            // - comment: report details with metadata
+            
+            $review->reported_person_name = $review->name; // Name of person being reported
+            $review->reporter_id = str_replace('user_', '', $review->commenter_phone); // Who made the report
+            return $review;
+        });
+        
+        $regularReviews = $customerReviews->where('rating', '!=', 1.0)->values();
+
+        return response()->json([
+            'message' => 'Customer reviews retrieved successfully',
+            'data' => [
+                'all_reviews' => $customerReviews,
+                'reports' => $reports,
+                'regular_reviews' => $regularReviews,
+                'total_reports' => $reports->count(),
+                'total_reviews' => $customerReviews->count(),
+            ],
+        ]);
+    }
 }

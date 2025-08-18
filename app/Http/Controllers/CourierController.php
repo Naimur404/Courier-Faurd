@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\CustomerReview;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
@@ -65,6 +66,9 @@ class CourierController extends Controller
             ]);
         }
 
+        // Process reports from the API response
+        $this->processReports($responseData, $phone);
+
         return $dataToReturn; // Return either old or new data based on total_parcel comparison
     }
 
@@ -121,7 +125,101 @@ class CourierController extends Controller
             ]);
         }
 
+        // Process reports from the API response
+        $this->processReports($responseData, $phone);
+
         return $dataToReturn; // Return either old or new data based on total_parcel comparison
+    }
+
+    /**
+     * Process reports from API response and store as customer reviews
+     */
+    private function processReports($responseData, $searchedPhone)
+    {
+        // Check if reports exist in the response
+        if (!isset($responseData['reports']) || !is_array($responseData['reports']) || empty($responseData['reports'])) {
+            return;
+        }
+
+        // Find or create the customer record for the searched phone
+        $customer = Customer::where('phone', $searchedPhone)->first();
+        if (!$customer) {
+            // If customer doesn't exist, create one
+            $customer = Customer::create([
+                'phone' => $searchedPhone,
+                'count' => 1,
+                'data' => json_encode([]),
+                'search_by' => 'api',
+                'ip_address' => request()->ip() ?? '127.0.0.1',
+                'last_searched_at' => now(),
+            ]);
+        }
+
+        // Process each report
+        foreach ($responseData['reports'] as $report) {
+            // In the report data:
+            // - 'phone' field contains the phone number being reported (same as searchedPhone)
+            // - 'name' field contains the name of the person being reported
+            // - 'user_id' represents the person who made the report
+            
+            $reportCreatedAt = isset($report['created_at']) ? $report['created_at'] : null;
+            $reportId = isset($report['id']) ? $report['id'] : null;
+            $reportedPhone = $report['phone']; // This is the phone being reported
+            $reportedName = $report['name']; // This is the name of person being reported
+            $reporterUserId = $report['user_id'] ?? null; // This is who made the report
+            
+            // First check if we already have this specific report ID stored
+            if ($reportId) {
+                $existingReviewWithId = CustomerReview::where('phone', $searchedPhone)
+                    ->where('comment', 'LIKE', '%Report ID: ' . $reportId . '%')
+                    ->first();
+                
+                if ($existingReviewWithId) {
+                    continue; // Skip this report as it's already stored
+                }
+            }
+            
+            // Fallback check: if no report ID, check by content and reporter user ID
+            if (!$reportId) {
+                $existingReview = CustomerReview::where('phone', $searchedPhone)
+                    ->where('commenter_phone', $reporterUserId ? 'user_' . $reporterUserId : 'unknown')
+                    ->where('name', $reportedName)
+                    ->where('comment', 'LIKE', '%' . substr($report['details'], 0, 50) . '%')
+                    ->first();
+
+                if ($existingReview) {
+                    continue; // Skip if similar review exists
+                }
+            }
+
+            // Prepare comment with metadata to ensure uniqueness
+            $comment = $report['details'];
+            if ($reportId) {
+                $comment .= " [Report ID: {$reportId}]";
+            }
+            if ($reportCreatedAt) {
+                $comment .= " [Reported on: {$reportCreatedAt}]";
+            }
+            if ($reporterUserId) {
+                $comment .= " [Reporter User ID: {$reporterUserId}]";
+            }
+
+            // Create new customer review from report
+            $review = CustomerReview::create([
+                'phone' => $searchedPhone, // The phone number being reported (target)
+                'commenter_phone' => $reporterUserId ? 'user_' . $reporterUserId : 'unknown', // The person who made the report
+                'customer_id' => $customer->id,
+                'name' => $reportedName, // Name of the person being reported
+                'rating' => 1.0, // Default rating for fraud reports (negative review)
+                'comment' => $comment,
+            ]);
+            
+            // If we want to preserve the original report timestamp, update it after creation
+            if ($reportCreatedAt) {
+                $review->created_at = $reportCreatedAt;
+                $review->save();
+            }
+        }
     }
 
     /**

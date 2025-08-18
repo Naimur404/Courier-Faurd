@@ -1309,6 +1309,87 @@ function updateChart(data) {
     }
 }
 
+ function displayReviews(reviews) {
+        const reviewsList = document.getElementById('reviewsList');
+        const noReviewsMsg = document.getElementById('noReviewsMsg');
+        
+        if (!reviews || reviews.length === 0) {
+            noReviewsMsg.classList.remove('hidden');
+            reviewsList.classList.add('hidden');
+            return;
+        }
+        
+        // Hide no reviews message and show reviews list
+        noReviewsMsg.classList.add('hidden');
+        reviewsList.classList.remove('hidden');
+        
+        // Clear previous reviews
+        reviewsList.innerHTML = '';
+        
+        // Add each review
+        reviews.forEach(review => {
+            const reviewElement = createReviewElement(review);
+            reviewsList.appendChild(reviewElement);
+        });
+    }
+
+
+        // Function to create a review element
+    function createReviewElement(review) {
+        const reviewDiv = document.createElement('div');
+        reviewDiv.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
+        
+        // Format date
+        const reviewDate = new Date(review.created_at);
+        const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        // Generate star rating HTML
+        let starsHtml = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= review.rating) {
+                starsHtml += '<i class="fas fa-star text-yellow-500"></i>';
+            } else {
+                starsHtml += '<i class="far fa-star text-gray-400"></i>';
+            }
+        }
+
+      // Create a function to mask the phone number
+function maskPhoneNumber(phone) {
+    if (!phone || phone.length < 4) return phone;
+    
+    // Keep the first 3 digits and last 2 digits visible
+    const firstPart = phone.substring(0, 3);
+    const lastPart = phone.substring(phone.length - 2);
+    
+    // Replace the middle with asterisks
+    const maskedPart = '*'.repeat(phone.length - 5);
+    
+    return firstPart + maskedPart + lastPart;
+}
+
+// Then update your HTML template
+reviewDiv.innerHTML = `
+    <div class="flex justify-between items-start mb-2">
+        <div>
+            <h4 class="font-semibold">${review.name} (${maskPhoneNumber(review.commenter_phone)})</h4>
+            <div class="text-sm text-yellow-500 my-1">
+                ${starsHtml}
+            </div>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">
+            ${formattedDate}
+        </div>
+    </div>
+    <p class="text-gray-700 dark:text-gray-300">${review.comment}</p>
+`;
+        
+        return reviewDiv;
+    }
+
 // Tab switching functionality
 const tabs = document.querySelectorAll('.tab');
 tabs.forEach(tab => {
@@ -1389,6 +1470,58 @@ document.getElementById('searchButton').addEventListener('click', async function
         
         // Update UI with data
         updateUI(data);
+
+            try {
+                // In a real implementation, you would fetch reviews:
+
+                const response = await axios.get(`/customer-reviews/${phone}`, {
+                    headers: {
+                        'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                });
+                const reviews = response.data.data;
+               
+                // displayReviews(reviews);
+                
+                // For demo, simulate fetching reviews after a delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                // Sample reviews data (for demo purposes)
+                // const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
+                
+                if (reviews.length > 0) {
+                    const sampleReviews = [
+                        {
+                            name: "রফিক হোসেন",
+                            rating: 5,
+                            comment: "খুব ভালো মানের পণ্য। সময়মতো পেমেন্ট করেন। আমি ৫ বার ডেলিভারি দিয়েছি, প্রতিবারই কোন সমস্যা ছিল না।",
+                            date: "2024-10-15T10:30:00"
+                        },
+                        {
+                            name: "আবিদ হাসান",
+                            rating: 4,
+                            comment: "ভালো কাস্টমার। পণ্য নিয়ে কোন কমপ্লেইন নেই। পেমেন্ট নিয়মিত করেন।",
+                            date: "2024-09-20T14:45:00"
+                        }
+                    ];
+                    
+                    // Display the reviews
+                    displayReviews(reviews);
+                } else {
+                    // No reviews found
+                    document.getElementById('noReviewsMsg').classList.remove('hidden');
+                    document.getElementById('reviewsList').classList.add('hidden');
+                }
+                
+            } catch (error) {
+                console.error('Error fetching reviews:', error);
+                // Show no reviews message
+                document.getElementById('noReviewsMsg').classList.remove('hidden');
+                document.getElementById('reviewsList').classList.add('hidden');
+            }
+    
+        
     } catch (error) {
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('emptyState').classList.remove('hidden');
@@ -1708,153 +1841,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 ratingForm.reset();
             }
         });
-    }
-    
-    // Function to fetch reviews when a phone number is searched
-    const searchButton = document.getElementById('searchButton');
-    if (searchButton) {
-        const originalSearchBtnClick = searchButton.onclick;
-        
-        searchButton.onclick = async function(event) {
-            // Call the original click handler
-            if (originalSearchBtnClick) {
-                originalSearchBtnClick.call(this, event);
-            }
-            
-            const phoneNumber = document.getElementById('phoneInput').value;
-            if (!phoneNumber) return;
-            
-            try {
-                // In a real implementation, you would fetch reviews:
-
-                const response = await axios.get(`/customer-reviews/${phoneNumber}`, {
-                    headers: {
-                        'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-                const reviews = response.data.data;
-               
-                // displayReviews(reviews);
-                
-                // For demo, simulate fetching reviews after a delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Sample reviews data (for demo purposes)
-                // const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
-                
-                if (reviews.length > 0) {
-                    const sampleReviews = [
-                        {
-                            name: "রফিক হোসেন",
-                            rating: 5,
-                            comment: "খুব ভালো মানের পণ্য। সময়মতো পেমেন্ট করেন। আমি ৫ বার ডেলিভারি দিয়েছি, প্রতিবারই কোন সমস্যা ছিল না।",
-                            date: "2024-10-15T10:30:00"
-                        },
-                        {
-                            name: "আবিদ হাসান",
-                            rating: 4,
-                            comment: "ভালো কাস্টমার। পণ্য নিয়ে কোন কমপ্লেইন নেই। পেমেন্ট নিয়মিত করেন।",
-                            date: "2024-09-20T14:45:00"
-                        }
-                    ];
-                    
-                    // Display the reviews
-                    displayReviews(reviews);
-                } else {
-                    // No reviews found
-                    document.getElementById('noReviewsMsg').classList.remove('hidden');
-                    document.getElementById('reviewsList').classList.add('hidden');
-                }
-                
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
-                // Show no reviews message
-                document.getElementById('noReviewsMsg').classList.remove('hidden');
-                document.getElementById('reviewsList').classList.add('hidden');
-            }
-        };
-    }
-    
-    // Function to display reviews
-    function displayReviews(reviews) {
-        const reviewsList = document.getElementById('reviewsList');
-        const noReviewsMsg = document.getElementById('noReviewsMsg');
-        
-        if (!reviews || reviews.length === 0) {
-            noReviewsMsg.classList.remove('hidden');
-            reviewsList.classList.add('hidden');
-            return;
-        }
-        
-        // Hide no reviews message and show reviews list
-        noReviewsMsg.classList.add('hidden');
-        reviewsList.classList.remove('hidden');
-        
-        // Clear previous reviews
-        reviewsList.innerHTML = '';
-        
-        // Add each review
-        reviews.forEach(review => {
-            const reviewElement = createReviewElement(review);
-            reviewsList.appendChild(reviewElement);
-        });
-    }
-    
-    // Function to create a review element
-    function createReviewElement(review) {
-        const reviewDiv = document.createElement('div');
-        reviewDiv.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
-        
-        // Format date
-        const reviewDate = new Date(review.created_at);
-        const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        // Generate star rating HTML
-        let starsHtml = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= review.rating) {
-                starsHtml += '<i class="fas fa-star text-yellow-500"></i>';
-            } else {
-                starsHtml += '<i class="far fa-star text-gray-400"></i>';
-            }
-        }
-
-      // Create a function to mask the phone number
-function maskPhoneNumber(phone) {
-    if (!phone || phone.length < 4) return phone;
-    
-    // Keep the first 3 digits and last 2 digits visible
-    const firstPart = phone.substring(0, 3);
-    const lastPart = phone.substring(phone.length - 2);
-    
-    // Replace the middle with asterisks
-    const maskedPart = '*'.repeat(phone.length - 5);
-    
-    return firstPart + maskedPart + lastPart;
-}
-
-// Then update your HTML template
-reviewDiv.innerHTML = `
-    <div class="flex justify-between items-start mb-2">
-        <div>
-            <h4 class="font-semibold">${review.name} (${maskPhoneNumber(review.commenter_phone)})</h4>
-            <div class="text-sm text-yellow-500 my-1">
-                ${starsHtml}
-            </div>
-        </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400">
-            ${formattedDate}
-        </div>
-    </div>
-    <p class="text-gray-700 dark:text-gray-300">${review.comment}</p>
-`;
-        
-        return reviewDiv;
     }
     
     // Function to add a new review to the UI
