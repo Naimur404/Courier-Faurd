@@ -233,6 +233,46 @@
             color: transparent;
         }
 
+        /* Search Statistics Animations */
+        .stat-card {
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideInUp 0.6s ease-out forwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .stat-number {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-number {
+            transform: scale(1.1);
+        }
+
+        .stat-icon {
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover .stat-icon {
+            transform: rotate(10deg) scale(1.1);
+        }
+
+        /* Pulse animation for loading states */
+        .pulse-slow {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
         @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
@@ -450,8 +490,107 @@
             </div>
         </div>
     </section>
+    
+    <!-- Search Statistics Section -->
+    <section class="bg-white dark:bg-gray-800 py-8 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                    <i class="fas fa-chart-bar mr-2 text-indigo-600"></i>
+                    সার্চ পরিসংখ্যান
+                </h2>
+                <p class="text-gray-600 dark:text-gray-400">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Last Hour Searches -->
+                <div class="stat-card bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-xl p-6 border border-blue-200 dark:border-blue-700 hover:shadow-lg transition duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="stat-icon p-3 bg-blue-500 text-white rounded-full">
+                            <i class="fas fa-clock text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="stat-number text-2xl font-bold text-blue-600 dark:text-blue-400" id="lastHourCount">
+                                <span class="animate-pulse">...</span>
+                            </div>
+                            <div class="text-sm text-blue-500 dark:text-blue-300 font-medium">শেষ ১ ঘন্টায়</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        সর্বশেষ ৬০ মিনিটের সার্চ
+                    </div>
+                </div>
+
+                <!-- Last Day Searches -->
+                <div class="stat-card bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl p-6 border border-green-200 dark:border-green-700 hover:shadow-lg transition duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="stat-icon p-3 bg-green-500 text-white rounded-full">
+                            <i class="fas fa-calendar-day text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="stat-number text-2xl font-bold text-green-600 dark:text-green-400" id="lastDayCount">
+                                <span class="animate-pulse">...</span>
+                            </div>
+                            <div class="text-sm text-green-500 dark:text-green-300 font-medium">শেষ ২৪ ঘন্টায়</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        গত ১ দিনের সার্চ সংখ্যা
+                    </div>
+                </div>
+
+                <!-- All Time Searches -->
+                <div class="stat-card bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl p-6 border border-purple-200 dark:border-purple-700 hover:shadow-lg transition duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="stat-icon p-3 bg-purple-500 text-white rounded-full">
+                            <i class="fas fa-infinity text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="stat-number text-2xl font-bold text-purple-600 dark:text-purple-400" id="allTimeCount">
+                                <span class="animate-pulse">...</span>
+                            </div>
+                            <div class="text-sm text-purple-500 dark:text-purple-300 font-medium">সর্বমোট সার্চ</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        সর্বকালের মোট সার্চ সংখ্যা
+                    </div>
+                </div>
+
+                <!-- Unique Numbers Searched -->
+                <div class="stat-card bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-xl p-6 border border-orange-200 dark:border-orange-700 hover:shadow-lg transition duration-300">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="stat-icon p-3 bg-orange-500 text-white rounded-full">
+                            <i class="fas fa-phone-alt text-xl"></i>
+                        </div>
+                        <div class="text-right">
+                            <div class="stat-number text-2xl font-bold text-orange-600 dark:text-orange-400" id="uniqueNumbersCount">
+                                <span class="animate-pulse">...</span>
+                            </div>
+                            <div class="text-sm text-orange-500 dark:text-orange-300 font-medium">ইউনিক নাম্বার</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        চেক করা মোট নাম্বার সংখ্যা
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Last Updated Time -->
+            <div class="text-center mt-6">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-sync-alt mr-1"></i>
+                    সর্বশেষ আপডেট: <span id="lastUpdated" class="font-medium">লোড হচ্ছে...</span>
+                </p>
+            </div>
+        </div>
+    </section>
     <!-- Main Content -->
-    <main class="flex-1 container mx-auto px-4 py-8">
+    <main class="flex-1 container mx-auto px-4 py-8" id="search-section">
         {{-- <h1 class="text-2xl md:text-2xl font-bold mb-6 text-center animate-in">Courier Fraud Detection System</h1> --}}
         
         <!-- Search Bar - Full width on mobile -->
@@ -1520,7 +1659,11 @@ document.getElementById('searchButton').addEventListener('click', async function
                 document.getElementById('noReviewsMsg').classList.remove('hidden');
                 document.getElementById('reviewsList').classList.add('hidden');
             }
-    
+        
+        // Refresh search statistics after successful search
+        if (typeof refreshStatsAfterSearch === 'function') {
+            refreshStatsAfterSearch();
+        }
         
     } catch (error) {
         document.getElementById('loading').classList.add('hidden');
@@ -1857,6 +2000,113 @@ document.addEventListener('DOMContentLoaded', function() {
         reviewsList.insertBefore(reviewElement, reviewsList.firstChild);
     }
 });
+    </script>
+    <script>
+        // Search Statistics functionality
+        let searchStatsInterval;
+
+        // Function to load search statistics
+        async function loadSearchStatistics() {
+            try {
+                const response = await fetch('/api/search-stats');
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    
+                    // Update the counters with animation
+                    animateCounter('lastHourCount', data.last_hour);
+                    animateCounter('lastDayCount', data.last_day);
+                    animateCounter('allTimeCount', data.all_time);
+                    animateCounter('uniqueNumbersCount', data.unique_numbers);
+                    
+                    // Update last updated time
+                    const now = new Date();
+                    const timeString = now.toLocaleString('bn-BD', {
+                        timeZone: 'Asia/Dhaka',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+                    document.getElementById('lastUpdated').textContent = timeString;
+                }
+            } catch (error) {
+                console.error('Error loading search statistics:', error);
+                // Show error state
+                ['lastHourCount', 'lastDayCount', 'allTimeCount', 'uniqueNumbersCount'].forEach(id => {
+                    document.getElementById(id).textContent = 'Error';
+                });
+            }
+        }
+
+        // Function to animate counter with number formatting
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
+            const duration = 1000; // 1 second
+            const steps = 50;
+            const stepValue = (targetValue - startValue) / steps;
+            let currentValue = startValue;
+            let step = 0;
+
+            const timer = setInterval(() => {
+                step++;
+                currentValue += stepValue;
+                
+                if (step >= steps) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                
+                // Format number with commas for better readability
+                const formattedValue = Math.round(currentValue).toLocaleString('en-US');
+                element.textContent = formattedValue;
+            }, duration / steps);
+        }
+
+        // Initialize search statistics when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load initial data
+            loadSearchStatistics();
+            
+            // Set up automatic refresh every 30 seconds
+            searchStatsInterval = setInterval(loadSearchStatistics, 30000);
+        });
+
+        // Refresh statistics when a new search is performed
+        function refreshStatsAfterSearch() {
+            // Add a small delay to ensure the backend has processed the search
+            setTimeout(() => {
+                loadSearchStatistics();
+            }, 1000);
+        }
+
+        // Update the existing search button event listener to include stats refresh
+        // This will be called automatically after each successful search
+
+        // Clean up interval when page is about to unload
+        window.addEventListener('beforeunload', function() {
+            if (searchStatsInterval) {
+                clearInterval(searchStatsInterval);
+            }
+        });
+
+        // Add visibility change listener to pause/resume updates when tab is not active
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                // Page is hidden, clear interval
+                if (searchStatsInterval) {
+                    clearInterval(searchStatsInterval);
+                }
+            } else {
+                // Page is visible, restart interval
+                loadSearchStatistics();
+                searchStatsInterval = setInterval(loadSearchStatistics, 30000);
+            }
+        });
     </script>
     <div class="fixed bottom-8 right-8 z-50">
         <a href="{{ route('download.page') }}" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-full font-semibold hover:shadow-lg hover:opacity-90 transition duration-300 shadow-xl animate-pulse">

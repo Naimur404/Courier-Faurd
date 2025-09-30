@@ -5,6 +5,7 @@ use App\Http\Controllers\CourierController;
 use App\Http\Controllers\CustomerReviewController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\SearchStatsController;
 use App\Http\Middleware\VerifyRequestOrigin;
 
 Route::get('/', [HomeController::class, 'home']);
@@ -33,3 +34,8 @@ Route::post('/track-download-intent', [DownloadController::class, 'trackDownload
 
 // Download CSV data
 Route::get('/download-csv', [DownloadController::class, 'downloadCsv'])->name('download.csv');
+
+// Search Statistics Routes (Public access for real-time stats)
+Route::get('/api/search-stats', [SearchStatsController::class, 'getSearchStatistics'])->name('search.stats');
+Route::get('/api/search-analytics', [SearchStatsController::class, 'getDetailedAnalytics'])->name('search.analytics');
+Route::get('/api/live-stats', [SearchStatsController::class, 'getLiveStats'])->name('live.stats');
