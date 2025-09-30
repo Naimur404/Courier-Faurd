@@ -176,21 +176,30 @@
             }
         }
         
-        /* Dark mode */
+        /* Comprehensive Dark Mode Styles */
         .dark {
-            color: #e2e8f0;
+            color: #f3f4f6;
         }
         
         .dark .bg-white, .dark .bg-gray-50 {
             background-color: #1f2937;
+            color: #f3f4f6;
         }
         
         .dark .border-gray-200 {
-            border-color: #374151;
+            border-color: #4b5563;
         }
         
         .dark .text-gray-600, .dark .text-gray-800 {
-            color: #e2e8f0;
+            color: #d1d5db !important;
+        }
+        
+        .dark .text-gray-500 {
+            color: #9ca3af !important;
+        }
+        
+        .dark .text-gray-400 {
+            color: #9ca3af !important;
         }
         
         .dark .bg-gray-100 {
@@ -198,19 +207,78 @@
         }
         
         .dark .bg-green-100 {
-            background-color: rgba(16, 185, 129, 0.2);
+            background-color: rgba(16, 185, 129, 0.15);
         }
         
         .dark .bg-yellow-100 {
-            background-color: rgba(245, 158, 11, 0.2);
+            background-color: rgba(245, 158, 11, 0.15);
         }
         
         .dark .bg-red-100 {
-            background-color: rgba(239, 68, 68, 0.2);
+            background-color: rgba(239, 68, 68, 0.15);
         }
         
         .dark .progress-ring circle.bg {
-            stroke: #374151;
+            stroke: #4b5563;
+        }
+        
+        /* Search Statistics Dark Mode */
+        .dark .stat-card {
+            border-color: #4b5563;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .stat-card:hover {
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Input and Form Dark Mode */
+        .dark input, .dark textarea {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
+        }
+        
+        .dark input::placeholder, .dark textarea::placeholder {
+            color: #9ca3af;
+        }
+        
+        .dark input:focus, .dark textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 1px #6366f1;
+        }
+        
+        /* Button Dark Mode */
+        .dark button {
+            color: #f3f4f6;
+        }
+        
+        /* Table Dark Mode */
+        .dark table {
+            background-color: #1f2937;
+        }
+        
+        .dark th {
+            background-color: #374151;
+            color: #f3f4f6;
+        }
+        
+        .dark td {
+            color: #d1d5db;
+            border-color: #4b5563;
+        }
+        
+        /* Modal Dark Mode */
+        .dark .modal, .dark .modal-content {
+            background-color: #1f2937;
+            color: #f3f4f6;
+        }
+        
+        /* Dropdown and Select Dark Mode */
+        .dark select {
+            background-color: #374151;
+            border-color: #4b5563;
+            color: #f3f4f6;
         }
 
         .glass-effect {
@@ -271,6 +339,194 @@
         /* Pulse animation for loading states */
         .pulse-slow {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        /* Additional Dark Mode Text Fixes */
+        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+            color: #f3f4f6;
+        }
+        
+        .dark p {
+            color: #d1d5db;
+        }
+        
+        .dark .text-indigo-200 {
+            color: #c7d2fe !important;
+        }
+        
+        .dark .text-indigo-600 {
+            color: #818cf8 !important;
+        }
+        
+        .dark .text-purple-600 {
+            color: #a78bfa !important;
+        }
+        
+        .dark .text-blue-600 {
+            color: #60a5fa !important;
+        }
+        
+        .dark .text-green-600 {
+            color: #34d399 !important;
+        }
+        
+        .dark .text-orange-600 {
+            color: #fb923c !important;
+        }
+        
+        .dark .text-red-600 {
+            color: #f87171 !important;
+        }
+        
+        /* Why section dark mode */
+        .dark .bg-white.rounded-xl.shadow-custom {
+            background-color: #1f2937;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark .border.border-gray-200 {
+            border-color: #4b5563;
+            background-color: #374151;
+        }
+        
+        .dark .bg-indigo-100 {
+            background-color: rgba(99, 102, 241, 0.15);
+        }
+        
+        .dark .text-indigo-600 {
+            color: #818cf8 !important;
+        }
+        
+        .dark .bg-gray-50.dark\:bg-gray-700 {
+            background-color: #374151;
+        }
+        
+        /* Footer dark mode improvements */
+        .dark .text-white\/70 {
+            color: rgba(243, 244, 246, 0.7) !important;
+        }
+        
+        /* Link colors in dark mode */
+        .dark a {
+            color: #60a5fa;
+        }
+        
+        .dark a:hover {
+            color: #93c5fd;
+        }
+        
+        /* Form elements additional fixes */
+        .dark .rounded-lg {
+            border-color: #4b5563;
+        }
+        
+        /* Ensure all text elements are visible */
+        .dark .text-yellow-400 {
+            color: #fbbf24 !important;
+        }
+        
+        .dark .text-yellow-500 {
+            color: #f59e0b !important;
+        }
+        
+        /* Review and rating system dark mode */
+        .dark .text-gray-700 {
+            color: #d1d5db !important;
+        }
+        
+        /* Search results dark mode */
+        .dark .bg-green-100.border-l-4 {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+        }
+        
+        .dark .bg-yellow-100.border-l-4 {
+            background-color: rgba(245, 158, 11, 0.1);
+            border-color: #f59e0b;
+        }
+        
+        .dark .bg-red-100.border-l-4 {
+            background-color: rgba(239, 68, 68, 0.1);
+            border-color: #ef4444;
+        }
+        
+        /* Analytics Cards Dark Mode - Comprehensive Fix */
+        .dark .stat-card .text-blue-600 {
+            color: #60a5fa !important;
+        }
+        
+        .dark .stat-card .text-green-600 {
+            color: #34d399 !important;
+        }
+        
+        .dark .stat-card .text-purple-600 {
+            color: #a78bfa !important;
+        }
+        
+        .dark .stat-card .text-orange-600 {
+            color: #fb923c !important;
+        }
+        
+        .dark .stat-card .text-blue-500 {
+            color: #60a5fa !important;
+        }
+        
+        .dark .stat-card .text-green-500 {
+            color: #34d399 !important;
+        }
+        
+        .dark .stat-card .text-purple-500 {
+            color: #a78bfa !important;
+        }
+        
+        .dark .stat-card .text-orange-500 {
+            color: #fb923c !important;
+        }
+        
+        .dark .stat-card .text-blue-400 {
+            color: #60a5fa !important;
+        }
+        
+        .dark .stat-card .text-green-400 {
+            color: #4ade80 !important;
+        }
+        
+        .dark .stat-card .text-purple-400 {
+            color: #c084fc !important;
+        }
+        
+        .dark .stat-card .text-orange-400 {
+            color: #fb923c !important;
+        }
+        
+        .dark .stat-card .text-blue-300 {
+            color: #93c5fd !important;
+        }
+        
+        .dark .stat-card .text-green-300 {
+            color: #86efac !important;
+        }
+        
+        .dark .stat-card .text-purple-300 {
+            color: #d8b4fe !important;
+        }
+        
+        .dark .stat-card .text-orange-300 {
+            color: #fdba74 !important;
+        }
+        
+        /* Force visibility for all analytics card text */
+        .dark .stat-card div,
+        .dark .stat-card span {
+            color: inherit;
+        }
+        
+        .dark .stat-card .text-gray-600 {
+            color: #d1d5db !important;
+        }
+        
+        .dark .stat-card .text-gray-300 {
+            color: #d1d5db !important;
         }
 
         @keyframes fadeIn {
@@ -369,33 +625,48 @@
       transition: all 0.3s ease;
     }
     
-    /* Dark mode styles */
+    /* Dark mode styles - using .dark class for better control */
+    .dark .faq-container {
+      background-color: #1E293B;
+      color: #E5E7EB;
+    }
+    
+    .dark .faq-item {
+      background-color: #374151;
+      border-left: 5px solid #38B2AC;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    
+    .dark .faq-item:hover {
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+    }
+    
+    .dark .faq-title {
+      color: #F3F4F6;
+    }
+    
+    .dark .faq-description {
+      color: #D1D5DB;
+    }
+    
+    .dark .faq-question {
+      color: #F3F4F6;
+    }
+    
+    .dark .faq-answer {
+      color: #D1D5DB;
+    }
+    
+    .dark .faq-icon {
+      background: #4B5563;
+      color: #60A5FA;
+    }
+    
+    /* Keep media query as fallback */
     @media (prefers-color-scheme: dark) {
       body {
         background-color: #1E293B;
         color: #E5E7EB;
-      }
-      
-      .faq-item {
-        background-color: #2D3748;
-        border-left: 5px solid #38B2AC;
-      }
-      
-      .faq-title {
-        color: #E5E7EB;
-      }
-      
-      .faq-question {
-        color: #E5E7EB;
-      }
-      
-      .faq-answer {
-        color: #CBD5E0;
-      }
-      
-      .faq-icon {
-        background: #2C5282;
-        color: #90CDF4;
       }
     }
 
@@ -472,9 +743,9 @@
                 </div>
             </div>
             <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300 focus:outline-none">
-                    <i class="fas fa-moon dark:hidden"></i>
-                    <i class="fas fa-sun hidden dark:inline"></i>
+                <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300 focus:outline-none text-gray-800 dark:text-gray-200">
+                    <i class="fas fa-moon dark:hidden text-gray-800"></i>
+                    <i class="fas fa-sun hidden dark:inline text-gray-200"></i>
                 </button>
             </div>
         </div>
@@ -492,14 +763,14 @@
     </section>
     
     <!-- Search Statistics Section -->
-    <section class="bg-white dark:bg-gray-800 py-8 border-b border-gray-200 dark:border-gray-700">
+    <section class="bg-white dark:bg-gray-900 py-8 border-b border-gray-200 dark:border-gray-700">
         <div class="container mx-auto px-4">
             <div class="text-center mb-8">
-                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                    <i class="fas fa-chart-bar mr-2 text-indigo-600"></i>
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                    <i class="fas fa-chart-bar mr-2 text-indigo-600 dark:text-indigo-400"></i>
                     সার্চ পরিসংখ্যান
                 </h2>
-                <p class="text-gray-600 dark:text-gray-400">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
+                <p class="text-gray-600 dark:text-gray-300">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -510,10 +781,10 @@
                             <i class="fas fa-clock text-xl"></i>
                         </div>
                         <div class="text-right">
-                            <div class="stat-number text-2xl font-bold text-blue-600 dark:text-blue-400" id="lastHourCount">
+                            <div class="stat-number text-2xl font-bold text-blue-600 dark:text-blue-300" id="lastHourCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-blue-500 dark:text-blue-300 font-medium">শেষ ১ ঘন্টায়</div>
+                            <div class="text-sm text-blue-500 dark:text-blue-200 font-medium">শেষ ১ ঘন্টায়</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
@@ -529,10 +800,10 @@
                             <i class="fas fa-calendar-day text-xl"></i>
                         </div>
                         <div class="text-right">
-                            <div class="stat-number text-2xl font-bold text-green-600 dark:text-green-400" id="lastDayCount">
+                            <div class="stat-number text-2xl font-bold text-green-600 dark:text-green-300" id="lastDayCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-green-500 dark:text-green-300 font-medium">শেষ ২৪ ঘন্টায়</div>
+                            <div class="text-sm text-green-500 dark:text-green-200 font-medium">শেষ ২৪ ঘন্টায়</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
@@ -548,10 +819,10 @@
                             <i class="fas fa-infinity text-xl"></i>
                         </div>
                         <div class="text-right">
-                            <div class="stat-number text-2xl font-bold text-purple-600 dark:text-purple-400" id="allTimeCount">
+                            <div class="stat-number text-2xl font-bold text-purple-600 dark:text-purple-300" id="allTimeCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-purple-500 dark:text-purple-300 font-medium">সর্বমোট সার্চ</div>
+                            <div class="text-sm text-purple-500 dark:text-purple-200 font-medium">সর্বমোট সার্চ</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
@@ -567,10 +838,10 @@
                             <i class="fas fa-phone-alt text-xl"></i>
                         </div>
                         <div class="text-right">
-                            <div class="stat-number text-2xl font-bold text-orange-600 dark:text-orange-400" id="uniqueNumbersCount">
+                            <div class="stat-number text-2xl font-bold text-orange-600 dark:text-orange-300" id="uniqueNumbersCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-orange-500 dark:text-orange-300 font-medium">ইউনিক নাম্বার</div>
+                            <div class="text-sm text-orange-500 dark:text-orange-200 font-medium">ইউনিক নাম্বার</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
@@ -584,7 +855,7 @@
             <div class="text-center mt-6">
                 <p class="text-sm text-gray-500 dark:text-gray-400">
                     <i class="fas fa-sync-alt mr-1"></i>
-                    সর্বশেষ আপডেট: <span id="lastUpdated" class="font-medium">লোড হচ্ছে...</span>
+                    সর্বশেষ আপডেট: <span id="lastUpdated" class="font-medium text-gray-700 dark:text-gray-300">লোড হচ্ছে...</span>
                 </p>
             </div>
         </div>
@@ -865,38 +1136,38 @@
         </div>
     </main>
     <section class="container mx-auto px-4 py-12">
-        <div class="bg-white rounded-xl shadow-custom p-6 dark:bg-gray-800">
-            <h2 class="text-2xl font-bold mb-6 text-center">কেন কুরিয়ার ফ্রড চেক করা প্রয়োজন?</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-custom p-6">
+            <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">কেন কুরিয়ার ফ্রড চেক করা প্রয়োজন?</h2>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="p-5 border border-gray-200 rounded-lg text-center">
-                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-shield-alt text-2xl text-indigo-600"></i>
+                <div class="p-5 border border-gray-200 dark:border-gray-600 rounded-lg text-center bg-gray-50 dark:bg-gray-700">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-shield-alt text-2xl text-indigo-600 dark:text-indigo-400"></i>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">ব্যবসা সুরক্ষা</h3>
-                    <p class="text-gray-600 dark:text-gray-400">আপনার ব্যবসাকে সম্ভাব্য কুরিয়ার ফ্রড থেকে রক্ষা করুন। প্রতি মাসে হাজার হাজার টাকা সাশ্রয় করুন।</p>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">ব্যবসা সুরক্ষা</h3>
+                    <p class="text-gray-600 dark:text-gray-300">আপনার ব্যবসাকে সম্ভাব্য কুরিয়ার ফ্রড থেকে রক্ষা করুন। প্রতি মাসে হাজার হাজার টাকা সাশ্রয় করুন।</p>
                 </div>
-                <div class="p-5 border border-gray-200 rounded-lg text-center">
-                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-chart-line text-2xl text-indigo-600"></i>
+                <div class="p-5 border border-gray-200 dark:border-gray-600 rounded-lg text-center bg-gray-50 dark:bg-gray-700">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-chart-line text-2xl text-indigo-600 dark:text-indigo-400"></i>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">ডেলিভারি সাফল্য বাড়ান</h3>
-                    <p class="text-gray-600 dark:text-gray-400">বিশ্বস্ত গ্রাহকদের চিহ্নিত করে আপনার ডেলিভারি সাফল্যের হার বাড়ান এবং ব্যবসার লাভ বৃদ্ধি করুন।</p>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">ডেলিভারি সাফল্য বাড়ান</h3>
+                    <p class="text-gray-600 dark:text-gray-300">বিশ্বস্ত গ্রাহকদের চিহ্নিত করে আপনার ডেলিভারি সাফল্যের হার বাড়ান এবং ব্যবসার লাভ বৃদ্ধি করুন।</p>
                 </div>
-                <div class="p-5 border border-gray-200 rounded-lg text-center">
-                    <div class="w-16 h-16 mx-auto bg-indigo-100 rounded-full flex items-center justify-center mb-4">
-                        <i class="fas fa-history text-2xl text-indigo-600"></i>
+                <div class="p-5 border border-gray-200 dark:border-gray-600 rounded-lg text-center bg-gray-50 dark:bg-gray-700">
+                    <div class="w-16 h-16 mx-auto bg-indigo-100 dark:bg-indigo-900 rounded-full flex items-center justify-center mb-4">
+                        <i class="fas fa-history text-2xl text-indigo-600 dark:text-indigo-400"></i>
                     </div>
-                    <h3 class="text-lg font-semibold mb-2">রিয়েল-টাইম ডাটা</h3>
-                    <p class="text-gray-600 dark:text-gray-400">সর্বাধিক আপডেটেড ডাটা দিয়ে গ্রাহকের আচরণ বিশ্লেষণ করুন এবং সঠিক সিদ্ধান্ত নিন।</p>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-100">রিয়েল-টাইম ডাটা</h3>
+                    <p class="text-gray-600 dark:text-gray-300">সর্বাধিক আপডেটেড ডাটা দিয়ে গ্রাহকের আচরণ বিশ্লেষণ করুন এবং সঠিক সিদ্ধান্ত নিন।</p>
                 </div>
             </div>
             
             <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg">
-                <h3 class="text-xl font-semibold mb-4">বাংলাদেশে কুরিয়ার ফ্রড সম্পর্কে জানুন</h3>
-                <p class="mb-4">বাংলাদেশে প্রতি বছর হাজার হাজার ব্যবসায়ী কুরিয়ার ফ্রডের শিকার হন। কুরিয়ার ফ্রড হল যখন একজন গ্রাহক ইচ্ছাকৃতভাবে পণ্য গ্রহণ করে না বা ডেলিভারি বাতিল করে। এর ফলে ব্যবসায়ীদের আর্থিক ক্ষতি হয় এবং সময় নষ্ট হয়।</p>
-                <p class="mb-4">FraudShield আপনাকে একটি গ্রাহকের পূর্ববর্তী ডেলিভারি ইতিহাস দেখার সুযোগ দেয়, যাতে আপনি সিদ্ধান্ত নিতে পারেন যে তাদের কাছে পণ্য পাঠানো নিরাপদ কিনা।</p>
-                <p>আমাদের সিস্টেম বাংলাদেশের সকল প্রধান কুরিয়ার সার্ভিসের ডাটা ব্যবহার করে এবং একটি বিশ্বস্ত ফ্রড স্কোর প্রদান করে।</p>
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">বাংলাদেশে কুরিয়ার ফ্রড সম্পর্কে জানুন</h3>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">বাংলাদেশে প্রতি বছর হাজার হাজার ব্যবসায়ী কুরিয়ার ফ্রডের শিকার হন। কুরিয়ার ফ্রড হল যখন একজন গ্রাহক ইচ্ছাকৃতভাবে পণ্য গ্রহণ করে না বা ডেলিভারি বাতিল করে। এর ফলে ব্যবসায়ীদের আর্থিক ক্ষতি হয় এবং সময় নষ্ট হয়।</p>
+                <p class="mb-4 text-gray-700 dark:text-gray-300">FraudShield আপনাকে একটি গ্রাহকের পূর্ববর্তী ডেলিভারি ইতিহাস দেখার সুযোগ দেয়, যাতে আপনি সিদ্ধান্ত নিতে পারেন যে তাদের কাছে পণ্য পাঠানো নিরাপদ কিনা।</p>
+                <p class="text-gray-700 dark:text-gray-300">আমাদের সিস্টেম বাংলাদেশের সকল প্রধান কুরিয়ার সার্ভিসের ডাটা ব্যবহার করে এবং একটি বিশ্বস্ত ফ্রড স্কোর প্রদান করে।</p>
             </div>
         </div>
     </section>
@@ -2004,6 +2275,20 @@ document.addEventListener('DOMContentLoaded', function() {
     <script>
         // Search Statistics functionality
         let searchStatsInterval;
+        
+        // Bengali number conversion function
+        function convertToBengaliNumbers(number) {
+            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+            return number.toString().replace(/[0-9]/g, function(digit) {
+                return bengaliDigits[parseInt(digit)];
+            });
+        }
+        
+        // Function to format number with commas and convert to Bengali
+        function formatBengaliNumber(number) {
+            const formattedNumber = Math.round(number).toLocaleString('en-US');
+            return convertToBengaliNumbers(formattedNumber);
+        }
 
         // Function to load search statistics
         async function loadSearchStatistics() {
@@ -2020,29 +2305,33 @@ document.addEventListener('DOMContentLoaded', function() {
                     animateCounter('allTimeCount', data.all_time);
                     animateCounter('uniqueNumbersCount', data.unique_numbers);
                     
-                    // Update last updated time
+                    // Update last updated time in Bengali
                     const now = new Date();
-                    const timeString = now.toLocaleString('bn-BD', {
-                        timeZone: 'Asia/Dhaka',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit'
-                    });
+                    const bengaliMonths = [
+                        'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+                        'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+                    ];
+                    
+                    const day = convertToBengaliNumbers(now.getDate());
+                    const month = bengaliMonths[now.getMonth()];
+                    const year = convertToBengaliNumbers(now.getFullYear());
+                    const hours = convertToBengaliNumbers(now.getHours().toString().padStart(2, '0'));
+                    const minutes = convertToBengaliNumbers(now.getMinutes().toString().padStart(2, '0'));
+                    const seconds = convertToBengaliNumbers(now.getSeconds().toString().padStart(2, '0'));
+                    
+                    const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds}`;
                     document.getElementById('lastUpdated').textContent = timeString;
                 }
             } catch (error) {
                 console.error('Error loading search statistics:', error);
-                // Show error state
+                // Show error state in Bengali
                 ['lastHourCount', 'lastDayCount', 'allTimeCount', 'uniqueNumbersCount'].forEach(id => {
-                    document.getElementById(id).textContent = 'Error';
+                    document.getElementById(id).textContent = 'ত্রুটি';
                 });
             }
         }
 
-        // Function to animate counter with number formatting
+        // Function to animate counter with Bengali number formatting
         function animateCounter(elementId, targetValue) {
             const element = document.getElementById(elementId);
             const startValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
@@ -2061,9 +2350,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     clearInterval(timer);
                 }
                 
-                // Format number with commas for better readability
-                const formattedValue = Math.round(currentValue).toLocaleString('en-US');
-                element.textContent = formattedValue;
+                // Format number with commas and convert to Bengali
+                const bengaliFormattedValue = formatBengaliNumber(currentValue);
+                element.textContent = bengaliFormattedValue;
             }, duration / steps);
         }
 
