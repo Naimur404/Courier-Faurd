@@ -584,15 +584,16 @@
       overflow: hidden;
       background: white;
       box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       border-left: 5px solid #3498DB;
       animation: fadeIn 0.5s ease forwards;
       animation-delay: calc(var(--order) * 0.1s);
       opacity: 0;
+      margin-bottom: 1rem;
     }
     
     .faq-item:hover {
-      transform: translateY(-5px);
+      transform: translateY(-2px);
       box-shadow: 0 15px 30px rgba(0,0,0,0.1);
     }
     
@@ -605,12 +606,28 @@
       font-weight: 600;
       font-size: 1.125rem;
       color: #2C3E50;
+      transition: background-color 0.2s ease;
+      min-height: 80px;
+    }
+    
+    .faq-question:hover {
+      background-color: rgba(52, 152, 219, 0.05);
     }
     
     .faq-answer {
-      padding: 0 1.5rem 1.25rem 1.5rem;
+      padding: 0 1.5rem;
       color: #5D6D7E;
       line-height: 1.6;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+    
+    .faq-answer.show {
+      max-height: 500px;
+      padding: 0 1.5rem 1.25rem 1.5rem;
+      opacity: 1;
     }
     
     .faq-icon {
@@ -654,6 +671,10 @@
     }
     
     .dark .faq-answer {
+      color: #D1D5DB;
+    }
+    
+    .dark .faq-answer.show {
       color: #D1D5DB;
     }
     
@@ -784,10 +805,10 @@
                             <div class="stat-number text-2xl font-bold text-blue-600 dark:text-blue-300" id="lastHourCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-blue-500 dark:text-blue-200 font-medium">শেষ ১ ঘন্টায়</div>
+                            <div class="text-sm text-blue-500 dark:text-blue-300 font-medium">শেষ ১ ঘন্টায়</div>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-600 dark:text-gray-300">
+                    <div class="text-sm text-gray-600 dark:text-gray-600">
                         <i class="fas fa-info-circle mr-1"></i>
                         সর্বশেষ ৬০ মিনিটের সার্চ
                     </div>
@@ -2078,13 +2099,25 @@ document.addEventListener('DOMContentLoaded', function() {
         question.addEventListener('click', () => {
           const answer = question.nextElementSibling;
           const icon = question.querySelector('.faq-icon svg');
+          const isCurrentlyOpen = answer.classList.contains('show');
           
-          if (answer.style.display === 'none' || !answer.style.display) {
-            answer.style.display = 'block';
-            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>';
-          } else {
-            answer.style.display = 'none';
+          // Close all other answers first
+          questions.forEach(otherQuestion => {
+            const otherAnswer = otherQuestion.nextElementSibling;
+            const otherIcon = otherQuestion.querySelector('.faq-icon svg');
+            if (otherAnswer !== answer) {
+              otherAnswer.classList.remove('show');
+              otherIcon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
+            }
+          });
+          
+          // Toggle current answer
+          if (isCurrentlyOpen) {
+            answer.classList.remove('show');
             icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
+          } else {
+            answer.classList.add('show');
+            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>';
           }
         });
       });
