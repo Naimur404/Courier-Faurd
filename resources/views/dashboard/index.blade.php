@@ -156,12 +156,12 @@
                         <p class="text-gray-600">{{ $activeSubscription->plan->description }}</p>
                         <div class="mt-2 text-sm text-gray-500">
                             <p>Daily Limit: {{ number_format($activeSubscription->plan->request_limit) }} requests</p>
-                            <p>Expires: {{ $activeSubscription->ends_at->format('M d, Y') }}</p>
-                            <p>Days Remaining: {{ $activeSubscription->days_remaining }}</p>
+                            <p>Expires: {{ $activeSubscription->expires_at ? $activeSubscription->expires_at->format('M d, Y') : 'Not set' }}</p>
+                            <p>Days Remaining: {{ $activeSubscription->getDaysRemainingAttribute() }}</p>
                         </div>
                     </div>
                     
-                    @if($activeSubscription->days_remaining < 7)
+                    @if($activeSubscription->getDaysRemainingAttribute() < 7 && $activeSubscription->getDaysRemainingAttribute() > 0)
                         <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded mb-4">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
                             Your subscription expires soon. Consider renewing to avoid service interruption.

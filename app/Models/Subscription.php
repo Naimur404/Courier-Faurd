@@ -16,16 +16,18 @@ class Subscription extends Model
         'plan_id',
         'status',
         'starts_at',
-        'ends_at',
+        'expires_at', // Changed from ends_at to match migration
+        'activated_at',
         'payment_method',
         'transaction_id',
         'amount_paid',
-        'notes',
+        'admin_notes', // Changed from notes to match migration
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
-        'ends_at' => 'datetime',
+        'expires_at' => 'datetime', // Changed from ends_at
+        'activated_at' => 'datetime',
         'amount_paid' => 'decimal:2',
     ];
 
@@ -55,8 +57,15 @@ class Subscription extends Model
      */
     public function isActive(): bool
     {
-        return $this->status === self::STATUS_ACTIVE && 
-               $this->ends_at->isFuture();
+        if ($this->status !== self::STATUS_ACTIVE || !$this->expires_at) {
+            return false;
+        }
+        
+        $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+            ? $this->expires_at 
+            : \Carbon\Carbon::parse($this->expires_at);
+            
+        return $expiresAt->isFuture();
     }
 
     /**
@@ -64,8 +73,19 @@ class Subscription extends Model
      */
     public function isExpired(): bool
     {
-        return $this->status === self::STATUS_EXPIRED || 
-               ($this->status === self::STATUS_ACTIVE && $this->ends_at->isPast());
+        if ($this->status === self::STATUS_EXPIRED) {
+            return true;
+        }
+        
+        if ($this->status === self::STATUS_ACTIVE && $this->expires_at) {
+            $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+                ? $this->expires_at 
+                : \Carbon\Carbon::parse($this->expires_at);
+                
+            return $expiresAt->isPast();
+        }
+        
+        return false;
     }
 
     /**
@@ -73,11 +93,15 @@ class Subscription extends Model
      */
     public function getDaysRemainingAttribute(): int
     {
-        if (!$this->isActive()) {
+        if (!$this->isActive() || !$this->expires_at) {
             return 0;
         }
         
-        return max(0, Carbon::now()->diffInDays($this->ends_at, false));
+        $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+            ? $this->expires_at 
+            : \Carbon\Carbon::parse($this->expires_at);
+        
+        return max(0, Carbon::now()->diffInDays($expiresAt, false));
     }
 
     /**
@@ -94,7 +118,7 @@ class Subscription extends Model
     public function scopeActive($query)
     {
         return $query->where('status', self::STATUS_ACTIVE)
-                    ->where('ends_at', '>', now());
+                    ->where('expires_at', '>', now());
     }
 
     /**
@@ -106,7 +130,7 @@ class Subscription extends Model
             $q->where('status', self::STATUS_EXPIRED)
               ->orWhere(function($subQuery) {
                   $subQuery->where('status', self::STATUS_ACTIVE)
-                           ->where('ends_at', '<=', now());
+                           ->where('expires_at', '<=', now());
               });
         });
     }
@@ -127,7 +151,8 @@ class Subscription extends Model
         $this->update([
             'status' => self::STATUS_ACTIVE,
             'starts_at' => now(),
-            'ends_at' => now()->addMonths($this->plan->duration_months),
+            'expires_at' => now()->addMonths($this->plan->duration_months),
+            'activated_at' => now(),
         ]);
     }
 }

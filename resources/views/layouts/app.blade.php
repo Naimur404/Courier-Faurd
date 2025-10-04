@@ -294,23 +294,33 @@
                             </a>
                         @endif
                         
+                        <!-- User Dropdown -->
                         <div class="relative group">
-                            <button class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                            <button class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center focus:outline-none focus:ring-2 focus:ring-indigo-500" onclick="toggleDropdown(event)">
                                 <i class="fas fa-user mr-1"></i>{{ auth()->user()->name }}
-                                <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                <i class="fas fa-chevron-down ml-1 text-xs transition-transform" id="dropdown-arrow"></i>
                             </button>
-                            <div class="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 hidden group-hover:block">
-                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <div id="user-dropdown" class="absolute right-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 z-50 hidden border border-gray-200 dark:border-gray-600">
+                                <a href="{{ route('dashboard') }}" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
                                     <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
                                 </a>
+                                <div class="border-t border-gray-200 dark:border-gray-600 my-1"></div>
                                 <form action="{{ route('logout') }}" method="POST" class="block">
                                     @csrf
-                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
+                                    <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                                        <i class="fas fa-sign-out-alt mr-2 text-red-500"></i>Logout
                                     </button>
                                 </form>
                             </div>
                         </div>
+                        
+                        <!-- Direct Logout Button (Alternative) -->
+                        <form action="{{ route('logout') }}" method="POST" class="inline">
+                            @csrf
+                            <button type="submit" class="text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 px-3 py-2 rounded-md text-sm font-medium transition-colors" title="Logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
                     @else
                         <a href="{{ route('login') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                             <i class="fas fa-sign-in-alt mr-1"></i>Login
@@ -368,10 +378,10 @@
                         @endif
                         
                         <div class="border-t border-gray-200 dark:border-gray-600 pt-2 mt-2">
-                            <p class="px-3 py-1 text-xs text-gray-500 dark:text-gray-400">{{ auth()->user()->name }}</p>
-                            <form action="{{ route('logout') }}" method="POST">
+                            <p class="px-3 py-1 text-xs text-gray-500 dark:text-gray-400">Logged in as: {{ auth()->user()->name }}</p>
+                            <form action="{{ route('logout') }}" method="POST" class="mt-2">
                                 @csrf
-                                <button type="submit" class="w-full text-left text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                <button type="submit" class="w-full text-left text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900 px-3 py-2 rounded-md text-sm font-medium transition-colors border border-red-200 dark:border-red-700 mx-3">
                                     <i class="fas fa-sign-out-alt mr-2"></i>Logout
                                 </button>
                             </form>
@@ -526,6 +536,32 @@
                 });
             });
         }
+
+        // User Dropdown Toggle Functionality
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('user-dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (dropdown.classList.contains('hidden')) {
+                dropdown.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                dropdown.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('user-dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            
+            if (dropdown && !dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+                if (arrow) arrow.style.transform = 'rotate(0deg)';
+            }
+        });
 
         // Bengali number conversion
         function convertToBengaliNumbers(number) {

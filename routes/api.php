@@ -48,8 +48,8 @@ Route::middleware(['api.auth'])->group(function () {
                 'remaining_today' => $user->getRemainingDailyRequests(),
                 'subscription' => $user->activeSubscription ? [
                     'plan_name' => $user->activeSubscription->plan->name,
-                    'expires_at' => $user->activeSubscription->ends_at,
-                    'days_remaining' => $user->activeSubscription->days_remaining,
+                    'expires_at' => $user->activeSubscription->expires_at,
+                    'days_remaining' => $user->activeSubscription->getDaysRemainingAttribute(),
                 ] : null
             ]
         ]);

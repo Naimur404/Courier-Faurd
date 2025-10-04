@@ -60,7 +60,7 @@ class PricingController extends Controller
             'payment_method' => $request->payment_method,
             'transaction_id' => $request->transaction_id,
             'amount_paid' => $plan->price,
-            'notes' => 'Manual payment verification required',
+            'admin_notes' => 'Manual payment verification required',
         ]);
 
         return redirect()->route('dashboard')
