@@ -25,41 +25,14 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Drop the unique index first if it exists (for SQLite)
-        if (Schema::getConnection()->getDriverName() === 'sqlite') {
-            try {
-                Schema::getConnection()->statement('DROP INDEX IF EXISTS users_api_token_unique');
-            } catch (\Exception $e) {
-                // Index might not exist, continue
-            }
-        }
-        
         Schema::table('users', function (Blueprint $table) {
-            // For non-SQLite databases, drop the unique constraint normally
-            if (Schema::getConnection()->getDriverName() !== 'sqlite' && Schema::hasColumn('users', 'api_token')) {
-                try {
-                    $table->dropUnique(['api_token']);
-                } catch (\Exception $e) {
-                    // Index might not exist, continue
-                }
-            }
-            
-            // Drop columns if they exist
-            if (Schema::hasColumn('users', 'api_token')) {
-                $table->dropColumn('api_token');
-            }
-            if (Schema::hasColumn('users', 'role')) {
-                $table->dropColumn('role');
-            }
-            if (Schema::hasColumn('users', 'monthly_request_limit')) {
-                $table->dropColumn('monthly_request_limit');
-            }
-            if (Schema::hasColumn('users', 'current_month_requests')) {
-                $table->dropColumn('current_month_requests');
-            }
-            if (Schema::hasColumn('users', 'last_request_reset')) {
-                $table->dropColumn('last_request_reset');
-            }
+            $table->dropColumn([
+                'role', 
+                'api_token', 
+                'monthly_request_limit', 
+                'current_month_requests', 
+                'last_request_reset'
+            ]);
         });
     }
 };
