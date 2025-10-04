@@ -1268,10 +1268,13 @@ document.getElementById('searchButton').addEventListener('click', async function
         if (error.response && error.response.status === 429) {
             const rateLimitData = error.response.data;
             
-            // Show detailed modal with rate limit information
+            // Check if subscription plans are available in response
+            const hasSubscriptionPlans = rateLimitData.subscription_available && rateLimitData.subscription_plans;
+            
+            // Show detailed modal with rate limit information and subscription options
             const rateLimitModal = `
                 <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="rateLimitModal">
-                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-lg w-full mx-4 shadow-2xl">
                         <div class="text-center">
                             <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
                                 <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
@@ -1288,19 +1291,53 @@ document.getElementById('searchButton').addEventListener('click', async function
                                     <strong>রিসেট হবে:</strong> ${new Date(rateLimitData.reset_time).toLocaleString('bn-BD')}
                                 </p>
                             </div>
+                            
+                            ${hasSubscriptionPlans ? `
+                            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 p-4 rounded-lg mb-6 border border-indigo-200">
+                                <h4 class="font-bold text-indigo-800 mb-3">
+                                    <i class="fas fa-infinity mr-2"></i>
+                                    সীমাহীন সার্চের জন্য সাবস্ক্রাইব করুন
+                                </h4>
+                                <div class="grid grid-cols-2 gap-3 mb-4">
+                                    <div class="bg-white p-3 rounded-lg border border-indigo-100">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-indigo-600">৳২০</div>
+                                            <div class="text-sm text-gray-600">১ দিন</div>
+                                            <div class="text-xs text-gray-500">সীমাহীন সার্চ</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-3 rounded-lg border border-indigo-100 ring-2 ring-indigo-500">
+                                        <div class="text-center">
+                                            <div class="text-lg font-bold text-indigo-600">৳৫০</div>
+                                            <div class="text-sm text-gray-600">১৫ দিন</div>
+                                            <div class="text-xs text-green-600 font-medium">সাশ্রয়ী</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            ` : `
                             <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mb-6">
                                 <p class="text-sm text-blue-800 dark:text-blue-200">
                                     <i class="fas fa-info-circle mr-2"></i>
-                                    আরও বেশি সার্চের জন্য আমাদের API প্ল্যান দেখুন অথবা আগামীকাল আবার চেষ্টা করুন।
+                                    আরও বেশি সার্চের জন্য আমাদের প্ল্যান দেখুন অথবা আগামীকাল আবার চেষ্টা করুন।
                                 </p>
                             </div>
-                            <div class="flex space-x-3">
-                                <button onclick="document.getElementById('rateLimitModal').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition duration-200">
+                            `}
+                            
+                            <div class="flex space-x-2">
+                                <button onclick="document.getElementById('rateLimitModal').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-3 rounded-lg font-medium transition duration-200 text-sm">
                                     বুঝেছি
                                 </button>
-                                <a href="/pricing" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2 px-4 rounded-lg font-medium text-center transition duration-200">
+                                ${hasSubscriptionPlans ? `
+                                <a href="/website-subscriptions" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2 px-3 rounded-lg font-medium text-center transition duration-200 text-sm">
+                                    <i class="fas fa-infinity mr-1"></i>
+                                    সীমাহীন সার্চ
+                                </a>
+                                ` : `
+                                <a href="/pricing" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2 px-3 rounded-lg font-medium text-center transition duration-200 text-sm">
                                     API প্ল্যান দেখুন
                                 </a>
+                                `}
                             </div>
                         </div>
                     </div>

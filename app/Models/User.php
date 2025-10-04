@@ -91,11 +91,29 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user's website subscriptions
+     */
+    public function websiteSubscriptions(): HasMany
+    {
+        return $this->hasMany(WebsiteSubscription::class);
+    }
+
+    /**
      * Get user's active subscription
      */
     public function activeSubscription(): HasOne
     {
         return $this->hasOne(Subscription::class)
+            ->where('status', 'active')
+            ->where('expires_at', '>', now());
+    }
+
+    /**
+     * Get user's active website subscription
+     */
+    public function activeWebsiteSubscription(): HasOne
+    {
+        return $this->hasOne(WebsiteSubscription::class)
             ->where('status', 'active')
             ->where('expires_at', '>', now());
     }

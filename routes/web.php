@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApiDocumentationController;
 use App\Http\Controllers\PricingController;
+use App\Http\Controllers\WebsiteSubscriptionController;
 use App\Http\Middleware\VerifyRequestOrigin;
 
 // Public routes
@@ -18,6 +19,15 @@ Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Pricing routes
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing');
+
+// Website Subscription routes (separate from API subscriptions)
+Route::get('/website-subscriptions', [WebsiteSubscriptionController::class, 'index'])->name('website.subscriptions');
+Route::get('/api/website-subscriptions/plans', [WebsiteSubscriptionController::class, 'getPlans'])->name('website.subscriptions.plans');
+Route::middleware('auth')->group(function () {
+    Route::get('/website-subscriptions/subscribe/{plan}', [WebsiteSubscriptionController::class, 'subscribe'])->name('website.subscriptions.subscribe');
+    Route::post('/website-subscriptions/subscribe/{plan}', [WebsiteSubscriptionController::class, 'processSubscription'])->name('website.subscriptions.process');
+    Route::get('/api/website-subscriptions/status', [WebsiteSubscriptionController::class, 'getStatus'])->name('website.subscriptions.status');
+});
 
 // Authentication routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

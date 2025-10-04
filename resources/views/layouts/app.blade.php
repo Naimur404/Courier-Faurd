@@ -279,9 +279,10 @@
                     <a href="{{ route('pricing') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('pricing') ? 'text-indigo-600 dark:text-indigo-400' : '' }}">
                         <i class="fas fa-tags mr-1"></i>প্রাইসিং
                     </a>
-                    <a href="{{ route('download.page') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('download') ? 'text-indigo-600 dark:text-indigo-400' : '' }}">
-                        <i class="fas fa-download mr-1"></i>অ্যাপ ডাউনলোড
+                    <a href="{{ route('website.subscriptions') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('website-subscriptions*') ? 'text-indigo-600 dark:text-indigo-400' : '' }}">
+                        <i class="fas fa-infinity mr-1"></i>সীমাহীন সার্চ
                     </a>
+                
                     
                     @auth
                         @if(auth()->user()->role === 'admin')
@@ -361,6 +362,9 @@
                     </a>
                     <a href="{{ route('pricing') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('pricing') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900' : '' }}">
                         <i class="fas fa-tags mr-2"></i>প্রাইসিং
+                    </a>
+                    <a href="{{ route('website.subscriptions') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('website-subscriptions*') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900' : '' }}">
+                        <i class="fas fa-infinity mr-2"></i>সীমাহীন সার্চ
                     </a>
                     <a href="{{ route('download.page') }}" class="text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors {{ request()->is('download') ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900' : '' }}">
                         <i class="fas fa-download mr-2"></i>অ্যাপ ডাউনলোড
