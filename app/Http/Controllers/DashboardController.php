@@ -34,8 +34,12 @@ class DashboardController extends Controller
         // Get current API subscription
         $activeSubscription = $user->activeSubscription;
         
-        // Get current website subscription
-        $activeWebsiteSubscription = WebsiteSubscription::getActiveForUser($user->id);
+        // Get current website subscription (including pending/rejected)
+        $activeWebsiteSubscription = WebsiteSubscription::where('user_id', $user->id)
+                                                       ->where('status', WebsiteSubscription::STATUS_ACTIVE)
+                                                       ->where('expires_at', '>', now())
+                                                       ->latest()
+                                                       ->first();
         
         // Get available plans for upgrade
         $plans = Plan::active()->ordered()->get();

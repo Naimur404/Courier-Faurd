@@ -20,11 +20,16 @@ class WebsiteSubscription extends Model
         'status',
         'payment_method',
         'transaction_id',
+        'verification_status',
+        'verified_at',
+        'verified_by',
+        'admin_notes',
     ];
 
     protected $casts = [
         'starts_at' => 'datetime',
         'expires_at' => 'datetime',
+        'verified_at' => 'datetime',
         'amount' => 'decimal:2',
     ];
 
@@ -40,6 +45,11 @@ class WebsiteSubscription extends Model
     const WEEKLY_PRICE = 50;
     const WEEKLY_DAYS = 15;
 
+    // Verification statuses
+    const VERIFICATION_PENDING = 'pending';
+    const VERIFICATION_VERIFIED = 'verified';
+    const VERIFICATION_REJECTED = 'rejected';
+
     /**
      * Get the user who owns the subscription
      */
@@ -49,11 +59,23 @@ class WebsiteSubscription extends Model
     }
 
     /**
-     * Check if subscription is active
+     * Get the admin who verified the subscription
+     */
+    public function verifiedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by');
+    }
+
+    /**
+     * Check if subscription is active and verified
      */
     public function isActive(): bool
     {
         if ($this->status !== self::STATUS_ACTIVE) {
+            return false;
+        }
+
+        if ($this->verification_status !== self::VERIFICATION_VERIFIED) {
             return false;
         }
         
@@ -134,6 +156,7 @@ class WebsiteSubscription extends Model
     {
         return self::where('user_id', $userId)
                   ->active()
+                  ->where('verification_status', self::VERIFICATION_VERIFIED)
                   ->first();
     }
 
@@ -154,6 +177,7 @@ class WebsiteSubscription extends Model
             'starts_at' => now(),
             'expires_at' => $expiresAt,
             'status' => self::STATUS_ACTIVE,
+            'verification_status' => self::VERIFICATION_PENDING,
         ]);
     }
 
@@ -191,6 +215,79 @@ class WebsiteSubscription extends Model
     {
         return self::where('user_id', $userId)
                   ->active()
+                  ->where('verification_status', self::VERIFICATION_VERIFIED)
                   ->exists();
+    }
+
+    /**
+     * Verification status methods
+     */
+    public function isPending(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_PENDING;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_VERIFIED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->verification_status === self::VERIFICATION_REJECTED;
+    }
+
+    /**
+     * Verify subscription
+     */
+    public function verify(int $adminId, ?string $notes = null): void
+    {
+        $this->update([
+            'verification_status' => self::VERIFICATION_VERIFIED,
+            'verified_by' => $adminId,
+            'verified_at' => now(),
+            'admin_notes' => $notes,
+        ]);
+    }
+
+    /**
+     * Reject subscription
+     */
+    public function reject(int $adminId, ?string $notes = null): void
+    {
+        $this->update([
+            'verification_status' => self::VERIFICATION_REJECTED,
+            'verified_by' => $adminId,
+            'verified_at' => now(),
+            'admin_notes' => $notes,
+        ]);
+    }
+
+    /**
+     * Get verification status label in Bengali
+     */
+    public function getVerificationStatusLabelAttribute(): string
+    {
+        $labels = [
+            self::VERIFICATION_PENDING => 'যাচাইকরণ অপেক্ষমান',
+            self::VERIFICATION_VERIFIED => 'যাচাইকৃত',
+            self::VERIFICATION_REJECTED => 'প্রত্যাখ্যাত',
+        ];
+
+        return $labels[$this->verification_status] ?? 'অজানা';
+    }
+
+    /**
+     * Get verification status badge CSS class
+     */
+    public function getVerificationStatusBadgeClassAttribute(): string
+    {
+        $classes = [
+            self::VERIFICATION_PENDING => 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+            self::VERIFICATION_VERIFIED => 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+            self::VERIFICATION_REJECTED => 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+        ];
+
+        return $classes[$this->verification_status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
 }

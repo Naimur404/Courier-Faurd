@@ -20,23 +20,36 @@ class IpRateLimit
         // Check if user has active website subscription (unlimited searches)
         if (Auth::check()) {
             $user = Auth::user();
-            if (WebsiteSubscription::userHasActiveSubscription($user->id)) {
-                // User has active subscription - no rate limit
+            $subscription = WebsiteSubscription::getActiveForUser($user->id);
+            
+            if ($subscription && $subscription->isActive()) {
+                // User has active and verified subscription - no rate limit
                 $response = $next($request);
                 
                 // Add headers to show unlimited access
                 $response->headers->set('X-RateLimit-Limit', 'unlimited');
                 $response->headers->set('X-RateLimit-Remaining', 'unlimited');
                 $response->headers->set('X-Subscription-Status', 'active');
+                $response->headers->set('X-Subscription-Plan', $subscription->plan_type);
+                $response->headers->set('X-Subscription-Expires', $subscription->expires_at->toISOString());
                 
                 return $response;
+            } elseif ($subscription && $subscription->isPending()) {
+                // User has pending subscription - show special message
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Subscription pending verification',
+                    'message' => 'আপনার সাবস্ক্রিপশন যাচাইকরণের অপেক্ষায় রয়েছে। অনুগ্রহ করে অ্যাডমিনের অনুমোদনের জন্য অপেক্ষা করুন।',
+                    'subscription_status' => 'pending',
+                    'verification_status' => $subscription->verification_status_label
+                ], 403);
             }
         }
         
         // Apply rate limiting for non-subscribed users
         $ip = $request->ip();
         $key = 'ip_searches:' . $ip;
-        $dailyLimit = 7;
+        $dailyLimit = 2;
         
         // Get current search count for this IP
         $searchCount = Cache::get($key, 0);

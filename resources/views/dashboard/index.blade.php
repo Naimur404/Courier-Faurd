@@ -167,7 +167,13 @@
                         </p>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
                             @if($activeWebsiteSubscription)
-                                {{ $activeWebsiteSubscription->days_remaining }} days left
+                                @if($activeWebsiteSubscription->isVerified())
+                                    {{ $activeWebsiteSubscription->days_remaining }} days left
+                                @elseif($activeWebsiteSubscription->isPending())
+                                    Pending approval
+                                @else
+                                    Rejected
+                                @endif
                             @else
                                 Limited
                             @endif
@@ -349,16 +355,49 @@
                                         {{ ucfirst($activeWebsiteSubscription->plan_type) }} Plan
                                         <span class="text-sm font-normal text-gray-600 dark:text-gray-400">({{ $activeWebsiteSubscription->formatted_amount }})</span>
                                     </h4>
-                                    <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 px-2 py-1 rounded-full text-xs font-medium">
-                                        Active
-                                    </span>
+                                    <div class="flex items-center space-x-2">
+                                        <span class="px-2 py-1 text-xs rounded-full font-medium {{ $activeWebsiteSubscription->verification_status_badge_class }}">
+                                            {{ $activeWebsiteSubscription->verification_status_label }}
+                                        </span>
+                                        @if($activeWebsiteSubscription->isVerified())
+                                            <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 px-2 py-1 rounded-full text-xs font-medium">
+                                                Active
+                                            </span>
+                                        @endif
+                                    </div>
                                 </div>
+                                
+                                @if($activeWebsiteSubscription->isPending())
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-2 rounded-lg mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-clock mr-2 text-yellow-500"></i>
+                                            <div>
+                                                <p class="text-sm font-medium">অ্যাডমিনের অনুমোদনের অপেক্ষায়</p>
+                                                <p class="text-xs">আপনার সাবস্ক্রিপশন যাচাইকরণের পর আনলিমিটেড সার্চ সুবিধা পাবেন।</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @elseif($activeWebsiteSubscription->isRejected())
+                                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-3 py-2 rounded-lg mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-times-circle mr-2 text-red-500"></i>
+                                            <div>
+                                                <p class="text-sm font-medium">সাবস্ক্রিপশন প্রত্যাখ্যাত</p>
+                                                @if($activeWebsiteSubscription->admin_notes)
+                                                    <p class="text-xs">কারণ: {{ $activeWebsiteSubscription->admin_notes }}</p>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 
                                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm mb-3">
                                     <div class="flex items-center">
                                         <i class="fas fa-infinity text-indigo-500 mr-2 flex-shrink-0"></i>
                                         <span class="text-gray-600 dark:text-gray-400 mr-1">Website Searches:</span>
-                                        <span class="font-semibold text-gray-900 dark:text-white">Unlimited</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">
+                                            {{ $activeWebsiteSubscription->isVerified() ? 'Unlimited' : 'Pending Approval' }}
+                                        </span>
                                     </div>
                                     <div class="flex items-center">
                                         <i class="fas fa-calendar-alt text-indigo-500 mr-2 flex-shrink-0"></i>
@@ -371,13 +410,23 @@
                                         <span class="font-semibold text-gray-900 dark:text-white">{{ $activeWebsiteSubscription->days_remaining }}</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <i class="fas fa-check-circle text-green-500 mr-2 flex-shrink-0"></i>
-                                        <span class="text-gray-600 dark:text-gray-400 mr-1">Status:</span>
-                                        <span class="font-semibold text-green-600 dark:text-green-400">No Limits</span>
+                                        @if($activeWebsiteSubscription->isVerified())
+                                            <i class="fas fa-check-circle text-green-500 mr-2 flex-shrink-0"></i>
+                                            <span class="text-gray-600 dark:text-gray-400 mr-1">Status:</span>
+                                            <span class="font-semibold text-green-600 dark:text-green-400">No Limits</span>
+                                        @elseif($activeWebsiteSubscription->isPending())
+                                            <i class="fas fa-clock text-yellow-500 mr-2 flex-shrink-0"></i>
+                                            <span class="text-gray-600 dark:text-gray-400 mr-1">Status:</span>
+                                            <span class="font-semibold text-yellow-600 dark:text-yellow-400">Awaiting Approval</span>
+                                        @else
+                                            <i class="fas fa-times-circle text-red-500 mr-2 flex-shrink-0"></i>
+                                            <span class="text-gray-600 dark:text-gray-400 mr-1">Status:</span>
+                                            <span class="font-semibold text-red-600 dark:text-red-400">Rejected</span>
+                                        @endif
                                     </div>
                                 </div>
                                 
-                                @if($activeWebsiteSubscription->days_remaining < 3 && $activeWebsiteSubscription->days_remaining > 0)
+                                @if($activeWebsiteSubscription->isVerified() && $activeWebsiteSubscription->days_remaining < 3 && $activeWebsiteSubscription->days_remaining > 0)
                                     <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-2 rounded-lg">
                                         <div class="flex items-center">
                                             <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>
