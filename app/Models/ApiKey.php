@@ -15,7 +15,10 @@ class ApiKey extends Model
     protected $fillable = [
         'user_id',
         'key',
+        'secret',
         'name',
+        'rate_limit',
+        'usage_count',
         'last_used_at',
         'is_active',
     ];
@@ -23,10 +26,13 @@ class ApiKey extends Model
     protected $casts = [
         'last_used_at' => 'datetime',
         'is_active' => 'boolean',
+        'rate_limit' => 'integer',
+        'usage_count' => 'integer',
     ];
 
     protected $hidden = [
         'key',
+        'secret',
     ];
 
     /**
@@ -51,6 +57,14 @@ class ApiKey extends Model
     public static function generateKey(): string
     {
         return 'cf_' . Str::random(32);
+    }
+
+    /**
+     * Generate a new API secret
+     */
+    public static function generateSecret(): string
+    {
+        return 'cs_' . Str::random(32);
     }
 
     /**
@@ -88,6 +102,22 @@ class ApiKey extends Model
     }
 
     /**
+     * Get total usage count from api_usages table
+     */
+    public function getTotalUsageCount(): int
+    {
+        return $this->apiUsages()->count();
+    }
+
+    /**
+     * Update usage count from api_usages table
+     */
+    public function refreshUsageCount(): void
+    {
+        $this->update(['usage_count' => $this->getTotalUsageCount()]);
+    }
+
+    /**
      * Get usage count for current month
      */
     public function getMonthlyUsageCount(): int
@@ -107,7 +137,8 @@ class ApiKey extends Model
             return true;
         }
 
-        $dailyLimit = $this->user->activeSubscription->plan->request_limit;
+        // Use API key specific rate limit or fall back to subscription limit
+        $dailyLimit = $this->rate_limit ? $this->rate_limit * 60 * 24 : $this->user->activeSubscription->plan->request_limit;
         return $this->getTodayUsageCount() >= $dailyLimit;
     }
 

@@ -102,6 +102,9 @@ class ApiAuthentication
                 'response_time' => round($responseTime),
                 'request_data' => $request->except(['password', 'password_confirmation']),
             ]);
+            
+            // Increment usage count on API key
+            $apiKey->increment('usage_count');
         });
     }
 }

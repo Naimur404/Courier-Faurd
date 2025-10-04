@@ -47,6 +47,12 @@ class ApiKeyResource extends Resource
                             ->dehydrated(false)
                             ->placeholder('Generated automatically')
                             ->helperText('API key is generated automatically when creating a new key'),
+                        Forms\Components\TextInput::make('secret')
+                            ->label('API Secret')
+                            ->disabled()
+                            ->dehydrated(false)
+                            ->placeholder('Generated automatically')
+                            ->helperText('API secret is generated automatically when creating a new key'),
                     ])
                     ->columns(2),
                     
@@ -61,6 +67,8 @@ class ApiKeyResource extends Resource
                             ->numeric()
                             ->default(60)
                             ->required()
+                            ->minValue(1)
+                            ->maxValue(1000)
                             ->helperText('Maximum number of requests per minute'),
                         Forms\Components\DateTimePicker::make('expires_at')
                             ->label('Expiration Date')
@@ -73,7 +81,10 @@ class ApiKeyResource extends Resource
                     ->schema([
                         Forms\Components\Placeholder::make('usage_count')
                             ->label('Total Usage')
-                            ->content(fn (?ApiKey $record): string => $record ? number_format($record->usage_count) . ' requests' : 'N/A'),
+                            ->content(fn (?ApiKey $record): string => $record ? number_format($record->usage_count) . ' requests' : '0 requests'),
+                        Forms\Components\Placeholder::make('today_usage')
+                            ->label('Today\'s Usage')
+                            ->content(fn (?ApiKey $record): string => $record ? number_format($record->getTodayUsageCount()) . ' requests' : '0 requests'),
                         Forms\Components\Placeholder::make('last_used_at')
                             ->label('Last Used')
                             ->content(fn (?ApiKey $record): string => $record && $record->last_used_at ? $record->last_used_at->diffForHumans() : 'Never'),
@@ -81,7 +92,25 @@ class ApiKeyResource extends Resource
                             ->label('Created')
                             ->content(fn (?ApiKey $record): string => $record ? $record->created_at->format('M j, Y H:i') : 'N/A'),
                     ])
-                    ->columns(3)
+                    ->columns(2)
+                    ->hiddenOn('create'),
+
+                Forms\Components\Section::make('API Documentation')
+                    ->schema([
+                        Forms\Components\Placeholder::make('api_docs_link')
+                            ->label('API Documentation')
+                            ->content(fn (): \Illuminate\Support\HtmlString => new \Illuminate\Support\HtmlString(
+                                '<div class="space-y-2">
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Learn how to use your API key:</p>
+                                    <a href="' . url('/api/documentation') . '" target="_blank" class="inline-flex items-center text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                        View API Documentation
+                                    </a>
+                                </div>'
+                            )),
+                    ])
                     ->hiddenOn('create'),
             ]);
     }
@@ -110,6 +139,17 @@ class ApiKeyResource extends Resource
                     ->formatStateUsing(function ($state) {
                         return substr($state, 0, 8) . '...' . substr($state, -8);
                     }),
+                Tables\Columns\TextColumn::make('secret')
+                    ->label('API Secret')
+                    ->limit(20)
+                    ->copyable()
+                    ->tooltip(function ($record) {
+                        return $record->secret;
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return substr($state, 0, 8) . '...' . substr($state, -8);
+                    })
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Status')
                     ->boolean()

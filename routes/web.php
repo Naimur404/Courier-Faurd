@@ -8,6 +8,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchStatsController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ApiDocumentationController;
 use App\Http\Controllers\PricingController;
 use App\Http\Middleware\VerifyRequestOrigin;
 
@@ -39,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/dashboard/api-key/{apiKey}', [DashboardController::class, 'deleteApiKey'])->name('dashboard.delete-api-key');
     Route::get('/dashboard/api-docs', [DashboardController::class, 'apiDocs'])->name('dashboard.api-docs');
 });
+
+// API Documentation (public access)
+Route::get('/api/documentation', [ApiDocumentationController::class, 'index'])->name('api.documentation');
 
 // Courier tracking routes
 Route::post('/courier-check', [CourierController::class, 'check'])->name('courier.check')->middleware([VerifyRequestOrigin::class]);

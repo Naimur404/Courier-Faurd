@@ -73,12 +73,16 @@ class DashboardController extends Controller
         $apiKey = ApiKey::create([
             'user_id' => $user->id,
             'key' => ApiKey::generateKey(),
+            'secret' => ApiKey::generateSecret(),
             'name' => $request->name,
+            'rate_limit' => 60, // Default 60 requests per minute
+            'usage_count' => 0,
             'is_active' => true,
         ]);
 
         return back()->with('success', 'API key generated successfully!')
-                    ->with('new_api_key', $apiKey->key);
+                    ->with('new_api_key', $apiKey->key)
+                    ->with('new_api_secret', $apiKey->secret);
     }
 
     /**
