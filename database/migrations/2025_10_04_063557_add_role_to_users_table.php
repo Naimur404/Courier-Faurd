@@ -27,8 +27,8 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropColumn([
-                // 'role', 
-                // 'api_token', 
+                'role', 
+                'api_token', 
                 'monthly_request_limit', 
                 'current_month_requests', 
                 'last_request_reset'
