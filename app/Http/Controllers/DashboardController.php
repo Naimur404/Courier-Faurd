@@ -51,6 +51,17 @@ class DashboardController extends Controller
                              ->take(10)
                              ->get();
         
+        // Get recent website search logs (only if user has active website subscription)
+        $recentWebsiteSearches = [];
+        if ($activeWebsiteSubscription && $activeWebsiteSubscription->isVerified()) {
+            $recentWebsiteSearches = \App\Models\Customer::where('user_id', $user->id)
+                                                         ->where('search_by', 'web')
+                                                         ->whereNotNull('ip_address')
+                                                         ->latest('last_searched_at')
+                                                         ->take(5)
+                                                         ->get(['id', 'phone', 'count', 'ip_address', 'last_searched_at', 'subscription_type']);
+        }
+        
         return view('dashboard.index', compact(
             'user', 
             'apiKeys', 
@@ -59,7 +70,8 @@ class DashboardController extends Controller
             'activeSubscription',
             'activeWebsiteSubscription',
             'plans',
-            'recentUsage'
+            'recentUsage',
+            'recentWebsiteSearches'
         ));
     }
 

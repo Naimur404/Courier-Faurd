@@ -465,58 +465,122 @@
         </div>
 
         <!-- Recent Activity -->
-        <div class="mt-8 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Recent API Activity</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Monitor your latest API requests and performance</p>
-            </div>
-            
-            <div class="p-6">
-                @if($recentUsage->count() > 0)
-                    <div class="overflow-x-auto -mx-6 sm:mx-0 sm:rounded-lg">
-                        <div class="min-w-full inline-block align-middle">
-                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                <thead class="bg-gray-50 dark:bg-gray-750">
-                                    <tr>
-                                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Endpoint</th>
-                                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Method</th>
-                                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
-                                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Response Time</th>
-                                        <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                                    @foreach($recentUsage as $usage)
-                                        <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
-                                            <td class="px-4 sm:px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono">
-                                                <div class="max-w-xs truncate" title="{{ $usage->endpoint }}">{{ $usage->endpoint }}</div>
-                                            </td>
-                                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">{{ $usage->method }}</span>
-                                            </td>
-                                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
-                                                <span class="px-2 py-1 text-xs rounded-full font-medium {{ $usage->isSuccessful() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
-                                                    {{ $usage->response_status }}
-                                                </span>
-                                            </td>
-                                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 hidden sm:table-cell">{{ $usage->formatted_response_time }}</td>
-                                            <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $usage->created_at->diffForHumans() }}</td>
+        <div class="mt-8 grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
+            <!-- API Activity -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Recent API Activity</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Monitor your latest API requests and performance</p>
+                </div>
+                
+                <div class="p-6">
+                    @if($recentUsage->count() > 0)
+                        <div class="overflow-x-auto -mx-6 sm:mx-0 sm:rounded-lg">
+                            <div class="min-w-full inline-block align-middle">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-50 dark:bg-gray-750">
+                                        <tr>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Endpoint</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Method</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Response Time</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Time</th>
                                         </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach($recentUsage as $usage)
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                                                <td class="px-4 sm:px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono">
+                                                    <div class="max-w-xs truncate" title="{{ $usage->endpoint }}">{{ $usage->endpoint }}</div>
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 font-medium">{{ $usage->method }}</span>
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 py-1 text-xs rounded-full font-medium {{ $usage->isSuccessful() ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200' }}">
+                                                        {{ $usage->response_status }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 hidden sm:table-cell">{{ $usage->formatted_response_time }}</td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $usage->created_at->diffForHumans() }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
-                @else
-                    <div class="text-center py-8">
-                        <div class="mb-4">
-                            <i class="fas fa-chart-line text-gray-400 dark:text-gray-500 text-4xl"></i>
+                    @else
+                        <div class="text-center py-8">
+                            <div class="mb-4">
+                                <i class="fas fa-chart-line text-gray-400 dark:text-gray-500 text-4xl"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No API activity yet</h3>
+                            <p class="text-gray-500 dark:text-gray-400 mb-4">Once you start making API requests, they'll appear here.</p>
                         </div>
-                        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No API activity yet</h3>
-                        <p class="text-gray-500 dark:text-gray-400 mb-4">Once you start making API requests, they'll appear here.</p>
-                    </div>
-                @endif
+                    @endif
+                </div>
             </div>
+
+            <!-- Website Search Logs -->
+            @if($activeWebsiteSubscription && $activeWebsiteSubscription->isVerified())
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white">My Website Search Logs</h2>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Your recent website search activity</p>
+                </div>
+                
+                <div class="p-6">
+                    @if($recentWebsiteSearches->count() > 0)
+                        <div class="overflow-x-auto -mx-6 sm:mx-0 sm:rounded-lg">
+                            <div class="min-w-full inline-block align-middle">
+                                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                    <thead class="bg-gray-50 dark:bg-gray-750">
+                                        <tr>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Search #</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider hidden sm:table-cell">Phone</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Count</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">IP Address</th>
+                                            <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Last Search</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                        @foreach($recentWebsiteSearches as $search)
+                                            <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
+                                                <td class="px-4 sm:px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono">
+                                                    #{{ $search->id }}
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 text-sm text-gray-900 dark:text-gray-100 font-mono hidden sm:table-cell">
+                                                    {{ substr($search->phone, 0, 3) }}****{{ substr($search->phone, -2) }}
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap">
+                                                    <span class="px-2 py-1 text-xs rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 font-medium">
+                                                        {{ number_format($search->count) }}
+                                                    </span>
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100 font-mono">
+                                                    {{ $search->ip_address }}
+                                                </td>
+                                                <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                                                    {{ $search->last_searched_at ? $search->last_searched_at->diffForHumans() : 'N/A' }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @else
+                        <div class="text-center py-8">
+                            <div class="mb-4">
+                                <i class="fas fa-search text-gray-400 dark:text-gray-500 text-4xl"></i>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No searches yet</h3>
+                            <p class="text-gray-500 dark:text-gray-400 mb-4">Your website search logs will appear here once you start searching.</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+            @endif
         </div>
     </div>
 </div>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Customer extends Model
 {
@@ -11,6 +12,9 @@ class Customer extends Model
 
     protected $fillable = [
         'phone',
+        'user_id',
+        'subscription_type',
+        'subscription_id',
         'count',
         'data',
         'search_by',
@@ -22,6 +26,45 @@ class Customer extends Model
         'data' => 'array',
         'last_searched_at' => 'datetime',
     ];
+
+    /**
+     * Get the user who performed this search
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the subscription used for this search
+     * This is a polymorphic relationship that can point to either Subscription or WebsiteSubscription
+     */
+    public function subscription()
+    {
+        if ($this->subscription_type === 'api') {
+            return $this->belongsTo(Subscription::class, 'subscription_id');
+        } elseif ($this->subscription_type === 'website') {
+            return $this->belongsTo(WebsiteSubscription::class, 'subscription_id');
+        }
+        
+        return null;
+    }
+
+    /**
+     * Get the API subscription if this search was made with API subscription
+     */
+    public function apiSubscription(): BelongsTo
+    {
+        return $this->belongsTo(Subscription::class, 'subscription_id');
+    }
+
+    /**
+     * Get the website subscription if this search was made with website subscription
+     */
+    public function websiteSubscription(): BelongsTo
+    {
+        return $this->belongsTo(WebsiteSubscription::class, 'subscription_id');
+    }
 
     /**
      * Get the reviews for this customer

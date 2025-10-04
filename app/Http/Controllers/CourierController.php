@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerReview;
+use App\Models\WebsiteSubscription;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -47,9 +50,36 @@ class CourierController extends Controller
             // Still store the new data but return the old one
         }
 
+        // Get subscription context for logged-in users
+        $userId = null;
+        $subscriptionType = null;
+        $subscriptionId = null;
+        
+        if (Auth::check()) {
+            $user = Auth::user();
+            $userId = $user->id;
+            
+            // Check for active website subscription first
+            $websiteSubscription = WebsiteSubscription::getActiveForUser($user->id);
+            if ($websiteSubscription && $websiteSubscription->isActive()) {
+                $subscriptionType = 'website';
+                $subscriptionId = $websiteSubscription->id;
+            } else {
+                // Check for API subscription as fallback
+                $apiSubscription = $user->activeSubscription;
+                if ($apiSubscription) {
+                    $subscriptionType = 'api';
+                    $subscriptionId = $apiSubscription->id;
+                }
+            }
+        }
+
         // Update or create customer record
         if ($existingCustomer) {
             $existingCustomer->update([
+                'user_id' => $userId,
+                'subscription_type' => $subscriptionType,
+                'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
                 'last_searched_at' => now(),
@@ -59,6 +89,9 @@ class CourierController extends Controller
         } else {
             Customer::create([
                 'phone' => $phone,
+                'user_id' => $userId,
+                'subscription_type' => $subscriptionType,
+                'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
                 'last_searched_at' => now(),
@@ -107,9 +140,36 @@ class CourierController extends Controller
             // Still store the new data but return the old one
         }
 
+        // Get subscription context (for API calls, we'll try to get from request or auth)
+        $userId = null;
+        $subscriptionType = null;
+        $subscriptionId = null;
+        
+        if (Auth::check()) {
+            $user = Auth::user();
+            $userId = $user->id;
+            
+            // For API calls, prioritize API subscription
+            $apiSubscription = $user->activeSubscription;
+            if ($apiSubscription) {
+                $subscriptionType = 'api';
+                $subscriptionId = $apiSubscription->id;
+            } else {
+                // Check for website subscription as fallback
+                $websiteSubscription = WebsiteSubscription::getActiveForUser($user->id);
+                if ($websiteSubscription && $websiteSubscription->isActive()) {
+                    $subscriptionType = 'website';
+                    $subscriptionId = $websiteSubscription->id;
+                }
+            }
+        }
+
         // Update or create customer record
         if ($existingCustomer) {
             $existingCustomer->update([
+                'user_id' => $userId,
+                'subscription_type' => $subscriptionType,
+                'subscription_id' => $subscriptionId,
                 'search_by' => 'app',
                 'ip_address' => $request->ip(),
                 'last_searched_at' => now(),
@@ -119,6 +179,9 @@ class CourierController extends Controller
         } else {
             Customer::create([
                 'phone' => $phone,
+                'user_id' => $userId,
+                'subscription_type' => $subscriptionType,
+                'subscription_id' => $subscriptionId,
                 'search_by' => 'app',
                 'ip_address' => $request->ip(),
                 'last_searched_at' => now(),
