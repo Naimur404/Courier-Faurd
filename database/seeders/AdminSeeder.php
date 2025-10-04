@@ -14,8 +14,8 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create admin user
-        $admin = User::firstOrCreate(
+        // Create or update admin user
+        $admin = User::updateOrCreate(
             ['email' => 'admin@courierfraud.com'],
             [
                 'name' => 'Admin',
@@ -25,9 +25,10 @@ class AdminSeeder extends Seeder
             ]
         );
 
-        $this->command->info('Admin user created successfully!');
+        $this->command->info('Admin user created/updated successfully!');
         $this->command->info('Email: admin@courierfraud.com');
         $this->command->info('Password: admin123456');
+        $this->command->info('Role: ' . $admin->role);
         $this->command->warn('⚠️  Please change the password after first login in production!');
     }
 }
