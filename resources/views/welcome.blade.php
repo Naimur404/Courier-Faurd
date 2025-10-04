@@ -1,95 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-5TNKX5N9');
-    </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MW75LTD9PG"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+@extends('layouts.app')
 
-  gtag('config', 'G-MW75LTD9PG');
+@section('title', 'FraudShield - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Courier Fraud Detection')
+
+@section('description', 'বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।')
+
+@section('keywords', 'courier fraud bangladesh, fraud detection system, bangladeshi courier check, courier ফ্রড, কুরিয়ার ফ্রড চেক, কুরিয়ার নাম্বার চেক, courier check bangladesh')
+
+@section('structured_data')
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
+  "url": "https://fraudshieldbd.site",
+  "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "All",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BDT"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "Tyrodevs",
+    "url": "https://tyrodevs.com"
+  }
+}
 </script>
-    <!-- End Google Tag Manager -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FraudShield - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Courier Fraud Detection</title>
-    <meta name="description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।">
-    <meta name="keywords" content="courier fraud bangladesh, fraud detection system, bangladeshi courier check, courier ফ্রড, কুরিয়ার ফ্রড চেক, কুরিয়ার নাম্বার চেক, courier check bangladesh">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://fraudshieldbd.site">
-    <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
-    <meta property="og:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
-    <meta property="og:image" content="{{asset('assets/banner.jpg')}}">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="{{asset('assets/banner.jpg')}}">
-    <meta property="twitter:url" content="https://fraudshieldbd.site">
-    <meta property="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম | Bangladesh Courier Fraud Detection">
-    <meta property="twitter:description" content="মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন। বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।">
-    <meta property="twitter:image" content="{{asset('assets/banner.jpg')}}">
-    
-    <!-- Canonical URL -->
-    <meta rel="canonical" href="https://fraudshieldbd.site">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{asset('assets/favicon.png')}}">
-    <link rel="apple-touch-icon" href="{{asset('assets/favicon.png')}}">
-    
-    <!-- Structured Data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
-      "url": "https://fraudshieldbd.site",
-      "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
-      "applicationCategory": "BusinessApplication",
-      "operatingSystem": "All",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "BDT"
-      },
-      "author": {
-        "@type": "Organization",
-        "name": "Tyrodevs",
-        "url": "https://tyrodevs.com"
-      }
-    }
-    </script>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <style>
-        :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #f97316;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-            --danger-color: #ef4444;
-            --light-color: #f9fafb;
-            --dark-color: #111827;
-        }
-        
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            transition: all 0.3s ease;
-        }
-        
+@endsection
+
+@section('additional_styles')
         .progress-ring {
             position: relative;
             width: 150px;
@@ -146,21 +87,6 @@
             border-radius: 3px 3px 0 0;
         }
         
-        .animate-in {
-            animation: fadeIn 0.5s ease-out forwards;
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
         .spinner {
             border-radius: 50%;
             width: 40px;
@@ -176,48 +102,6 @@
             }
         }
         
-        /* Comprehensive Dark Mode Styles */
-        .dark {
-            color: #f3f4f6;
-        }
-        
-        .dark .bg-white, .dark .bg-gray-50 {
-            background-color: #1f2937;
-            color: #f3f4f6;
-        }
-        
-        .dark .border-gray-200 {
-            border-color: #4b5563;
-        }
-        
-        .dark .text-gray-600, .dark .text-gray-800 {
-            color: #d1d5db !important;
-        }
-        
-        .dark .text-gray-500 {
-            color: #9ca3af !important;
-        }
-        
-        .dark .text-gray-400 {
-            color: #9ca3af !important;
-        }
-        
-        .dark .bg-gray-100 {
-            background-color: #374151;
-        }
-        
-        .dark .bg-green-100 {
-            background-color: rgba(16, 185, 129, 0.15);
-        }
-        
-        .dark .bg-yellow-100 {
-            background-color: rgba(245, 158, 11, 0.15);
-        }
-        
-        .dark .bg-red-100 {
-            background-color: rgba(239, 68, 68, 0.15);
-        }
-        
         .dark .progress-ring circle.bg {
             stroke: #4b5563;
         }
@@ -230,75 +114,6 @@
         
         .dark .stat-card:hover {
             box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Input and Form Dark Mode */
-        .dark input, .dark textarea {
-            background-color: #374151;
-            border-color: #4b5563;
-            color: #f3f4f6;
-        }
-        
-        .dark input::placeholder, .dark textarea::placeholder {
-            color: #9ca3af;
-        }
-        
-        .dark input:focus, .dark textarea:focus {
-            border-color: #6366f1;
-            box-shadow: 0 0 0 1px #6366f1;
-        }
-        
-        /* Button Dark Mode */
-        .dark button {
-            color: #f3f4f6;
-        }
-        
-        /* Table Dark Mode */
-        .dark table {
-            background-color: #1f2937;
-        }
-        
-        .dark th {
-            background-color: #374151;
-            color: #f3f4f6;
-        }
-        
-        .dark td {
-            color: #d1d5db;
-            border-color: #4b5563;
-        }
-        
-        /* Modal Dark Mode */
-        .dark .modal, .dark .modal-content {
-            background-color: #1f2937;
-            color: #f3f4f6;
-        }
-        
-        /* Dropdown and Select Dark Mode */
-        .dark select {
-            background-color: #374151;
-            border-color: #4b5563;
-            color: #f3f4f6;
-        }
-
-        .glass-effect {
-            backdrop-filter: blur(10px);
-            background-color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .dark .glass-effect {
-            background-color: rgba(31, 41, 55, 0.7);
-        }
-
-        .shadow-custom {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
-        .gradient-text {
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
         }
 
         /* Search Statistics Animations */
@@ -341,115 +156,6 @@
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
         
-        /* Additional Dark Mode Text Fixes */
-        .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-            color: #f3f4f6;
-        }
-        
-        .dark p {
-            color: #d1d5db;
-        }
-        
-        .dark .text-indigo-200 {
-            color: #c7d2fe !important;
-        }
-        
-        .dark .text-indigo-600 {
-            color: #818cf8 !important;
-        }
-        
-        .dark .text-purple-600 {
-            color: #a78bfa !important;
-        }
-        
-        .dark .text-blue-600 {
-            color: #60a5fa !important;
-        }
-        
-        .dark .text-green-600 {
-            color: #34d399 !important;
-        }
-        
-        .dark .text-orange-600 {
-            color: #fb923c !important;
-        }
-        
-        .dark .text-red-600 {
-            color: #f87171 !important;
-        }
-        
-        /* Why section dark mode */
-        .dark .bg-white.rounded-xl.shadow-custom {
-            background-color: #1f2937;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
-        }
-        
-        .dark .border.border-gray-200 {
-            border-color: #4b5563;
-            background-color: #374151;
-        }
-        
-        .dark .bg-indigo-100 {
-            background-color: rgba(99, 102, 241, 0.15);
-        }
-        
-        .dark .text-indigo-600 {
-            color: #818cf8 !important;
-        }
-        
-        .dark .bg-gray-50.dark\:bg-gray-700 {
-            background-color: #374151;
-        }
-        
-        /* Footer dark mode improvements */
-        .dark .text-white\/70 {
-            color: rgba(243, 244, 246, 0.7) !important;
-        }
-        
-        /* Link colors in dark mode */
-        .dark a {
-            color: #60a5fa;
-        }
-        
-        .dark a:hover {
-            color: #93c5fd;
-        }
-        
-        /* Form elements additional fixes */
-        .dark .rounded-lg {
-            border-color: #4b5563;
-        }
-        
-        /* Ensure all text elements are visible */
-        .dark .text-yellow-400 {
-            color: #fbbf24 !important;
-        }
-        
-        .dark .text-yellow-500 {
-            color: #f59e0b !important;
-        }
-        
-        /* Review and rating system dark mode */
-        .dark .text-gray-700 {
-            color: #d1d5db !important;
-        }
-        
-        /* Search results dark mode */
-        .dark .bg-green-100.border-l-4 {
-            background-color: rgba(16, 185, 129, 0.1);
-            border-color: #10b981;
-        }
-        
-        .dark .bg-yellow-100.border-l-4 {
-            background-color: rgba(245, 158, 11, 0.1);
-            border-color: #f59e0b;
-        }
-        
-        .dark .bg-red-100.border-l-4 {
-            background-color: rgba(239, 68, 68, 0.1);
-            border-color: #ef4444;
-        }
-        
         /* Analytics Cards Dark Mode - Comprehensive Fix */
         .dark .stat-card .text-blue-600 {
             color: #60a5fa !important;
@@ -466,326 +172,216 @@
         .dark .stat-card .text-orange-600 {
             color: #fb923c !important;
         }
-        
-        .dark .stat-card .text-blue-500 {
-            color: #60a5fa !important;
+
+        /* FAQ Styles */
+        .faq-container {
+          max-width: auto;
+          margin: 0 auto;
+          padding: 2rem;
+          font-family: 'Hind Siliguri', 'Bangla', sans-serif;
         }
         
-        .dark .stat-card .text-green-500 {
-            color: #34d399 !important;
+        .faq-header {
+          text-align: center;
+          margin-bottom: 2.5rem;
+          position: relative;
         }
         
-        .dark .stat-card .text-purple-500 {
-            color: #a78bfa !important;
+        .faq-title {
+          font-size: 2.25rem;
+          font-weight: 700;
+          color: #2C3E50;
+          margin-bottom: 1rem;
+          position: relative;
+          display: inline-block;
         }
         
-        .dark .stat-card .text-orange-500 {
-            color: #fb923c !important;
+        .faq-title::after {
+          content: "";
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 100px;
+          height: 4px;
+          background: linear-gradient(90deg, #3498DB, #2ECC71);
+          border-radius: 2px;
         }
         
-        .dark .stat-card .text-blue-400 {
-            color: #60a5fa !important;
+        .faq-description {
+          color: #7F8C8D;
+          max-width: 600px;
+          margin: 0 auto;
         }
         
-        .dark .stat-card .text-green-400 {
-            color: #4ade80 !important;
+        .faq-items {
+          display: grid;
+          gap: 1.25rem;
         }
         
-        .dark .stat-card .text-purple-400 {
-            color: #c084fc !important;
+        .faq-item {
+          border-radius: 12px;
+          overflow: hidden;
+          background: white;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+          border-left: 5px solid #3498DB;
+          animation: fadeIn 0.5s ease forwards;
+          animation-delay: calc(var(--order) * 0.1s);
+          opacity: 0;
+          margin-bottom: 1rem;
         }
         
-        .dark .stat-card .text-orange-400 {
-            color: #fb923c !important;
+        .faq-item:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 30px rgba(0,0,0,0.1);
         }
         
-        .dark .stat-card .text-blue-300 {
-            color: #93c5fd !important;
+        .faq-question {
+          padding: 1.25rem 1.5rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 1.125rem;
+          color: #2C3E50;
+          transition: background-color 0.2s ease;
+          min-height: 80px;
         }
         
-        .dark .stat-card .text-green-300 {
-            color: #86efac !important;
+        .faq-question:hover {
+          background-color: rgba(52, 152, 219, 0.05);
         }
         
-        .dark .stat-card .text-purple-300 {
-            color: #d8b4fe !important;
+        .faq-answer {
+          padding: 0 1.5rem;
+          color: #5D6D7E;
+          line-height: 1.6;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
+          opacity: 0;
         }
         
-        .dark .stat-card .text-orange-300 {
-            color: #fdba74 !important;
+        .faq-answer.show {
+          max-height: 500px;
+          padding: 0 1.5rem 1.25rem 1.5rem;
+          opacity: 1;
         }
         
-        /* Force visibility for all analytics card text */
-        .dark .stat-card div,
-        .dark .stat-card span {
-            color: inherit;
+        .faq-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          background: #EBF5FB;
+          color: #3498DB;
+          transition: all 0.3s ease;
         }
         
-        .dark .stat-card .text-gray-600 {
-            color: #d1d5db !important;
+        /* Dark mode FAQ styles */
+        .dark .faq-container {
+          background-color: #1E293B;
+          color: #E5E7EB;
         }
         
-        .dark .stat-card .text-gray-300 {
-            color: #d1d5db !important;
+        .dark .faq-item {
+          background-color: #374151;
+          border-left: 5px solid #38B2AC;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .dark .faq-item:hover {
+          box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        
+        .dark .faq-title {
+          color: #F3F4F6;
+        }
+        
+        .dark .faq-description {
+          color: #D1D5DB;
+        }
+        
+        .dark .faq-question {
+          color: #F3F4F6;
+        }
+        
+        .dark .faq-answer {
+          color: #D1D5DB;
+        }
+        
+        .dark .faq-answer.show {
+          color: #D1D5DB;
+        }
+        
+        .dark .faq-icon {
+          background: #4B5563;
+          color: #60A5FA;
         }
 
-        @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .faq-container {
-      max-width: auto;
-      margin: 0 auto;
-      padding: 2rem;
-      font-family: 'Hind Siliguri', 'Bangla', sans-serif;
-    }
-    
-    .faq-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-      position: relative;
-    }
-    
-    .faq-title {
-      font-size: 2.25rem;
-      font-weight: 700;
-      color: #2C3E50;
-      margin-bottom: 1rem;
-      position: relative;
-      display: inline-block;
-    }
-    
-    .faq-title::after {
-      content: "";
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100px;
-      height: 4px;
-      background: linear-gradient(90deg, #3498DB, #2ECC71);
-      border-radius: 2px;
-    }
-    
-    .faq-description {
-      color: #7F8C8D;
-      max-width: 600px;
-      margin: 0 auto;
-    }
-    
-    .faq-items {
-      display: grid;
-      gap: 1.25rem;
-    }
-    
-    .faq-item {
-      border-radius: 12px;
-      overflow: hidden;
-      background: white;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      border-left: 5px solid #3498DB;
-      animation: fadeIn 0.5s ease forwards;
-      animation-delay: calc(var(--order) * 0.1s);
-      opacity: 0;
-      margin-bottom: 1rem;
-    }
-    
-    .faq-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    }
-    
-    .faq-question {
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 1.125rem;
-      color: #2C3E50;
-      transition: background-color 0.2s ease;
-      min-height: 80px;
-    }
-    
-    .faq-question:hover {
-      background-color: rgba(52, 152, 219, 0.05);
-    }
-    
-    .faq-answer {
-      padding: 0 1.5rem;
-      color: #5D6D7E;
-      line-height: 1.6;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s ease, padding 0.3s ease, opacity 0.3s ease;
-      opacity: 0;
-    }
-    
-    .faq-answer.show {
-      max-height: 500px;
-      padding: 0 1.5rem 1.25rem 1.5rem;
-      opacity: 1;
-    }
-    
-    .faq-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: #EBF5FB;
-      color: #3498DB;
-      transition: all 0.3s ease;
-    }
-    
-    /* Dark mode styles - using .dark class for better control */
-    .dark .faq-container {
-      background-color: #1E293B;
-      color: #E5E7EB;
-    }
-    
-    .dark .faq-item {
-      background-color: #374151;
-      border-left: 5px solid #38B2AC;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-    }
-    
-    .dark .faq-item:hover {
-      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-    }
-    
-    .dark .faq-title {
-      color: #F3F4F6;
-    }
-    
-    .dark .faq-description {
-      color: #D1D5DB;
-    }
-    
-    .dark .faq-question {
-      color: #F3F4F6;
-    }
-    
-    .dark .faq-answer {
-      color: #D1D5DB;
-    }
-    
-    .dark .faq-answer.show {
-      color: #D1D5DB;
-    }
-    
-    .dark .faq-icon {
-      background: #4B5563;
-      color: #60A5FA;
-    }
-    
-    /* Keep media query as fallback */
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: #1E293B;
-        color: #E5E7EB;
-      }
-    }
+        /* Rating and review system styles */
+        .rating-star {
+            transition: transform 0.1s ease-in-out;
+        }
 
-    /* Additional CSS for rating and review system */
-.rating-star {
-    transition: transform 0.1s ease-in-out;
-}
+        .rating-star:hover {
+            transform: scale(1.2);
+        }
 
-.rating-star:hover {
-    transform: scale(1.2);
-}
+        /* Animation for the new review being added */
+        @keyframes highlight {
+            0% { background-color: rgba(99, 102, 241, 0.1); }
+            100% { background-color: transparent; }
+        }
 
-/* Animation for the new review being added */
-@keyframes highlight {
-    0% { background-color: rgba(99, 102, 241, 0.1); }
-    100% { background-color: transparent; }
-}
+        #reviewsList > div:first-child {
+            animation: highlight 2s ease-out;
+        }
 
-#reviewsList > div:first-child {
-    animation: highlight 2s ease-out;
-}
+        /* Modal animation */
+        #ratingModal {
+            transition: opacity 0.3s ease;
+        }
 
-/* Modal animation */
-#ratingModal {
-    transition: opacity 0.3s ease;
-}
+        #ratingModal.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
 
-#ratingModal.hidden {
-    opacity: 0;
-    pointer-events: none;
-}
+        #ratingModal:not(.hidden) {
+            opacity: 1;
+        }
 
-#ratingModal:not(.hidden) {
-    opacity: 1;
-}
+        #ratingModal > div {
+            transition: transform 0.3s ease;
+            transform: scale(0.9);
+        }
 
-#ratingModal > div {
-    transition: transform 0.3s ease;
-    transform: scale(0.9);
-}
+        #ratingModal:not(.hidden) > div {
+            transform: scale(1);
+        }
 
-#ratingModal:not(.hidden) > div {
-    transform: scale(1);
-}
+        /* Make reviews section responsive */
+        @media (max-width: 640px) {
+            #customerReviewsSection h2, 
+            #customerReviewsSection button {
+                font-size: 0.95rem;
+            }
+            
+            #addReviewBtn {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+@endsection
 
-/* Make reviews section responsive */
-@media (max-width: 640px) {
-    #customerReviewsSection h2, 
-    #customerReviewsSection button {
-        font-size: 0.95rem;
-    }
-    
-    #addReviewBtn {
-        padding: 0.5rem 0.75rem;
-    }
-}
-    </style>
-</head>
-<body class="bg-gray-50 flex flex-col min-h-screen text-gray-800 dark:bg-gray-900 dark:text-gray-100">
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TNKX5N9"
-        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- Header -->
-    <header class="bg-white shadow-lg py-4 sticky top-0 z-50 glass-effect dark:bg-gray-800">
-        <div class="container mx-auto px-4 flex justify-between items-center">
-            <div class="flex items-center">
-                <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-lg">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="text-xl font-bold">
-                    <a href="/"> <!-- Corrected href attribute -->
-                        <span class="gradient-text">Fraud</span>
-                        <span class="text-gray-800 dark:text-white">Shield</span>
-                    </a>
-                </div>
-            </div>
-            <div class="flex items-center gap-4">
-                <button id="themeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition duration-300 focus:outline-none text-gray-800 dark:text-gray-200">
-                    <i class="fas fa-moon dark:hidden text-gray-800"></i>
-                    <i class="fas fa-sun hidden dark:inline text-gray-200"></i>
-                </button>
-            </div>
-        </div>
-    </header>
-    <section class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
-        <div class="container mx-auto px-4 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold mb-4">কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</h1>
-            <p class="text-xl mb-6">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।</p>
-            <div class="flex justify-center">
-                <a href="#search-section" class="bg-white text-indigo-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
-                    <i class="fas fa-search mr-2"></i> অনুসন্ধান শুরু করুন
-                </a>
-            </div>
-        </div>
-    </section>
-    
+@section('content')
     <!-- Search Statistics Section -->
-    <section class="bg-white dark:bg-gray-900 py-8 border-b border-gray-200 dark:border-gray-700">
-        <div class="container mx-auto px-4">
+    <section class="py-12 px-4">
+        <div class="container mx-auto">
             <div class="text-center mb-8">
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                     <i class="fas fa-chart-bar mr-2 text-indigo-600 dark:text-indigo-400"></i>
@@ -808,7 +404,7 @@
                             <div class="text-sm text-blue-500 dark:text-blue-300 font-medium">শেষ ১ ঘন্টায়</div>
                         </div>
                     </div>
-                    <div class="text-sm text-gray-600 dark:text-gray-600">
+                    <div class="text-sm text-gray-600 dark:text-gray-300">
                         <i class="fas fa-info-circle mr-1"></i>
                         সর্বশেষ ৬০ মিনিটের সার্চ
                     </div>
@@ -881,7 +477,8 @@
             </div>
         </div>
     </section>
-    <!-- Main Content -->
+
+    <!-- Main Search Section -->
     <main class="flex-1 container mx-auto px-4 py-8" id="search-section">
         {{-- <h1 class="text-2xl md:text-2xl font-bold mb-6 text-center animate-in">Courier Fraud Detection System</h1> --}}
         
@@ -1010,18 +607,6 @@
                             <div class="tab px-4 py-2 cursor-pointer font-medium text-gray-600 hover:text-indigo-500 dark:text-gray-400 active" data-tab="courier">
                                 <i class="fas fa-truck-loading mr-2"></i> কুরিয়ার
                             </div>
-                            {{-- <div class="tab px-4 py-2 cursor-pointer font-medium text-gray-600 hover:text-indigo-500 dark:text-gray-400" data-tab="orders">
-                                <i class="fas fa-shopping-bag mr-2"></i> অর্ডার
-                            </div>
-                            <div class="tab px-4 py-2 cursor-pointer font-medium text-gray-600 hover:text-indigo-500 dark:text-gray-400" data-tab="delivery">
-                                <i class="fas fa-box-open mr-2"></i> ডেলিভারি
-                            </div>
-                            <div class="tab px-4 py-2 cursor-pointer font-medium text-gray-600 hover:text-indigo-500 dark:text-gray-400" data-tab="cancelled">
-                                <i class="fas fa-ban mr-2"></i> বাতিল
-                            </div>
-                            <div class="tab px-4 py-2 cursor-pointer font-medium text-gray-600 hover:text-indigo-500 dark:text-gray-400" data-tab="delivery-rate">
-                                <i class="fas fa-chart-line mr-2"></i> ডেলিভারি হার
-                            </div> --}}
                         </div>
 
                         <!-- Chart Container -->
@@ -1156,6 +741,7 @@
             </div>
         </div>
     </main>
+    
     <section class="container mx-auto px-4 py-12">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-custom p-6">
             <h2 class="text-2xl font-bold mb-6 text-center text-gray-800 dark:text-gray-100">কেন কুরিয়ার ফ্রড চেক করা প্রয়োজন?</h2>
@@ -1262,139 +848,18 @@
         </div>
       </section>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-indigo-800 to-purple-800 text-white py-8 mt-auto">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div>
-                    <div class="flex items-center mb-4">
-                        <div class="bg-white text-indigo-600 w-10 h-10 rounded-lg flex items-center justify-center mr-3 shadow-lg">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="text-xl font-bold">
-                            <span class="text-white">Fraud</span><span class="text-yellow-400">Shield</span>
-                        </div>
-                    </div>
-                    <p class="text-sm text-indigo-200 mb-4">Advanced fraud detection system for courier services. Protect your business from potential fraud.</p>
-                    <div class="flex space-x-3">
-                        <a href="#" class="text-white hover:text-yellow-400 transition duration-300">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="#" class="text-white hover:text-yellow-400 transition duration-300">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="text-white hover:text-yellow-400 transition duration-300">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Home</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">About Us</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Features</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Pricing</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
-                    <ul class="space-y-2">
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Documentation</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Help Center</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Privacy Policy</a></li>
-                        <li><a href="#" class="text-indigo-200 hover:text-white transition duration-300">Terms of Service</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Contact Us</h3>
-                    <ul class="space-y-2">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt mt-1 mr-2 text-yellow-400"></i>
-                            <span class="text-indigo-200">Chittagong, Bangladesh</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-envelope mt-1 mr-2 text-yellow-400"></i>
-                            <span class="text-indigo-200">info@fraudshield.com</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-phone-alt mt-1 mr-2 text-yellow-400"></i>
-                            <span class="text-indigo-200">+8801309092748</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="border-t border-indigo-700 mt-8 pt-6 text-center text-indigo-200">
-                <p>© 2025 FraudShield - Courier Fraud Detection System. All rights reserved Tyrodevs.com</p>
-            </div>
-        </div>
-    </footer>
-    <!-- Google Tag Manager (noscript) -->
-    <!-- End Google Tag Manager (noscript) -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <script>
-       // Theme Toggle Functionality
-const themeToggle = document.getElementById('themeToggle');
-themeToggle.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
-});
+    <div class="fixed bottom-8 right-8 z-50">
+        <a href="{{ route('download.page') }}" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-full font-semibold hover:shadow-lg hover:opacity-90 transition duration-300 shadow-xl animate-pulse">
+          <i class="fas fa-download"></i>
+          <span>অ্যাপ ডাউনলোড করুন</span>
+        </a>
+      </div>
+@endsection
 
-// Set initial theme based on local storage or system preference
-if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark');
-} else {
-    document.documentElement.classList.remove('dark');
-}
-
+@section('scripts')
+<script>
 // Initialize Chart.js chart
 let dataChart;
-
-// Sample data for simulating API response
-// const sampleData = {
-//     phone: "01309092748",
-//     status: "success",
-//     courierData: {
-//         "pathao": {
-//             total_parcel: 45,
-//             success_parcel: 38,
-//             cancelled_parcel: 7,
-//             success_ratio: 84.4
-//         },
-//         "redx": {
-//             total_parcel: 32,
-//             success_parcel: 28,
-//             cancelled_parcel: 4,
-//             success_ratio: 87.5
-//         },
-//         "steadfast": {
-//             total_parcel: 27,
-//             success_parcel: 24,
-//             cancelled_parcel: 3,
-//             success_ratio: 88.9
-//         },
-//         "e-courier": {
-//             total_parcel: 18,
-//             success_parcel: 16,
-//             cancelled_parcel: 2,
-//             success_ratio: 88.9
-//         },
-//         "summary": {
-//             total_parcel: 122,
-//             success_parcel: 106,
-//             cancelled_parcel: 16,
-//             success_ratio: 86.9
-//         }
-//     },
-//     monthly_data: [
-//         { month: "Jan", orders: 15, delivered: 13, cancelled: 2 },
-//         { month: "Feb", orders: 18, delivered: 16, cancelled: 2 },
-//         { month: "Mar", orders: 22, delivered: 19, cancelled: 3 },
-//         { month: "Apr", orders: 20, delivered: 17, cancelled: 3 },
-//         { month: "May", orders: 25, delivered: 22, cancelled: 3 },
-//         { month: "Jun", orders: 22, delivered: 19, cancelled: 3 }
-//     ]
-// };
 
 // Function to get color based on success ratio
 function getColorForRatio(ratio) {
@@ -1425,17 +890,12 @@ function updateUI(data) {
     const messageBox = document.getElementById('messageBox');
 
     // Set rating and UI elements based on success ratio
-
     if(successRatio == 0 && summary.total_parcel == 0) {
         rating.textContent = 'New';
         ratingMessage.textContent = 'This customer is new and has no delivery history.';
         riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-gray-500 flex items-center justify-center';
         riskIndicator.innerHTML = '<i class="fas fa-question-circle mr-2"></i> <span>No Data Available</span>';
         quoteBox.textContent = '"Reliability is the foundation of trust. This customer\'s no record to speaks volumes."';
-
-        // ratingMessage.textContent = 'This customer has an excellent delivery history.';
-        // riskIndicator.className = 'mt-6 text-center py-3 px-4 rounded-lg text-white bg-green-500 flex items-center justify-center';
-        // riskIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i> <span>Low Fraud Risk</span>';
 
         messageBox.className = 'bg-green-100 border-l-4 border-green-500 p-4 rounded-xl mb-6 flex items-center gap-4 dark:bg-green-900 dark:border-green-700 animate-in';
         messageBox.innerHTML = `
@@ -1612,214 +1072,88 @@ function updateChart(data) {
                 }
             }
         });
-    } else if (activeTab === 'orders' || activeTab === 'delivery' || activeTab === 'cancelled') {
-        // Monthly data
-        chartData.labels = data.monthly_data.map(item => item.month);
-        
-        let dataKey = 'orders';
-        let color = 'rgba(79, 70, 229, 1)';
-        let bgColor = 'rgba(79, 70, 229, 0.2)';
-        
-        if (activeTab === 'delivery') {
-            dataKey = 'delivered';
-            color = 'rgba(16, 185, 129, 1)';
-            bgColor = 'rgba(16, 185, 129, 0.2)';
-        } else if (activeTab === 'cancelled') {
-            dataKey = 'cancelled';
-            color = 'rgba(239, 68, 68, 1)';
-            bgColor = 'rgba(239, 68, 68, 0.2)';
-        }
-        
-        chartData.datasets = [
-            {
-                label: dataKey.charAt(0).toUpperCase() + dataKey.slice(1),
-                data: data.monthly_data.map(item => item[dataKey]),
-                fill: true,
-                backgroundColor: bgColor,
-                borderColor: color,
-                tension: 0.4
-            }
-        ];
-        
-        // Create chart
-        dataChart = new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            color: textColor
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColor
-                        },
-                        grid: {
-                            color: gridColor
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            color: textColor
-                        },
-                        grid: {
-                            color: gridColor
-                        }
-                    }
-                }
-            }
-        });
-    } else if (activeTab === 'delivery-rate') {
-        // Delivery success rate trend
-        chartData.labels = data.monthly_data.map(item => item.month);
-        
-        // Calculate monthly success rates
-        const successRates = data.monthly_data.map(item => {
-            return item.orders > 0 ? ((item.delivered / item.orders) * 100).toFixed(1) : 0;
-        });
-        
-        chartData.datasets = [
-            {
-                label: 'Delivery Success Rate (%)',
-                data: successRates,
-                fill: true,
-                backgroundColor: 'rgba(249, 115, 22, 0.2)',
-                borderColor: 'rgba(249, 115, 22, 1)',
-                tension: 0.4
-            }
-        ];
-        
-        // Create chart
-        dataChart = new Chart(ctx, {
-            type: 'line',
-            data: chartData,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            color: textColor
-                        }
-                    }
-                },
-                scales: {
-                    x: {
-                        ticks: {
-                            color: textColor
-                        },
-                        grid: {
-                            color: gridColor
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            color: textColor,
-                            callback: function(value) {
-                                return value + '%';
-                            }
-                        },
-                        grid: {
-                            color: gridColor
-                        }
-                    }
-                }
-            }
-        });
     }
 }
 
- function displayReviews(reviews) {
-        const reviewsList = document.getElementById('reviewsList');
-        const noReviewsMsg = document.getElementById('noReviewsMsg');
-        
-        if (!reviews || reviews.length === 0) {
-            noReviewsMsg.classList.remove('hidden');
-            reviewsList.classList.add('hidden');
-            return;
-        }
-        
-        // Hide no reviews message and show reviews list
-        noReviewsMsg.classList.add('hidden');
-        reviewsList.classList.remove('hidden');
-        
-        // Clear previous reviews
-        reviewsList.innerHTML = '';
-        
-        // Add each review
-        reviews.forEach(review => {
-            const reviewElement = createReviewElement(review);
-            reviewsList.appendChild(reviewElement);
-        });
+function displayReviews(reviews) {
+    const reviewsList = document.getElementById('reviewsList');
+    const noReviewsMsg = document.getElementById('noReviewsMsg');
+    
+    if (!reviews || reviews.length === 0) {
+        noReviewsMsg.classList.remove('hidden');
+        reviewsList.classList.add('hidden');
+        return;
     }
-
-
-        // Function to create a review element
-    function createReviewElement(review) {
-        const reviewDiv = document.createElement('div');
-        reviewDiv.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
-        
-        // Format date
-        const reviewDate = new Date(review.created_at);
-        const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-        
-        // Generate star rating HTML
-        let starsHtml = '';
-        for (let i = 1; i <= 5; i++) {
-            if (i <= review.rating) {
-                starsHtml += '<i class="fas fa-star text-yellow-500"></i>';
-            } else {
-                starsHtml += '<i class="far fa-star text-gray-400"></i>';
-            }
-        }
-
-      // Create a function to mask the phone number
-function maskPhoneNumber(phone) {
-    if (!phone || phone.length < 4) return phone;
     
-    // Keep the first 3 digits and last 2 digits visible
-    const firstPart = phone.substring(0, 3);
-    const lastPart = phone.substring(phone.length - 2);
+    // Hide no reviews message and show reviews list
+    noReviewsMsg.classList.add('hidden');
+    reviewsList.classList.remove('hidden');
     
-    // Replace the middle with asterisks
-    const maskedPart = '*'.repeat(phone.length - 5);
+    // Clear previous reviews
+    reviewsList.innerHTML = '';
     
-    return firstPart + maskedPart + lastPart;
+    // Add each review
+    reviews.forEach(review => {
+        const reviewElement = createReviewElement(review);
+        reviewsList.appendChild(reviewElement);
+    });
 }
 
-// Then update your HTML template
-reviewDiv.innerHTML = `
-    <div class="flex justify-between items-start mb-2">
-        <div>
-            <h4 class="font-semibold">${review.name} (${maskPhoneNumber(review.commenter_phone)})</h4>
-            <div class="text-sm text-yellow-500 my-1">
-                ${starsHtml}
+// Function to create a review element
+function createReviewElement(review) {
+    const reviewDiv = document.createElement('div');
+    reviewDiv.className = 'bg-gray-50 dark:bg-gray-700 p-4 rounded-lg';
+    
+    // Format date
+    const reviewDate = new Date(review.created_at);
+    const formattedDate = reviewDate.toLocaleDateString('bn-BD', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+    
+    // Generate star rating HTML
+    let starsHtml = '';
+    for (let i = 1; i <= 5; i++) {
+        if (i <= review.rating) {
+            starsHtml += '<i class="fas fa-star text-yellow-500"></i>';
+        } else {
+            starsHtml += '<i class="far fa-star text-gray-400"></i>';
+        }
+    }
+
+    // Create a function to mask the phone number
+    function maskPhoneNumber(phone) {
+        if (!phone || phone.length < 4) return phone;
+        
+        // Keep the first 3 digits and last 2 digits visible
+        const firstPart = phone.substring(0, 3);
+        const lastPart = phone.substring(phone.length - 2);
+        
+        // Replace the middle with asterisks
+        const maskedPart = '*'.repeat(phone.length - 5);
+        
+        return firstPart + maskedPart + lastPart;
+    }
+
+    // Then update your HTML template
+    reviewDiv.innerHTML = `
+        <div class="flex justify-between items-start mb-2">
+            <div>
+                <h4 class="font-semibold">${review.name} (${maskPhoneNumber(review.commenter_phone)})</h4>
+                <div class="text-sm text-yellow-500 my-1">
+                    ${starsHtml}
+                </div>
+            </div>
+            <div class="text-xs text-gray-500 dark:text-gray-400">
+                ${formattedDate}
             </div>
         </div>
-        <div class="text-xs text-gray-500 dark:text-gray-400">
-            ${formattedDate}
-        </div>
-    </div>
-    <p class="text-gray-700 dark:text-gray-300">${review.comment}</p>
-`;
-        
-        return reviewDiv;
-    }
+        <p class="text-gray-700 dark:text-gray-300">${review.comment}</p>
+    `;
+    
+    return reviewDiv;
+}
 
 // Tab switching functionality
 const tabs = document.querySelectorAll('.tab');
@@ -1843,15 +1177,13 @@ document.getElementById('searchButton').addEventListener('click', async function
     const phone = document.getElementById('phoneInput').value;
 
     if (!phone) {
-        // alert('Please enter a phone number');
-
         Toastify({
-  text: "Please enter a phone number",
-  className: "error",
-  style: {
-    background: "linear-gradient(to right, red, red)",
-  }
-}).showToast();
+            text: "Please enter a phone number",
+            className: "error",
+            style: {
+                background: "linear-gradient(to right, red, red)",
+            }
+        }).showToast();
         return;
     }
 
@@ -1859,12 +1191,12 @@ document.getElementById('searchButton').addEventListener('click', async function
     const phoneRegex = /^01[0-9]{9}$/;
     if (!phoneRegex.test(phone)) {
         Toastify({
-  text: "Please enter a valid Bangladesh mobile number (e.g. 0160000000)",
-  className: "error",
-  style: {
-    background: "linear-gradient(to right, red, red)",
-  }
-}).showToast();
+            text: "Please enter a valid Bangladesh mobile number (e.g. 0160000000)",
+            className: "error",
+            style: {
+                background: "linear-gradient(to right, red, red)",
+            }
+        }).showToast();
         return;
     }
 
@@ -1879,8 +1211,6 @@ document.getElementById('searchButton').addEventListener('click', async function
         // Simulate API call delay
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        // In a real implementation, you would make an actual API call:
-        
         const response = await axios.post('/courier-check', { phone }, {
             headers: {
                 'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
@@ -1892,8 +1222,6 @@ document.getElementById('searchButton').addEventListener('click', async function
         const data = response.data;
         
         document.getElementById('searchButton').disabled = false;
-        // For demo purposes, use sample data
-        // const data = sampleData;
         
         // Hide loading and show results
         document.getElementById('loading').classList.add('hidden');
@@ -1902,55 +1230,29 @@ document.getElementById('searchButton').addEventListener('click', async function
         // Update UI with data
         updateUI(data);
 
-            try {
-                // In a real implementation, you would fetch reviews:
-
-                const response = await axios.get(`/customer-reviews/${phone}`, {
-                    headers: {
-                        'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                });
-                const reviews = response.data.data;
-               
-                // displayReviews(reviews);
-                
-                // For demo, simulate fetching reviews after a delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // Sample reviews data (for demo purposes)
-                // const hasReviews = Math.random() > 0.5; // Randomly show reviews or not
-                
-                if (reviews.length > 0) {
-                    const sampleReviews = [
-                        {
-                            name: "রফিক হোসেন",
-                            rating: 5,
-                            comment: "খুব ভালো মানের পণ্য। সময়মতো পেমেন্ট করেন। আমি ৫ বার ডেলিভারি দিয়েছি, প্রতিবারই কোন সমস্যা ছিল না।",
-                            date: "2024-10-15T10:30:00"
-                        },
-                        {
-                            name: "আবিদ হাসান",
-                            rating: 4,
-                            comment: "ভালো কাস্টমার। পণ্য নিয়ে কোন কমপ্লেইন নেই। পেমেন্ট নিয়মিত করেন।",
-                            date: "2024-09-20T14:45:00"
-                        }
-                    ];
-                    
-                    // Display the reviews
-                    displayReviews(reviews);
-                } else {
-                    // No reviews found
-                    document.getElementById('noReviewsMsg').classList.remove('hidden');
-                    document.getElementById('reviewsList').classList.add('hidden');
+        try {
+            const response = await axios.get(`/customer-reviews/${phone}`, {
+                headers: {
+                    'Authorization': 'Bearer YOUR_BEARER_TOKEN_HERE',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 }
-                
-            } catch (error) {
-                console.error('Error fetching reviews:', error);
-                // Show no reviews message
+            });
+            const reviews = response.data.data;
+           
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            if (reviews.length > 0) {
+                displayReviews(reviews);
+            } else {
                 document.getElementById('noReviewsMsg').classList.remove('hidden');
                 document.getElementById('reviewsList').classList.add('hidden');
             }
+            
+        } catch (error) {
+            console.error('Error fetching reviews:', error);
+            document.getElementById('noReviewsMsg').classList.remove('hidden');
+            document.getElementById('reviewsList').classList.add('hidden');
+        }
         
         // Refresh search statistics after successful search
         if (typeof refreshStatsAfterSearch === 'function') {
@@ -1961,12 +1263,12 @@ document.getElementById('searchButton').addEventListener('click', async function
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('emptyState').classList.remove('hidden');
         Toastify({
-  text: "Error fetching data. Please try again.",
-  className: "error",
-  style: {
-    background: "linear-gradient(to right, red, red)",
-  }
-}).showToast();
+            text: "Error fetching data. Please try again.",
+            className: "error",
+            style: {
+                background: "linear-gradient(to right, red, red)",
+            }
+        }).showToast();
         console.error('Error:', error);
     }
 });
@@ -1987,159 +1289,38 @@ document.getElementById('loading').classList.add('hidden');
 // Initialize progress ring stroke color
 document.getElementById('progressRing').style.stroke = '#4f46e5';
 
-// Listen for theme changes to update chart colors
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (!document.getElementById('resultsContainer').classList.contains('hidden')) {
-        updateChart(sampleData);
-    }
-});
-
-// Event listener for window resize to make chart responsive
-window.addEventListener('resize', () => {
-    if (dataChart) {
-        dataChart.resize();
-    }
-});
-    </script>
-    <script>
-
+// FAQ functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Set page title based on search results
-    const setDynamicPageTitle = (phoneNumber) => {
-        if (phoneNumber) {
-            document.title = `${phoneNumber} - কুরিয়ার ডেলিভারি হিস্টরি | FraudShield`;
+    const questions = document.querySelectorAll('.faq-question');
+      
+    questions.forEach(question => {
+        question.addEventListener('click', () => {
+            const answer = question.nextElementSibling;
+            const icon = question.querySelector('.faq-icon svg');
+            const isCurrentlyOpen = answer.classList.contains('show');
             
-            // Update meta description
-            let metaDescription = document.querySelector('meta[name="description"]');
-            if (metaDescription) {
-                metaDescription.setAttribute('content', `${phoneNumber} নম্বরের কুরিয়ার ডেলিভারি হিস্টরি এবং ফ্রড রিস্ক রিপোর্ট। FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম।`);
-            }
-        }
-    };
-    
-    // Handle search button click
-    const searchButton = document.getElementById('searchButton');
-    const phoneInput = document.getElementById('phoneInput');
-    
-    // if (searchButton && phoneInput) {
-    //     searchButton.addEventListener('click', function() {
-    //         const phoneNumber = phoneInput.value.trim();
-    //         if (phoneNumber) {
-    //             setDynamicPageTitle(phoneNumber);
-                
-    //             // Add phone number to URL for shareable links
-    //             const url = new URL(window.location);
-    //             url.searchParams.set('phone', phoneNumber);
-    //             window.history.pushState({}, '', url);
-    //         }
-    //     });
-        
-    //     // Check URL parameters on page load
-    //     const urlParams = new URLSearchParams(window.location.search);
-    //     const phoneParam = urlParams.get('phone');
-    //     if (phoneParam) {
-    //         phoneInput.value = phoneParam;
-    //         searchButton.click(); // Trigger search
-    //     }
-    // }
-    
-    // Add structured breadcrumbs for search results
-    const addBreadcrumbs = (phoneNumber) => {
-        if (!phoneNumber) return;
-        
-        const breadcrumbsData = {
-            "@context": "https://schema.org",
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-                {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "name": "হোম",
-                    "item": "https://fraudshieldbd.site"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": "কুরিয়ার চেক",
-                    "item": "https://fraudshieldbd.site/check"
-                },
-                {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": `${phoneNumber} নম্বর চেক`,
-                    "item": `https://fraudshieldbd.site/check?phone=${phoneNumber}`
+            // Close all other answers first
+            questions.forEach(otherQuestion => {
+                const otherAnswer = otherQuestion.nextElementSibling;
+                const otherIcon = otherQuestion.querySelector('.faq-icon svg');
+                if (otherAnswer !== answer) {
+                    otherAnswer.classList.remove('show');
+                    otherIcon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
                 }
-            ]
-        };
-        
-        const script = document.createElement('script');
-        script.type = 'application/ld+json';
-        script.text = JSON.stringify(breadcrumbsData);
-        document.head.appendChild(script);
-    };
-    
-    // Implement smooth scrolling for better UX
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
+            });
             
-            if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop - 100,
-                    behavior: 'smooth'
-                });
+            // Toggle current answer
+            if (isCurrentlyOpen) {
+                answer.classList.remove('show');
+                icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
+            } else {
+                answer.classList.add('show');
+                icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>';
             }
         });
     });
-    const questions = document.querySelectorAll('.faq-question');
-      
-      questions.forEach(question => {
-        question.addEventListener('click', () => {
-          const answer = question.nextElementSibling;
-          const icon = question.querySelector('.faq-icon svg');
-          const isCurrentlyOpen = answer.classList.contains('show');
-          
-          // Close all other answers first
-          questions.forEach(otherQuestion => {
-            const otherAnswer = otherQuestion.nextElementSibling;
-            const otherIcon = otherQuestion.querySelector('.faq-icon svg');
-            if (otherAnswer !== answer) {
-              otherAnswer.classList.remove('show');
-              otherIcon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
-            }
-          });
-          
-          // Toggle current answer
-          if (isCurrentlyOpen) {
-            answer.classList.remove('show');
-            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>';
-          } else {
-            answer.classList.add('show');
-            icon.innerHTML = '<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"/>';
-          }
-        });
-      });
-});
-    </script>
-    <script>
 
-        // Rating and comment system functionality
-document.addEventListener('DOMContentLoaded', function() {
-    // Add the customer reviews section to resultsContainer
-    const resultsContainer = document.getElementById('resultsContainer');
-    if (resultsContainer) {
-        // Check if the customerReviewsSection is already appended
-        if (!document.getElementById('customerReviewsSection')) {
-            // Append after the chart and table container
-            const customerReviewsSection = document.createElement('div');
-            customerReviewsSection.innerHTML = document.getElementById('customerReviewsSection').outerHTML;
-            resultsContainer.appendChild(customerReviewsSection);
-        }
-    }
-
-    // Rating stars functionality
+    // Rating and comment system functionality
     const ratingStars = document.querySelectorAll('.rating-star');
     ratingStars.forEach(star => {
         star.addEventListener('click', function() {
@@ -2209,7 +1390,6 @@ document.addEventListener('DOMContentLoaded', function() {
             
             const phoneNumber = document.getElementById('phoneInput').value;
             const ownNumber = document.getElementById('ownNumber').value;
-
             const userName = document.getElementById('userName').value;
             const rating = document.getElementById('ratingValue').value;
             const comment = document.getElementById('userComment').value;
@@ -2232,8 +1412,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> অপেক্ষা করুন...';
                 submitBtn.disabled = true;
                 
-                // In a real implementation, you would make an actual API call:
-                
                 const response = await axios.post('/customer-review', {
                     phone: phoneNumber,
                     ownNumber: ownNumber,
@@ -2247,10 +1425,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 });
-                // Simulate API call delay
+                
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 
-                // Add the new review to the UI
                 const reviews = response.data.data;
                 addReviewToUI(reviews);
                 
@@ -2304,156 +1481,145 @@ document.addEventListener('DOMContentLoaded', function() {
         reviewsList.insertBefore(reviewElement, reviewsList.firstChild);
     }
 });
-    </script>
-    <script>
-        // Search Statistics functionality
-        let searchStatsInterval;
+
+// Search Statistics functionality
+let searchStatsInterval;
+
+// Bengali number conversion function
+function convertToBengaliNumbers(number) {
+    const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return number.toString().replace(/[0-9]/g, function(digit) {
+        return bengaliDigits[parseInt(digit)];
+    });
+}
+
+// Function to format number with commas and convert to Bengali
+function formatBengaliNumber(number) {
+    const formattedNumber = Math.round(number).toLocaleString('en-US');
+    return convertToBengaliNumbers(formattedNumber);
+}
+
+// Function to load search statistics
+async function loadSearchStatistics() {
+    try {
+        const response = await fetch('/api/search-stats');
+        const result = await response.json();
         
-        // Bengali number conversion function
-        function convertToBengaliNumbers(number) {
-            const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-            return number.toString().replace(/[0-9]/g, function(digit) {
-                return bengaliDigits[parseInt(digit)];
-            });
-        }
-        
-        // Function to format number with commas and convert to Bengali
-        function formatBengaliNumber(number) {
-            const formattedNumber = Math.round(number).toLocaleString('en-US');
-            return convertToBengaliNumbers(formattedNumber);
-        }
-
-        // Function to load search statistics
-        async function loadSearchStatistics() {
-            try {
-                const response = await fetch('/api/search-stats');
-                const result = await response.json();
-                
-                if (result.success) {
-                    const data = result.data;
-                    
-                    // Update the counters with animation
-                    animateCounter('lastHourCount', data.last_hour);
-                    animateCounter('lastDayCount', data.today);
-                    animateCounter('allTimeCount', data.all_time);
-                    animateCounter('uniqueNumbersCount', data.unique_numbers);
-                    
-                    // Update last updated time in Bengali using Bangladesh time from API
-                    if (data.bangladesh_time) {
-                        const bangladeshTime = new Date(data.bangladesh_time + '+06:00'); // Ensure timezone is applied
-                        const bengaliMonths = [
-                            'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-                            'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-                        ];
-                        
-                        const day = convertToBengaliNumbers(bangladeshTime.getDate());
-                        const month = bengaliMonths[bangladeshTime.getMonth()];
-                        const year = convertToBengaliNumbers(bangladeshTime.getFullYear());
-                        const hours = convertToBengaliNumbers(bangladeshTime.getHours().toString().padStart(2, '0'));
-                        const minutes = convertToBengaliNumbers(bangladeshTime.getMinutes().toString().padStart(2, '0'));
-                        const seconds = convertToBengaliNumbers(bangladeshTime.getSeconds().toString().padStart(2, '0'));
-                        
-                        const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds} (বাংলাদেশ সময়)`;
-                        document.getElementById('lastUpdated').textContent = timeString;
-                    } else {
-                        // Fallback to local time if Bangladesh time not available
-                        const now = new Date();
-                        const bengaliMonths = [
-                            'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-                            'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-                        ];
-                        
-                        const day = convertToBengaliNumbers(now.getDate());
-                        const month = bengaliMonths[now.getMonth()];
-                        const year = convertToBengaliNumbers(now.getFullYear());
-                        const hours = convertToBengaliNumbers(now.getHours().toString().padStart(2, '0'));
-                        const minutes = convertToBengaliNumbers(now.getMinutes().toString().padStart(2, '0'));
-                        const seconds = convertToBengaliNumbers(now.getSeconds().toString().padStart(2, '0'));
-                        
-                        const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds}`;
-                        document.getElementById('lastUpdated').textContent = timeString;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading search statistics:', error);
-                // Show error state in Bengali
-                ['lastHourCount', 'lastDayCount', 'allTimeCount', 'uniqueNumbersCount'].forEach(id => {
-                    document.getElementById(id).textContent = 'ত্রুটি';
-                });
-            }
-        }
-
-        // Function to animate counter with Bengali number formatting
-        function animateCounter(elementId, targetValue) {
-            const element = document.getElementById(elementId);
-            const startValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
-            const duration = 1000; // 1 second
-            const steps = 50;
-            const stepValue = (targetValue - startValue) / steps;
-            let currentValue = startValue;
-            let step = 0;
-
-            const timer = setInterval(() => {
-                step++;
-                currentValue += stepValue;
-                
-                if (step >= steps) {
-                    currentValue = targetValue;
-                    clearInterval(timer);
-                }
-                
-                // Format number with commas and convert to Bengali
-                const bengaliFormattedValue = formatBengaliNumber(currentValue);
-                element.textContent = bengaliFormattedValue;
-            }, duration / steps);
-        }
-
-        // Initialize search statistics when page loads
-        document.addEventListener('DOMContentLoaded', function() {
-            // Load initial data
-            loadSearchStatistics();
+        if (result.success) {
+            const data = result.data;
             
-            // Set up automatic refresh every 30 seconds
-            searchStatsInterval = setInterval(loadSearchStatistics, 30000);
-        });
-
-        // Refresh statistics when a new search is performed
-        function refreshStatsAfterSearch() {
-            // Add a small delay to ensure the backend has processed the search
-            setTimeout(() => {
-                loadSearchStatistics();
-            }, 1000);
-        }
-
-        // Update the existing search button event listener to include stats refresh
-        // This will be called automatically after each successful search
-
-        // Clean up interval when page is about to unload
-        window.addEventListener('beforeunload', function() {
-            if (searchStatsInterval) {
-                clearInterval(searchStatsInterval);
-            }
-        });
-
-        // Add visibility change listener to pause/resume updates when tab is not active
-        document.addEventListener('visibilitychange', function() {
-            if (document.hidden) {
-                // Page is hidden, clear interval
-                if (searchStatsInterval) {
-                    clearInterval(searchStatsInterval);
-                }
+            // Update the counters with animation
+            animateCounter('lastHourCount', data.last_hour);
+            animateCounter('lastDayCount', data.today);
+            animateCounter('allTimeCount', data.all_time);
+            animateCounter('uniqueNumbersCount', data.unique_numbers);
+            
+            // Update last updated time in Bengali using Bangladesh time from API
+            if (data.bangladesh_time) {
+                const bangladeshTime = new Date(data.bangladesh_time + '+06:00'); // Ensure timezone is applied
+                const bengaliMonths = [
+                    'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+                    'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+                ];
+                
+                const day = convertToBengaliNumbers(bangladeshTime.getDate());
+                const month = bengaliMonths[bangladeshTime.getMonth()];
+                const year = convertToBengaliNumbers(bangladeshTime.getFullYear());
+                const hours = convertToBengaliNumbers(bangladeshTime.getHours().toString().padStart(2, '0'));
+                const minutes = convertToBengaliNumbers(bangladeshTime.getMinutes().toString().padStart(2, '0'));
+                const seconds = convertToBengaliNumbers(bangladeshTime.getSeconds().toString().padStart(2, '0'));
+                
+                const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds} (বাংলাদেশ সময়)`;
+                document.getElementById('lastUpdated').textContent = timeString;
             } else {
-                // Page is visible, restart interval
-                loadSearchStatistics();
-                searchStatsInterval = setInterval(loadSearchStatistics, 30000);
+                // Fallback to local time if Bangladesh time not available
+                const now = new Date();
+                const bengaliMonths = [
+                    'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+                    'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+                ];
+                
+                const day = convertToBengaliNumbers(now.getDate());
+                const month = bengaliMonths[now.getMonth()];
+                const year = convertToBengaliNumbers(now.getFullYear());
+                const hours = convertToBengaliNumbers(now.getHours().toString().padStart(2, '0'));
+                const minutes = convertToBengaliNumbers(now.getMinutes().toString().padStart(2, '0'));
+                const seconds = convertToBengaliNumbers(now.getSeconds().toString().padStart(2, '0'));
+                
+                const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds}`;
+                document.getElementById('lastUpdated').textContent = timeString;
             }
+        }
+    } catch (error) {
+        console.error('Error loading search statistics:', error);
+        // Show error state in Bengali
+        ['lastHourCount', 'lastDayCount', 'allTimeCount', 'uniqueNumbersCount'].forEach(id => {
+            document.getElementById(id).textContent = 'ত্রুটি';
         });
-    </script>
-    <div class="fixed bottom-8 right-8 z-50">
-        <a href="{{ route('download.page') }}" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-5 py-3 rounded-full font-semibold hover:shadow-lg hover:opacity-90 transition duration-300 shadow-xl animate-pulse">
-          <i class="fas fa-download"></i>
-          <span>অ্যাপ ডাউনলোড করুন</span>
-        </a>
-      </div>
-</body>
-</html>
+    }
+}
+
+// Function to animate counter with Bengali number formatting
+function animateCounter(elementId, targetValue) {
+    const element = document.getElementById(elementId);
+    const startValue = parseInt(element.textContent.replace(/[^\d]/g, '')) || 0;
+    const duration = 1000; // 1 second
+    const steps = 50;
+    const stepValue = (targetValue - startValue) / steps;
+    let currentValue = startValue;
+    let step = 0;
+
+    const timer = setInterval(() => {
+        step++;
+        currentValue += stepValue;
+        
+        if (step >= steps) {
+            currentValue = targetValue;
+            clearInterval(timer);
+        }
+        
+        // Format number with commas and convert to Bengali
+        const bengaliFormattedValue = formatBengaliNumber(currentValue);
+        element.textContent = bengaliFormattedValue;
+    }, duration / steps);
+}
+
+// Initialize search statistics when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Load initial data
+    loadSearchStatistics();
+    
+    // Set up automatic refresh every 30 seconds
+    searchStatsInterval = setInterval(loadSearchStatistics, 30000);
+});
+
+// Refresh statistics when a new search is performed
+function refreshStatsAfterSearch() {
+    // Add a small delay to ensure the backend has processed the search
+    setTimeout(() => {
+        loadSearchStatistics();
+    }, 1000);
+}
+
+// Clean up interval when page is about to unload
+window.addEventListener('beforeunload', function() {
+    if (searchStatsInterval) {
+        clearInterval(searchStatsInterval);
+    }
+});
+
+// Add visibility change listener to pause/resume updates when tab is not active
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        // Page is hidden, clear interval
+        if (searchStatsInterval) {
+            clearInterval(searchStatsInterval);
+        }
+    } else {
+        // Page is visible, restart interval
+        loadSearchStatistics();
+        searchStatsInterval = setInterval(loadSearchStatistics, 30000);
+    }
+});
+</script>
+@endsection
