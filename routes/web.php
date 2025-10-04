@@ -44,8 +44,12 @@ Route::middleware(['auth'])->group(function () {
 // API Documentation (public access)
 Route::get('/api/documentation', [ApiDocumentationController::class, 'index'])->name('api.documentation');
 
-// Courier tracking routes
-Route::post('/courier-check', [CourierController::class, 'check'])->name('courier.check')->middleware([VerifyRequestOrigin::class]);
+
+
+
+
+// Courier tracking routes with IP rate limiting (5 searches per day per IP)
+Route::post('/courier-check', [CourierController::class, 'check'])->name('courier.check')->middleware([VerifyRequestOrigin::class, 'ip.rate.limit']);
 Route::get('/customer', [CourierController::class, 'showTokenForm'])->name('customer.form')->middleware([VerifyRequestOrigin::class]);
 Route::post('customer-review', [CustomerReviewController::class, 'store'])->name('customer.review.store')->middleware([VerifyRequestOrigin::class]);
 Route::get('customer-reviews/{phone}', [CustomerReviewController::class, 'list'])->name('customer.review.list')->middleware([VerifyRequestOrigin::class]);

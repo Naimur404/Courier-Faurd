@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'api.auth' => \App\Http\Middleware\ApiAuthentication::class,
+            'ip.rate.limit' => \App\Http\Middleware\IpRateLimit::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

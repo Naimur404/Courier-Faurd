@@ -1260,15 +1260,67 @@ document.getElementById('searchButton').addEventListener('click', async function
         }
         
     } catch (error) {
+        document.getElementById('searchButton').disabled = false;
         document.getElementById('loading').classList.add('hidden');
         document.getElementById('emptyState').classList.remove('hidden');
-        Toastify({
-            text: "Error fetching data. Please try again.",
-            className: "error",
-            style: {
-                background: "linear-gradient(to right, red, red)",
-            }
-        }).showToast();
+        
+        // Check if it's a rate limit error (429 status)
+        if (error.response && error.response.status === 429) {
+            const rateLimitData = error.response.data;
+            
+            // Show detailed modal with rate limit information
+            const rateLimitModal = `
+                <div class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center" id="rateLimitModal">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+                        <div class="text-center">
+                            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-yellow-100 mb-4">
+                                <i class="fas fa-exclamation-triangle text-yellow-600 text-xl"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">দৈনিক সার্চ সীমা অতিক্রম</h3>
+                            <div class="text-left space-y-2 mb-6">
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>দৈনিক সীমা:</strong> ${rateLimitData.limit} টি সার্চ
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>ব্যবহৃত:</strong> ${rateLimitData.used} টি সার্চ
+                                </p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">
+                                    <strong>রিসেট হবে:</strong> ${new Date(rateLimitData.reset_time).toLocaleString('bn-BD')}
+                                </p>
+                            </div>
+                            <div class="bg-blue-50 dark:bg-blue-900 p-4 rounded-lg mb-6">
+                                <p class="text-sm text-blue-800 dark:text-blue-200">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    আরও বেশি সার্চের জন্য আমাদের API প্ল্যান দেখুন অথবা আগামীকাল আবার চেষ্টা করুন।
+                                </p>
+                            </div>
+                            <div class="flex space-x-3">
+                                <button onclick="document.getElementById('rateLimitModal').remove()" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-lg font-medium transition duration-200">
+                                    বুঝেছি
+                                </button>
+                                <a href="/pricing" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-2 px-4 rounded-lg font-medium text-center transition duration-200">
+                                    API প্ল্যান দেখুন
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Add modal to body
+            document.body.insertAdjacentHTML('beforeend', rateLimitModal);
+            
+        } else {
+            // Regular error message for other types of errors
+            Toastify({
+                text: "ডাটা লোড করতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+                className: "error",
+                style: {
+                    background: "linear-gradient(to right, red, red)",
+                }
+            }).showToast();
+        }
+        
         console.error('Error:', error);
     }
 });
