@@ -79,7 +79,15 @@ class WebsiteSubscription extends Model
             return false;
         }
         
-        return $this->expires_at && $this->expires_at->isFuture();
+        if (!$this->expires_at) {
+            return false;
+        }
+        
+        // Use Bangladesh timezone for comparison
+        $now = Carbon::now('Asia/Dhaka');
+        $expiresAt = $this->expires_at->setTimezone('Asia/Dhaka');
+        
+        return $expiresAt->isFuture();
     }
 
     /**
@@ -92,7 +100,10 @@ class WebsiteSubscription extends Model
         }
         
         if ($this->status === self::STATUS_ACTIVE && $this->expires_at) {
-            return $this->expires_at->isPast();
+            // Use Bangladesh timezone for comparison
+            $now = Carbon::now('Asia/Dhaka');
+            $expiresAt = $this->expires_at->setTimezone('Asia/Dhaka');
+            return $expiresAt->isPast();
         }
         
         return false;
@@ -107,7 +118,24 @@ class WebsiteSubscription extends Model
             return 0;
         }
         
-        return max(0, Carbon::now()->diffInDays($this->expires_at, false));
+        // Use Bangladesh timezone for calculations
+        $now = Carbon::now('Asia/Dhaka');
+        $expiresAt = $this->expires_at->setTimezone('Asia/Dhaka');
+        
+        // If subscription has already expired
+        if ($expiresAt->isPast()) {
+            return 0;
+        }
+        
+        // Calculate the difference in whole days
+        $today = $now->copy()->startOfDay();
+        $expiryDay = $expiresAt->copy()->startOfDay();
+        
+        $daysDifference = $today->diffInDays($expiryDay);
+        
+        // If expires today, show 1 day remaining (include today)
+        // If expires tomorrow, show 2 days remaining (today + tomorrow)
+        return $daysDifference + 1;
     }
 
     /**
@@ -123,8 +151,9 @@ class WebsiteSubscription extends Model
      */
     public function scopeActive($query)
     {
+        $bangladeshNow = Carbon::now('Asia/Dhaka');
         return $query->where('status', self::STATUS_ACTIVE)
-                    ->where('expires_at', '>', now());
+                    ->where('expires_at', '>', $bangladeshNow);
     }
 
     /**
@@ -132,11 +161,12 @@ class WebsiteSubscription extends Model
      */
     public function scopeExpired($query)
     {
-        return $query->where(function($q) {
+        $bangladeshNow = Carbon::now('Asia/Dhaka');
+        return $query->where(function($q) use ($bangladeshNow) {
             $q->where('status', self::STATUS_EXPIRED)
-              ->orWhere(function($subQuery) {
+              ->orWhere(function($subQuery) use ($bangladeshNow) {
                   $subQuery->where('status', self::STATUS_ACTIVE)
-                           ->where('expires_at', '<=', now());
+                           ->where('expires_at', '<=', $bangladeshNow);
               });
         });
     }
@@ -166,15 +196,16 @@ class WebsiteSubscription extends Model
     public static function createForUser(int $userId, string $planType): self
     {
         $amount = $planType === self::PLAN_DAILY ? self::DAILY_PRICE : self::WEEKLY_PRICE;
+        $bangladeshNow = Carbon::now('Asia/Dhaka');
         $expiresAt = $planType === self::PLAN_DAILY 
-            ? now()->addDay() 
-            : now()->addDays(self::WEEKLY_DAYS);
+            ? $bangladeshNow->copy()->addDay() 
+            : $bangladeshNow->copy()->addDays(self::WEEKLY_DAYS);
 
         return self::create([
             'user_id' => $userId,
             'plan_type' => $planType,
             'amount' => $amount,
-            'starts_at' => now(),
+            'starts_at' => $bangladeshNow,
             'expires_at' => $expiresAt,
             'status' => self::STATUS_ACTIVE,
             'verification_status' => self::VERIFICATION_PENDING,
@@ -245,7 +276,7 @@ class WebsiteSubscription extends Model
         $this->update([
             'verification_status' => self::VERIFICATION_VERIFIED,
             'verified_by' => $adminId,
-            'verified_at' => now(),
+            'verified_at' => Carbon::now('Asia/Dhaka'),
             'admin_notes' => $notes,
         ]);
     }
@@ -258,7 +289,7 @@ class WebsiteSubscription extends Model
         $this->update([
             'verification_status' => self::VERIFICATION_REJECTED,
             'verified_by' => $adminId,
-            'verified_at' => now(),
+            'verified_at' => Carbon::now('Asia/Dhaka'),
             'admin_notes' => $notes,
         ]);
     }

@@ -82,7 +82,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
+                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => $existingCustomer->count + 1,
                 'data' => $dataToStore // Store as array, model casting will handle it
             ]);
@@ -94,7 +94,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
+                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => 1,
                 'data' => $dataToStore,
             ]);
@@ -172,7 +172,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'app',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
+                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => $existingCustomer->count + 1,
                 'data' => $dataToStore // Always store the latest API response
             ]);
@@ -184,7 +184,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'app',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => now(),
+                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => 1,
                 'data' => $dataToStore,
             ]);

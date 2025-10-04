@@ -180,20 +180,37 @@
                 <form id="subscriptionForm">
                     <input type="hidden" id="selectedPlan" name="plan">
                     
-                    <div class="mb-4">
+                    <div class="mb-6">
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">পেমেন্ট মেথড</label>
-                        <select name="payment_method" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" required>
-                            <option value="">পেমেন্ট মেথড নির্বাচন করুন</option>
-                            <option value="bkash">বিকাশ</option>
-                            <option value="nagad">নগদ</option>
-                            <option value="rocket">রকেট</option>
-                            <option value="manual">ম্যানুয়াল</option>
-                        </select>
+                        <div class="bg-pink-50 dark:bg-pink-900/20 border border-pink-200 dark:border-pink-800 rounded-lg p-4">
+                            <div class="flex items-center mb-3">
+                                <div class="bg-pink-600 text-white rounded-lg px-3 py-1 text-sm font-bold mr-3">bKash</div>
+                                <span class="text-gray-700 dark:text-gray-300 font-medium">পেমেন্ট নম্বর</span>
+                            </div>
+                            <div class="bg-white dark:bg-gray-700 border rounded-lg p-3 mb-3">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-mono text-lg font-bold text-gray-900 dark:text-white">01309092748</span>
+                                    <button type="button" onclick="copyNumber()" class="bg-pink-100 hover:bg-pink-200 dark:bg-pink-800 dark:hover:bg-pink-700 text-pink-700 dark:text-pink-200 px-3 py-1 rounded text-sm font-medium transition-colors">
+                                        <i class="fas fa-copy mr-1"></i> কপি
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-sm text-gray-600 dark:text-gray-400">
+                                <p class="mb-2"><strong>পেমেন্ট প্রক্রিয়া:</strong></p>
+                                <ol class="list-decimal list-inside space-y-1 text-xs">
+                                    <li>উপরের নম্বরে bKash Send Money করুন</li>
+                                    <li>ট্রানজেকশন সম্পন্ন হলে ট্রানজেকশন আইডি নিচে লিখুন</li>
+                                    <li>সাবস্ক্রাইব বাটনে ক্লিক করুন</li>
+                                </ol>
+                            </div>
+                        </div>
+                        <input type="hidden" name="payment_method" value="bkash">
                     </div>
                     
                     <div class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">ট্রানজেকশন আইডি (ঐচ্ছিক)</label>
-                        <input type="text" name="transaction_id" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="ট্রানজেকশন আইডি">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">ট্রানজেকশন আইডি *</label>
+                        <input type="text" name="transaction_id" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="bKash ট্রানজেকশন আইডি লিখুন" required>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">পেমেন্ট সম্পন্ন হওয়ার পর যে আইডি পাবেন তা এখানে লিখুন</p>
                     </div>
                     
                     <div class="flex space-x-3">
@@ -211,8 +228,160 @@
 @endsection
 
 @section('scripts')
+    <!-- Nice Alert CSS -->
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 300px;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 16px 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            transform: translateX(400px);
+            transition: all 0.3s ease-in-out;
+            backdrop-filter: blur(10px);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-left: 4px solid #047857;
+        }
+        
+        .notification.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border-left: 4px solid #b91c1c;
+        }
+        
+        .notification.info {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-left: 4px solid #1d4ed8;
+        }
+        
+        .notification .notification-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .notification .notification-icon {
+            margin-right: 12px;
+            font-size: 20px;
+        }
+        
+        .notification .notification-text {
+            flex: 1;
+        }
+        
+        .notification .notification-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .notification .notification-message {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .notification .notification-close {
+            background: none;
+            border: none;
+            color: currentColor;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 0;
+            margin-left: 12px;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .notification .notification-close:hover {
+            opacity: 1;
+        }
+    </style>
+    
     <script>
         const plans = @json($plans);
+
+        // Nice notification function
+        function showNotification(title, message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            
+            const iconMap = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle'
+            };
+            
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <i class="${iconMap[type]} notification-icon"></i>
+                    <div class="notification-text">
+                        <div class="notification-title">${title}</div>
+                        <div class="notification-message">${message}</div>
+                    </div>
+                    <button class="notification-close" onclick="closeNotification(this)">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Show notification
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            // Auto close after 5 seconds
+            setTimeout(() => {
+                closeNotification(notification.querySelector('.notification-close'));
+            }, 5000);
+        }
+        
+        function closeNotification(button) {
+            const notification = button.closest('.notification');
+            notification.classList.remove('show');
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 300);
+        }
+        
+        // Copy bKash number function
+        function copyNumber() {
+            const number = '01309092748';
+            navigator.clipboard.writeText(number).then(() => {
+                showNotification(
+                    'নম্বর কপি হয়েছে!', 
+                    'bKash নম্বর ক্লিপবোর্ডে কপি হয়েছে', 
+                    'success'
+                );
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = number;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showNotification(
+                    'নম্বর কপি হয়েছে!', 
+                    'bKash নম্বর ক্লিপবোর্ডে কপি হয়েছে', 
+                    'success'
+                );
+            });
+        }
 
         function subscribeToPlan(planType) {
             const plan = plans[planType];
@@ -230,6 +399,16 @@
             
             const formData = new FormData(this);
             const planType = formData.get('plan');
+            const transactionId = formData.get('transaction_id');
+            
+            if (!transactionId || transactionId.trim() === '') {
+                showNotification(
+                    'ট্রানজেকশন আইডি প্রয়োজন', 
+                    'অনুগ্রহ করে bKash ট্রানজেকশন আইডি প্রদান করুন', 
+                    'error'
+                );
+                return;
+            }
             
             try {
                 const response = await fetch(`/website-subscriptions/subscribe/${planType}`, {
@@ -240,20 +419,35 @@
                     },
                     body: JSON.stringify({
                         payment_method: formData.get('payment_method'),
-                        transaction_id: formData.get('transaction_id'),
+                        transaction_id: transactionId,
                     })
                 });
                 
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert('সাবস্ক্রিপশন সফলভাবে সক্রিয় হয়েছে!');
-                    location.reload();
+                    showNotification(
+                        'সাবস্ক্রিপশন সফল!', 
+                        'আপনার সাবস্ক্রিপশন সফলভাবে সক্রিয় হয়েছে। অ্যাডমিনের অনুমোদনের অপেক্ষায় রয়েছে।', 
+                        'success'
+                    );
+                    closeSubscriptionModal();
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
                 } else {
-                    alert(result.message || 'সাবস্ক্রিপশন প্রক্রিয়ায় সমস্যা হয়েছে।');
+                    showNotification(
+                        'সাবস্ক্রিপশন ব্যর্থ', 
+                        result.message || 'সাবস্ক্রিপশন প্রক্রিয়ায় সমস্যা হয়েছে।', 
+                        'error'
+                    );
                 }
             } catch (error) {
-                alert('সাবস্ক্রিপশন প্রক্রিয়ায় সমস্যা হয়েছে।');
+                showNotification(
+                    'নেটওয়ার্ক ত্রুটি', 
+                    'সাবস্ক্রিপশন প্রক্রিয়ায় সমস্যা হয়েছে। আবার চেষ্টা করুন।', 
+                    'error'
+                );
             }
             
             closeSubscriptionModal();

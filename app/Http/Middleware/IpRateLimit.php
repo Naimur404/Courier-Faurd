@@ -49,7 +49,7 @@ class IpRateLimit
         // Apply rate limiting for non-subscribed users
         $ip = $request->ip();
         $key = 'ip_searches:' . $ip;
-        $dailyLimit = 2;
+        $dailyLimit = 10;
         
         // Get current search count for this IP
         $searchCount = Cache::get($key, 0);

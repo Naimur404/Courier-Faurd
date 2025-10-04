@@ -35,9 +35,11 @@ class DashboardController extends Controller
         $activeSubscription = $user->activeSubscription;
         
         // Get current website subscription (including pending/rejected)
+        // Use Bangladesh timezone for proper date comparison
+        $bangladeshNow = \Carbon\Carbon::now('Asia/Dhaka');
         $activeWebsiteSubscription = WebsiteSubscription::where('user_id', $user->id)
                                                        ->where('status', WebsiteSubscription::STATUS_ACTIVE)
-                                                       ->where('expires_at', '>', now())
+                                                       ->where('expires_at', '>', $bangladeshNow)
                                                        ->latest()
                                                        ->first();
         
