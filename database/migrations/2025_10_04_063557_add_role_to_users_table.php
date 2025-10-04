@@ -12,11 +12,22 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('role', ['admin', 'api_user'])->default('api_user')->after('email');
-            $table->string('api_token')->nullable()->unique()->after('remember_token');
-            $table->integer('monthly_request_limit')->default(1000)->after('api_token');
-            $table->integer('current_month_requests')->default(0)->after('monthly_request_limit');
-            $table->timestamp('last_request_reset')->nullable()->after('current_month_requests');
+            // Only add columns if they don't exist
+            if (!Schema::hasColumn('users', 'role')) {
+                $table->enum('role', ['admin', 'api_user'])->default('api_user')->after('email');
+            }
+            if (!Schema::hasColumn('users', 'api_token')) {
+                $table->string('api_token')->nullable()->unique()->after('remember_token');
+            }
+            if (!Schema::hasColumn('users', 'monthly_request_limit')) {
+                $table->integer('monthly_request_limit')->default(1000)->after('api_token');
+            }
+            if (!Schema::hasColumn('users', 'current_month_requests')) {
+                $table->integer('current_month_requests')->default(0)->after('monthly_request_limit');
+            }
+            if (!Schema::hasColumn('users', 'last_request_reset')) {
+                $table->timestamp('last_request_reset')->nullable()->after('current_month_requests');
+            }
         });
     }
 
@@ -26,13 +37,22 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'role', 
-                'api_token', 
-                'monthly_request_limit', 
-                'current_month_requests', 
-                'last_request_reset'
-            ]);
+            // Only drop columns if they exist
+            if (Schema::hasColumn('users', 'role')) {
+                $table->dropColumn('role');
+            }
+            if (Schema::hasColumn('users', 'api_token')) {
+                $table->dropColumn('api_token');
+            }
+            if (Schema::hasColumn('users', 'monthly_request_limit')) {
+                $table->dropColumn('monthly_request_limit');
+            }
+            if (Schema::hasColumn('users', 'current_month_requests')) {
+                $table->dropColumn('current_month_requests');
+            }
+            if (Schema::hasColumn('users', 'last_request_reset')) {
+                $table->dropColumn('last_request_reset');
+            }
         });
     }
 };
