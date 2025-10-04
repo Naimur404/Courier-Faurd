@@ -35,16 +35,19 @@ class CustomerReviewResource extends Resource
                             ->label('Target Phone Number')
                             ->tel()
                             ->required()
-                            ->placeholder('Phone number being reviewed'),
+                            ->placeholder('Phone number being reviewed/reported')
+                            ->helperText('The phone number that is being reviewed'),
                         Forms\Components\TextInput::make('commenter_phone')
                             ->label('Reviewer Phone')
                             ->tel()
                             ->required()
-                            ->placeholder('Phone number of reviewer'),
+                            ->placeholder('Phone number of the person making the review')
+                            ->helperText('The phone number of who is leaving this review'),
                         Forms\Components\TextInput::make('name')
                             ->label('Reviewer Name')
                             ->required()
-                            ->placeholder('Name of the reviewer'),
+                            ->placeholder('Name of the reviewer')
+                            ->helperText('Full name of the person leaving the review'),
                     ])->columns(3),
                 
                 Forms\Components\Section::make('Review Content')
@@ -52,29 +55,47 @@ class CustomerReviewResource extends Resource
                         Forms\Components\Select::make('rating')
                             ->label('Rating')
                             ->options([
-                                1 => '1 Star (Report/Complaint)',
-                                2 => '2 Stars (Poor)',
-                                3 => '3 Stars (Average)',
-                                4 => '4 Stars (Good)',
-                                5 => '5 Stars (Excellent)',
+                                1 => '1 Star ⭐ (Report/Complaint)',
+                                2 => '2 Stars ⭐⭐ (Poor)',
+                                3 => '3 Stars ⭐⭐⭐ (Average)',
+                                4 => '4 Stars ⭐⭐⭐⭐ (Good)',
+                                5 => '5 Stars ⭐⭐⭐⭐⭐ (Excellent)',
                             ])
                             ->required()
-                            ->helperText('Rating of 1 is considered a report/complaint'),
+                            ->helperText('1-2 stars are considered reports/complaints')
+                            ->reactive(),
                         Forms\Components\Textarea::make('comment')
-                            ->label('Review Comment')
+                            ->label('Review/Report Comment')
                             ->rows(4)
                             ->columnSpanFull()
-                            ->placeholder('Detailed review or report description'),
+                            ->placeholder('Detailed review description or report details')
+                            ->helperText('Optional: Additional details about the experience'),
                     ])->columns(1),
                 
-                Forms\Components\Section::make('Additional Information')
+                Forms\Components\Section::make('System Information')
                     ->schema([
-                        Forms\Components\TextInput::make('customer_id')
-                            ->label('Customer ID')
-                            ->numeric()
-                            ->disabled()
-                            ->helperText('Auto-generated from customer records'),
-                    ]),
+                        Forms\Components\Select::make('customer_id')
+                            ->label('Related Customer Record')
+                            ->relationship('customer', 'phone')
+                            ->searchable()
+                            ->preload()
+                            ->helperText('Link to existing customer search record if available')
+                            ->placeholder('Search for customer record'),
+                        Forms\Components\Placeholder::make('created_info')
+                            ->label('Creation Info')
+                            ->content(function ($record) {
+                                if (!$record) return 'New review';
+                                
+                                return 'Created: ' . $record->created_at->format('M j, Y H:i') . ' (' . $record->created_at->diffForHumans() . ')';
+                            }),
+                        Forms\Components\Placeholder::make('review_type_info')
+                            ->label('Review Type')
+                            ->content(function ($record) {
+                                if (!$record) return 'Will be determined by rating';
+                                
+                                return $record->review_type . ($record->isReport() ? ' 🚨' : ' ✅');
+                            }),
+                    ])->columns(3)->hiddenOn('create'),
             ]);
     }
 
@@ -82,65 +103,70 @@ class CustomerReviewResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('customer_name')
-                    ->label('Customer Name')
+                Tables\Columns\TextColumn::make('phone')
+                    ->label('Target Phone')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('medium')
+                    ->copyable()
+                    ->description('Phone number being reviewed'),
+                Tables\Columns\TextColumn::make('commenter_phone')
+                    ->label('Reviewer Phone')
+                    ->searchable()
+                    ->sortable()
+                    ->weight('medium')
+                    ->copyable()
+                    ->description('Phone number of reviewer'),
+                Tables\Columns\TextColumn::make('name')
+                    ->label('Reviewer Name')
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
-                Tables\Columns\TextColumn::make('courier_name')
-                    ->label('Courier Name')
-                    ->searchable()
-                    ->sortable()
-                    ->weight('medium'),
-                Tables\Columns\TextColumn::make('courier_rating')
-                    ->label('Courier Rating')
+                Tables\Columns\TextColumn::make('rating')
+                    ->label('Rating')
                     ->numeric()
                     ->sortable()
                     ->badge()
                     ->color(static function ($state): string {
                         return match (true) {
                             $state >= 4 => 'success',
-                            $state >= 3 => 'warning',
-                            default => 'danger',
+                            $state == 3 => 'warning',
+                            $state <= 2 => 'danger',
+                            default => 'gray',
                         };
+                    })
+                    ->formatStateUsing(function ($state) {
+                        return $state . ' ⭐';
                     }),
-                Tables\Columns\TextColumn::make('customer_rating')
-                    ->label('Customer Rating')
-                    ->numeric()
-                    ->sortable()
+                Tables\Columns\TextColumn::make('review_type')
+                    ->label('Type')
                     ->badge()
-                    ->color(static function ($state): string {
+                    ->color(static function ($record): string {
                         return match (true) {
-                            $state >= 4 => 'success',
-                            $state >= 3 => 'warning',
-                            default => 'danger',
+                            $record->rating >= 4 => 'success',
+                            $record->rating == 3 => 'warning',
+                            $record->rating <= 2 => 'danger',
+                            default => 'gray',
                         };
                     }),
-                Tables\Columns\TextColumn::make('customer_phone')
-                    ->label('Customer Phone')
+                Tables\Columns\TextColumn::make('comment')
+                    ->label('Review/Report Content')
                     ->searchable()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('courier_phone')
-                    ->label('Courier Phone')
-                    ->searchable()
-                    ->toggleable(),
-                Tables\Columns\TextColumn::make('customer_address')
-                    ->label('Customer Address')
-                    ->searchable()
-                    ->limit(40)
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('courier_address')
-                    ->label('Courier Address')
-                    ->searchable()
-                    ->limit(40)
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('review_content')
-                    ->label('Review Content')
-                    ->searchable()
-                    ->limit(50)
+                    ->limit(60)
                     ->tooltip(function ($record) {
-                        return $record->review_content;
-                    }),
+                        return $record->comment ?: 'No comment provided';
+                    })
+                    ->placeholder('No comment'),
+                Tables\Columns\TextColumn::make('customer_id')
+                    ->label('Customer ID')
+                    ->numeric()
+                    ->sortable()
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('customer.phone')
+                    ->label('Customer Record')
+                    ->searchable()
+                    ->placeholder('No customer record')
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Submitted At')
                     ->dateTime('M j, Y H:i')
@@ -148,29 +174,37 @@ class CustomerReviewResource extends Resource
                     ->description(function ($record) {
                         return $record->created_at->diffForHumans();
                     }),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Last Updated')
+                    ->dateTime('M j, Y H:i')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('courier_rating')
-                    ->label('Courier Rating')
+                Tables\Filters\SelectFilter::make('rating')
+                    ->label('Rating')
                     ->options([
-                        1 => '1 Star',
-                        2 => '2 Stars',
-                        3 => '3 Stars',
-                        4 => '4 Stars',
-                        5 => '5 Stars',
+                        1 => '1 Star (Report)',
+                        2 => '2 Stars (Poor)',
+                        3 => '3 Stars (Average)',
+                        4 => '4 Stars (Good)',
+                        5 => '5 Stars (Excellent)',
                     ]),
-                Tables\Filters\SelectFilter::make('customer_rating')
-                    ->label('Customer Rating')
-                    ->options([
-                        1 => '1 Star',
-                        2 => '2 Stars',
-                        3 => '3 Stars',
-                        4 => '4 Stars',
-                        5 => '5 Stars',
-                    ]),
+                Tables\Filters\Filter::make('reports')
+                    ->label('Reports & Complaints (1-2 Stars)')
+                    ->query(fn (Builder $query): Builder => $query->where('rating', '<=', 2)),
+                Tables\Filters\Filter::make('positive_reviews')
+                    ->label('Positive Reviews (4-5 Stars)')
+                    ->query(fn (Builder $query): Builder => $query->where('rating', '>=', 4)),
                 Tables\Filters\Filter::make('recent_reviews')
                     ->label('Recent Reviews (Last 7 days)')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDays(7))),
+                Tables\Filters\Filter::make('has_comment')
+                    ->label('Has Comment')
+                    ->query(fn (Builder $query): Builder => $query->whereNotNull('comment')->where('comment', '!=', '')),
+                Tables\Filters\Filter::make('same_phone')
+                    ->label('Self Reviews (Same Phone)')
+                    ->query(fn (Builder $query): Builder => $query->whereColumn('phone', 'commenter_phone')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),

@@ -90,25 +90,26 @@ class AppDownloadTrackResource extends Resource
                     ->sortable()
                     ->placeholder('Not completed')
                     ->description(function ($record) {
-                        return $record->completed_at ? $record->completed_at->diffForHumans() : null;
-                    }),
-                Tables\Columns\TextColumn::make('duration')
-                    ->label('Duration')
-                    ->getStateUsing(function ($record) {
                         if (!$record->completed_at) {
-                            return 'In progress...';
+                            return null;
                         }
                         
-                        $duration = $record->created_at->diffInSeconds($record->completed_at);
-                        if ($duration < 60) {
-                            return $duration . 's';
-                        } elseif ($duration < 3600) {
-                            return round($duration / 60, 1) . 'm';
-                        } else {
-                            return round($duration / 3600, 1) . 'h';
+                        try {
+                            // Ensure completed_at is a Carbon instance
+                            $completedAt = $record->completed_at instanceof \Carbon\Carbon 
+                                ? $record->completed_at 
+                                : \Carbon\Carbon::parse($record->completed_at);
+                            return $completedAt->diffForHumans();
+                        } catch (\Exception $e) {
+                            return null;
                         }
-                    })
-                    ->sortable(false),
+                    }),
+                Tables\Columns\TextColumn::make('formatted_duration')
+                    ->label('Duration')
+                    ->sortable(false)
+                    ->getStateUsing(function ($record) {
+                        return $record->formatted_duration;
+                    }),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')

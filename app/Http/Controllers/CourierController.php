@@ -23,7 +23,8 @@ class CourierController extends Controller
         $oldTotalParcel = 0;
 
         if ($existingCustomer && $existingCustomer->data) {
-            $oldData = json_decode($existingCustomer->data, true);
+            // Data is already an array due to model casting
+            $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
             $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
         }
 
@@ -38,7 +39,7 @@ class CourierController extends Controller
 
         // Determine which data to return
         $dataToReturn = $responseData;
-        $dataToStore = json_encode($responseData);
+        $dataToStore = $responseData; // Store as array, model will handle casting
 
         // If new total parcel is less than old total parcel, return old data
         if ($oldData && $newTotalParcel < $oldTotalParcel) {
@@ -53,7 +54,7 @@ class CourierController extends Controller
                 'ip_address' => $request->ip(),
                 'last_searched_at' => now(),
                 'count' => $existingCustomer->count + 1,
-                'data' => $dataToStore // Always store the latest API response
+                'data' => $dataToStore // Store as array, model casting will handle it
             ]);
         } else {
             Customer::create([
@@ -82,7 +83,8 @@ class CourierController extends Controller
         $oldTotalParcel = 0;
 
         if ($existingCustomer && $existingCustomer->data) {
-            $oldData = json_decode($existingCustomer->data, true);
+            // Data is already an array due to model casting
+            $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
             $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
         }
 

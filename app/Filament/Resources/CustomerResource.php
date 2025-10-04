@@ -67,10 +67,38 @@ class CustomerResource extends Resource
                     ->schema([
                         Forms\Components\Textarea::make('data')
                             ->label('Raw Search Data (JSON)')
-                            ->rows(10)
+                            ->rows(15)
                             ->columnSpanFull()
-                            ->helperText('Complete API response data in JSON format'),
+                            ->helperText('Complete API response data in JSON format')
+                            ->formatStateUsing(function ($state) {
+                                if (is_array($state) || is_object($state)) {
+                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                }
+                                return $state;
+                            })
+                            ->dehydrateStateUsing(function ($state) {
+                                if (is_string($state)) {
+                                    $decoded = json_decode($state, true);
+                                    return $decoded !== null ? $decoded : $state;
+                                }
+                                return $state;
+                            }),
                     ]),
+                
+                Forms\Components\Section::make('Courier Summary')
+                    ->schema([
+                        Forms\Components\Placeholder::make('total_parcels')
+                            ->label('Total Parcels')
+                            ->content(fn (?Customer $record): string => $record ? number_format($record->total_parcels) : 'N/A'),
+                        Forms\Components\Placeholder::make('success_ratio')
+                            ->label('Success Ratio')
+                            ->content(fn (?Customer $record): string => $record ? $record->success_ratio . '%' : 'N/A'),
+                        Forms\Components\Placeholder::make('courier_services_count')
+                            ->label('Courier Services')
+                            ->content(fn (?Customer $record): string => $record ? count($record->courier_services) . ' services' : 'N/A'),
+                    ])
+                    ->columns(3)
+                    ->hiddenOn('create'),
             ]);
     }
 
@@ -107,6 +135,33 @@ class CustomerResource extends Resource
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->since(),
+                Tables\Columns\TextColumn::make('total_parcels')
+                    ->label('Total Parcels')
+                    ->getStateUsing(fn (Customer $record): string => number_format($record->total_parcels))
+                    ->badge()
+                    ->color('info')
+                    ->sortable(false)
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('success_ratio')
+                    ->label('Success Rate')
+                    ->getStateUsing(fn (Customer $record): string => $record->success_ratio . '%')
+                    ->badge()
+                    ->color(static function (Customer $record): string {
+                        return match (true) {
+                            $record->success_ratio >= 90 => 'success',
+                            $record->success_ratio >= 70 => 'warning',
+                            default => 'danger',
+                        };
+                    })
+                    ->sortable(false)
+                    ->toggleable(),
+                Tables\Columns\TextColumn::make('courier_services_count')
+                    ->label('Courier Services')
+                    ->getStateUsing(fn (Customer $record): string => count($record->courier_services) . ' services')
+                    ->badge()
+                    ->color('gray')
+                    ->sortable(false)
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('First Search')
                     ->dateTime('M d, Y H:i')
@@ -127,6 +182,15 @@ class CustomerResource extends Resource
                 Tables\Filters\Filter::make('recent')
                     ->query(fn (Builder $query): Builder => $query->where('last_searched_at', '>=', now()->subDays(7)))
                     ->label('Recent (Last 7 days)'),
+                Tables\Filters\Filter::make('has_courier_data')
+                    ->query(fn (Builder $query): Builder => $query->whereNotNull('data'))
+                    ->label('Has Courier Data'),
+                Tables\Filters\Filter::make('high_success_rate')
+                    ->query(fn (Builder $query): Builder => $query->whereRaw("JSON_EXTRACT(data, '$.courierData.summary.success_ratio') >= 90"))
+                    ->label('High Success Rate (90%+)'),
+                Tables\Filters\Filter::make('many_parcels')
+                    ->query(fn (Builder $query): Builder => $query->whereRaw("JSON_EXTRACT(data, '$.courierData.summary.total_parcel') >= 10"))
+                    ->label('Many Parcels (10+)'),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
