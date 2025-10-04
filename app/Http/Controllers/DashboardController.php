@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ApiKey;
 use App\Models\ApiUsage;
 use App\Models\Plan;
+use App\Models\WebsiteSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,8 +31,11 @@ class DashboardController extends Controller
                               ->whereYear('created_at', now()->year)
                               ->count();
         
-        // Get current subscription
+        // Get current API subscription
         $activeSubscription = $user->activeSubscription;
+        
+        // Get current website subscription
+        $activeWebsiteSubscription = WebsiteSubscription::getActiveForUser($user->id);
         
         // Get available plans for upgrade
         $plans = Plan::active()->ordered()->get();
@@ -48,7 +52,8 @@ class DashboardController extends Controller
             'apiKeys', 
             'todayUsage', 
             'monthlyUsage', 
-            'activeSubscription', 
+            'activeSubscription',
+            'activeWebsiteSubscription',
             'plans',
             'recentUsage'
         ));

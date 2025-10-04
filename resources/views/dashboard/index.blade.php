@@ -86,7 +86,7 @@
         @endif
 
         <!-- Quick Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
                 <div class="flex items-center">
                     <div class="p-3 rounded-full bg-gradient-to-r from-blue-500 to-indigo-600">
@@ -132,7 +132,7 @@
                         <i class="fas fa-crown text-white text-xl"></i>
                     </div>
                     <div class="ml-4 min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 truncate">Subscription</p>
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 truncate">API Plan</p>
                         <p class="text-lg font-bold text-gray-900 dark:text-white truncate">
                             @if($activeSubscription)
                                 {{ $activeSubscription->plan->name }}
@@ -145,6 +145,31 @@
                                 {{ $activeSubscription->getDaysRemainingAttribute() }} days left
                             @else
                                 Inactive
+                            @endif
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
+                <div class="flex items-center">
+                    <div class="p-3 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600">
+                        <i class="fas fa-infinity text-white text-xl"></i>
+                    </div>
+                    <div class="ml-4 min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400 truncate">Website Plan</p>
+                        <p class="text-lg font-bold text-gray-900 dark:text-white truncate">
+                            @if($activeWebsiteSubscription)
+                                {{ ucfirst($activeWebsiteSubscription->plan_type) }}
+                            @else
+                                No Plan
+                            @endif
+                        </p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">
+                            @if($activeWebsiteSubscription)
+                                {{ $activeWebsiteSubscription->days_remaining }} days left
+                            @else
+                                Limited
                             @endif
                         </p>
                     </div>
@@ -220,98 +245,172 @@
                 </div>
             </div>
 
-            <!-- Subscription Section -->
+            <!-- Subscriptions Section -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700">
                 <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-900 dark:text-white">Subscription Status</h2>
-                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Your current plan and usage limits</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Your API and website subscription plans</p>
                         </div>
-                        @if($activeSubscription)
+                        @if($activeSubscription || $activeWebsiteSubscription)
                             <span class="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 px-3 py-1 rounded-full text-sm font-medium">
-                                Active
+                                {{ ($activeSubscription && $activeWebsiteSubscription) ? 'Both Active' : 'Active' }}
                             </span>
                         @endif
                     </div>
                 </div>
                 
-                <div class="p-6">
-                    @if($activeSubscription)
-                        <div class="space-y-4">
-                            <div class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-lg p-4">
-                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">{{ $activeSubscription->plan->name }}</h3>
+                <div class="p-6 space-y-6">
+                    <!-- API Subscription -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                            <i class="fas fa-crown text-orange-500 mr-2"></i>
+                            API Subscription
+                        </h3>
+                        @if($activeSubscription)
+                            <div class="bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">{{ $activeSubscription->plan->name }}</h4>
+                                    <span class="bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 px-2 py-1 rounded-full text-xs font-medium">
+                                        Active
+                                    </span>
+                                </div>
                                 <p class="text-gray-600 dark:text-gray-300 text-sm mb-3">{{ $activeSubscription->plan->description }}</p>
                                 
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm">
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm mb-4">
                                     <div class="flex items-center">
-                                        <i class="fas fa-tachometer-alt text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <i class="fas fa-tachometer-alt text-orange-500 mr-2 flex-shrink-0"></i>
                                         <span class="text-gray-600 dark:text-gray-400 mr-1">Daily Limit:</span>
-                                        <span class="font-semibold text-gray-900 dark:text-white break-all">{{ number_format($activeSubscription->plan->request_limit) }} requests</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">{{ number_format($activeSubscription->plan->request_limit) }} requests</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <i class="fas fa-calendar-alt text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <i class="fas fa-calendar-alt text-orange-500 mr-2 flex-shrink-0"></i>
                                         <span class="text-gray-600 dark:text-gray-400 mr-1">Expires:</span>
-                                        <span class="font-semibold text-gray-900 dark:text-white break-all">{{ $activeSubscription->expires_at ? $activeSubscription->expires_at->format('M d, Y') : 'Never' }}</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">{{ $activeSubscription->expires_at ? $activeSubscription->expires_at->format('M d, Y') : 'Never' }}</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <i class="fas fa-clock text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <i class="fas fa-clock text-orange-500 mr-2 flex-shrink-0"></i>
                                         <span class="text-gray-600 dark:text-gray-400 mr-1">Days Remaining:</span>
                                         <span class="font-semibold text-gray-900 dark:text-white">{{ $activeSubscription->getDaysRemainingAttribute() }}</span>
                                     </div>
                                     <div class="flex items-center">
-                                        <i class="fas fa-chart-pie text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <i class="fas fa-chart-pie text-orange-500 mr-2 flex-shrink-0"></i>
                                         <span class="text-gray-600 dark:text-gray-400 mr-1">Usage Today:</span>
                                         <span class="font-semibold text-gray-900 dark:text-white">{{ number_format($todayUsage) }} / {{ number_format($activeSubscription->plan->request_limit) }}</span>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            @if($activeSubscription->getDaysRemainingAttribute() < 7 && $activeSubscription->getDaysRemainingAttribute() > 0)
-                                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-4 py-3 rounded-lg">
-                                    <div class="flex items-center">
-                                        <i class="fas fa-exclamation-triangle mr-3 text-yellow-500"></i>
-                                        <div>
-                                            <p class="font-medium">Subscription Expiring Soon</p>
-                                            <p class="text-sm">Your subscription expires in {{ $activeSubscription->getDaysRemainingAttribute() }} days. Consider renewing to avoid service interruption.</p>
+                                
+                                @if($activeSubscription->getDaysRemainingAttribute() < 7 && $activeSubscription->getDaysRemainingAttribute() > 0)
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-2 rounded-lg mb-3">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>
+                                            <p class="text-sm">API subscription expires in {{ $activeSubscription->getDaysRemainingAttribute() }} days</p>
                                         </div>
                                     </div>
-                                </div>
-                            @endif
+                                @endif
 
-                            <!-- Usage Progress Bar -->
+                                <!-- Usage Progress Bar -->
+                                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3 mb-3">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Today's API Usage</span>
+                                        <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($todayUsage) }} / {{ number_format($activeSubscription->plan->request_limit) }}</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                                        @php
+                                            $percentage = min(100, ($todayUsage / $activeSubscription->plan->request_limit) * 100);
+                                            $colorClass = $percentage > 90 ? 'bg-red-500' : ($percentage > 70 ? 'bg-yellow-500' : 'bg-green-500');
+                                        @endphp
+                                        <div class="h-2 rounded-full {{ $colorClass }}" style="width: {{ $percentage }}%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
                             <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                                <div class="flex justify-between items-center mb-2">
-                                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Today's Usage</span>
-                                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ number_format($todayUsage) }} / {{ number_format($activeSubscription->plan->request_limit) }}</span>
-                                </div>
-                                <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                                    @php
-                                        $percentage = min(100, ($todayUsage / $activeSubscription->plan->request_limit) * 100);
-                                        $colorClass = $percentage > 90 ? 'bg-red-500' : ($percentage > 70 ? 'bg-yellow-500' : 'bg-green-500');
-                                    @endphp
-                                    <div class="h-2 rounded-full {{ $colorClass }}" style="width: {{ $percentage }}%"></div>
+                                <div class="text-center">
+                                    <i class="fas fa-exclamation-circle text-orange-400 dark:text-orange-500 text-2xl mb-2"></i>
+                                    <h4 class="font-medium text-gray-900 dark:text-white mb-1">No API Subscription</h4>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm">Subscribe to access API services</p>
                                 </div>
                             </div>
+                        @endif
+                    </div>
 
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <a href="{{ route('pricing') }}" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-200">
-                                    <i class="fas fa-arrow-up mr-2"></i>Upgrade Plan
-                                </a>
+                    <!-- Website Subscription -->
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center">
+                            <i class="fas fa-infinity text-indigo-500 mr-2"></i>
+                            Website Unlimited Search
+                        </h3>
+                        @if($activeWebsiteSubscription)
+                            <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 rounded-lg p-4">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                        {{ ucfirst($activeWebsiteSubscription->plan_type) }} Plan
+                                        <span class="text-sm font-normal text-gray-600 dark:text-gray-400">({{ $activeWebsiteSubscription->formatted_amount }})</span>
+                                    </h4>
+                                    <span class="bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 px-2 py-1 rounded-full text-xs font-medium">
+                                        Active
+                                    </span>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-3 text-sm mb-3">
+                                    <div class="flex items-center">
+                                        <i class="fas fa-infinity text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <span class="text-gray-600 dark:text-gray-400 mr-1">Website Searches:</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">Unlimited</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-calendar-alt text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <span class="text-gray-600 dark:text-gray-400 mr-1">Expires:</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">{{ $activeWebsiteSubscription->expires_at->format('M d, Y') }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-clock text-indigo-500 mr-2 flex-shrink-0"></i>
+                                        <span class="text-gray-600 dark:text-gray-400 mr-1">Days Remaining:</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">{{ $activeWebsiteSubscription->days_remaining }}</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <i class="fas fa-check-circle text-green-500 mr-2 flex-shrink-0"></i>
+                                        <span class="text-gray-600 dark:text-gray-400 mr-1">Status:</span>
+                                        <span class="font-semibold text-green-600 dark:text-green-400">No Limits</span>
+                                    </div>
+                                </div>
+                                
+                                @if($activeWebsiteSubscription->days_remaining < 3 && $activeWebsiteSubscription->days_remaining > 0)
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 text-yellow-800 dark:text-yellow-200 px-3 py-2 rounded-lg">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-exclamation-triangle mr-2 text-yellow-500"></i>
+                                            <p class="text-sm">Website subscription expires in {{ $activeWebsiteSubscription->days_remaining }} days</p>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <div class="mb-4">
-                                <i class="fas fa-exclamation-circle text-orange-400 dark:text-orange-500 text-4xl"></i>
+                        @else
+                            <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                                <div class="text-center">
+                                    <i class="fas fa-exclamation-circle text-indigo-400 dark:text-indigo-500 text-2xl mb-2"></i>
+                                    <h4 class="font-medium text-gray-900 dark:text-white mb-1">No Website Subscription</h4>
+                                    <p class="text-gray-600 dark:text-gray-400 text-sm mb-3">Limited to 7 searches per day</p>
+                                    <a href="{{ route('website.subscriptions') }}" class="text-indigo-600 dark:text-indigo-400 text-sm font-medium hover:underline">
+                                        Get unlimited searches →
+                                    </a>
+                                </div>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No Active Subscription</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-6">Subscribe to a plan to start using our API services and unlock powerful fraud detection capabilities.</p>
-                            <a href="{{ route('pricing') }}" class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
-                                <i class="fas fa-crown mr-2"></i>View Plans & Pricing
+                        @endif
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <a href="{{ route('pricing') }}" class="flex-1 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-200">
+                                <i class="fas fa-crown mr-2"></i>API Plans
+                            </a>
+                            <a href="{{ route('website.subscriptions') }}" class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium text-center transition-all duration-200">
+                                <i class="fas fa-infinity mr-2"></i>Website Plans
                             </a>
                         </div>
-                    @endif
+                    </div>
                 </div>
             </div>
         </div>
