@@ -9,16 +9,21 @@ use Carbon\Carbon;
 class SearchStatsController extends Controller
 {
     /**
-     * Get search statistics for the welcome page
+     * Get search statistics for the welcome page with Bangladesh timezone (GMT+6)
      */
     public function getSearchStatistics()
     {
-        // Last 1 hour searches
-        $lastHourSearches = Customer::where('last_searched_at', '>=', Carbon::now()->subHour())
+        // Set timezone to Bangladesh (Asia/Dhaka - GMT+6)
+        $bangladeshTime = Carbon::now('Asia/Dhaka');
+        
+        // Last 1 hour searches (Bangladesh time)
+        $oneHourAgo = $bangladeshTime->copy()->subHour();
+        $lastHourSearches = Customer::where('last_searched_at', '>=', $oneHourAgo->utc())
             ->count();
         
-        // Last 24 hours searches
-        $lastDaySearches = Customer::where('last_searched_at', '>=', Carbon::now()->subDay())
+        // Today's searches (from 12:00 AM Bangladesh time today)
+        $startOfTodayBD = $bangladeshTime->copy()->startOfDay(); // 12:00 AM Bangladesh time
+        $todaySearches = Customer::where('last_searched_at', '>=', $startOfTodayBD->utc())
             ->count();
         
         // All time searches (total count of all searches)
@@ -31,19 +36,21 @@ class SearchStatsController extends Controller
             'success' => true,
             'data' => [
                 'last_hour' => $lastHourSearches,
-                'last_day' => $lastDaySearches,
+                'today' => $todaySearches,
                 'all_time' => $allTimeSearches,
-                'unique_numbers' => $uniqueNumbersSearched
+                'unique_numbers' => $uniqueNumbersSearched,
+                'bangladesh_time' => $bangladeshTime->format('Y-m-d H:i:s'),
+                'timezone' => 'Asia/Dhaka (GMT+6)'
             ]
         ]);
     }
     
     /**
-     * Get detailed search analytics
+     * Get detailed search analytics with Bangladesh timezone (GMT+6)
      */
     public function getDetailedAnalytics()
     {
-        $now = Carbon::now();
+        $bangladeshTime = Carbon::now('Asia/Dhaka');
         
         // Searches by platform (web vs app)
         $webSearches = Customer::where('search_by', 'web')->sum('count');
@@ -59,14 +66,14 @@ class SearchStatsController extends Controller
             ->take(50)
             ->get(['phone', 'last_searched_at', 'count']);
         
-        // Daily search trend for last 7 days
+        // Daily search trend for last 7 days (Bangladesh timezone)
         $dailyTrend = [];
         for ($i = 6; $i >= 0; $i--) {
-            $date = $now->copy()->subDays($i);
-            $startOfDay = $date->copy()->startOfDay();
-            $endOfDay = $date->copy()->endOfDay();
+            $date = $bangladeshTime->copy()->subDays($i);
+            $startOfDay = $date->copy()->startOfDay(); // 12:00 AM Bangladesh time
+            $endOfDay = $date->copy()->endOfDay(); // 11:59 PM Bangladesh time
             
-            $searchCount = Customer::whereBetween('last_searched_at', [$startOfDay, $endOfDay])
+            $searchCount = Customer::whereBetween('last_searched_at', [$startOfDay->utc(), $endOfDay->utc()])
                 ->count();
             
             $dailyTrend[] = [
@@ -85,25 +92,29 @@ class SearchStatsController extends Controller
                 ],
                 'top_searched' => $topSearchedNumbers,
                 'recent_searches' => $recentSearches,
-                'daily_trend' => $dailyTrend
+                'daily_trend' => $dailyTrend,
+                'timezone' => 'Asia/Dhaka (GMT+6)'
             ]
         ]);
     }
     
     /**
-     * Get live search counter (for real-time updates)
+     * Get live search counter (for real-time updates) with Bangladesh timezone (GMT+6)
      */
     public function getLiveStats()
     {
         $allTimeSearches = Customer::sum('count');
         $uniqueNumbers = Customer::count();
+        $bangladeshTime = Carbon::now('Asia/Dhaka');
         
         return response()->json([
             'success' => true,
             'data' => [
                 'total_searches' => $allTimeSearches,
                 'unique_numbers' => $uniqueNumbers,
-                'timestamp' => now()->toISOString()
+                'timestamp' => $bangladeshTime->toISOString(),
+                'bangladesh_time' => $bangladeshTime->format('Y-m-d H:i:s'),
+                'timezone' => 'Asia/Dhaka (GMT+6)'
             ]
         ]);
     }

@@ -814,7 +814,7 @@
                     </div>
                 </div>
 
-                <!-- Last Day Searches -->
+                <!-- Today's Searches -->
                 <div class="stat-card bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl p-6 border border-green-200 dark:border-green-700 hover:shadow-lg transition duration-300">
                     <div class="flex items-center justify-between mb-4">
                         <div class="stat-icon p-3 bg-green-500 text-white rounded-full">
@@ -824,12 +824,12 @@
                             <div class="stat-number text-2xl font-bold text-green-600 dark:text-green-300" id="lastDayCount">
                                 <span class="animate-pulse">...</span>
                             </div>
-                            <div class="text-sm text-green-500 dark:text-green-200 font-medium">শেষ ২৪ ঘন্টায়</div>
+                            <div class="text-sm text-green-500 dark:text-green-200 font-medium">আজকের সার্চ</div>
                         </div>
                     </div>
                     <div class="text-sm text-gray-600 dark:text-gray-300">
                         <i class="fas fa-info-circle mr-1"></i>
-                        গত ১ দিনের সার্চ সংখ্যা
+                        আজ রাত ১২টা থেকে এখন পর্যন্ত (বাংলাদেশ সময়)
                     </div>
                 </div>
 
@@ -2334,26 +2334,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Update the counters with animation
                     animateCounter('lastHourCount', data.last_hour);
-                    animateCounter('lastDayCount', data.last_day);
+                    animateCounter('lastDayCount', data.today);
                     animateCounter('allTimeCount', data.all_time);
                     animateCounter('uniqueNumbersCount', data.unique_numbers);
                     
-                    // Update last updated time in Bengali
-                    const now = new Date();
-                    const bengaliMonths = [
-                        'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
-                        'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
-                    ];
-                    
-                    const day = convertToBengaliNumbers(now.getDate());
-                    const month = bengaliMonths[now.getMonth()];
-                    const year = convertToBengaliNumbers(now.getFullYear());
-                    const hours = convertToBengaliNumbers(now.getHours().toString().padStart(2, '0'));
-                    const minutes = convertToBengaliNumbers(now.getMinutes().toString().padStart(2, '0'));
-                    const seconds = convertToBengaliNumbers(now.getSeconds().toString().padStart(2, '0'));
-                    
-                    const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds}`;
-                    document.getElementById('lastUpdated').textContent = timeString;
+                    // Update last updated time in Bengali using Bangladesh time from API
+                    if (data.bangladesh_time) {
+                        const bangladeshTime = new Date(data.bangladesh_time + '+06:00'); // Ensure timezone is applied
+                        const bengaliMonths = [
+                            'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+                            'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+                        ];
+                        
+                        const day = convertToBengaliNumbers(bangladeshTime.getDate());
+                        const month = bengaliMonths[bangladeshTime.getMonth()];
+                        const year = convertToBengaliNumbers(bangladeshTime.getFullYear());
+                        const hours = convertToBengaliNumbers(bangladeshTime.getHours().toString().padStart(2, '0'));
+                        const minutes = convertToBengaliNumbers(bangladeshTime.getMinutes().toString().padStart(2, '0'));
+                        const seconds = convertToBengaliNumbers(bangladeshTime.getSeconds().toString().padStart(2, '0'));
+                        
+                        const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds} (বাংলাদেশ সময়)`;
+                        document.getElementById('lastUpdated').textContent = timeString;
+                    } else {
+                        // Fallback to local time if Bangladesh time not available
+                        const now = new Date();
+                        const bengaliMonths = [
+                            'জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
+                            'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'
+                        ];
+                        
+                        const day = convertToBengaliNumbers(now.getDate());
+                        const month = bengaliMonths[now.getMonth()];
+                        const year = convertToBengaliNumbers(now.getFullYear());
+                        const hours = convertToBengaliNumbers(now.getHours().toString().padStart(2, '0'));
+                        const minutes = convertToBengaliNumbers(now.getMinutes().toString().padStart(2, '0'));
+                        const seconds = convertToBengaliNumbers(now.getSeconds().toString().padStart(2, '0'));
+                        
+                        const timeString = `${day} ${month} ${year}, ${hours}:${minutes}:${seconds}`;
+                        document.getElementById('lastUpdated').textContent = timeString;
+                    }
                 }
             } catch (error) {
                 console.error('Error loading search statistics:', error);
