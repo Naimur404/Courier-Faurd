@@ -70,15 +70,34 @@ class ApiKeysRelationManager extends RelationManager
                     ->schema([
                         Forms\Components\Placeholder::make('usage_count')
                             ->label('Total Usage')
-                            ->content(fn (?ApiKey $record): string => $record ? number_format($record->usage_count) . ' requests' : '0 requests'),
+                            ->content(function ($get, $record, $livewire): string {
+                                if (!$record) return '0 requests';
+                                // Refresh the usage count to get latest data
+                                $record->refreshUsageCount();
+                                return number_format($record->usage_count) . ' requests';
+                            }),
                         Forms\Components\Placeholder::make('today_usage')
                             ->label('Today\'s Usage')
-                            ->content(fn (?ApiKey $record): string => $record ? number_format($record->getTodayUsageCount()) . ' requests' : '0 requests'),
+                            ->content(function ($get, $record): string {
+                                if (!$record) return '0 requests';
+                                $todayCount = $record->getTodayUsageCount();
+                                return number_format($todayCount) . ' requests';
+                            }),
+                        Forms\Components\Placeholder::make('monthly_usage')
+                            ->label('Monthly Usage')
+                            ->content(function ($get, $record): string {
+                                if (!$record) return '0 requests';
+                                $monthlyCount = $record->getMonthlyUsageCount();
+                                return number_format($monthlyCount) . ' requests';
+                            }),
                         Forms\Components\Placeholder::make('last_used_at')
                             ->label('Last Used')
-                            ->content(fn (?ApiKey $record): string => $record && $record->last_used_at ? $record->last_used_at->diffForHumans() : 'Never'),
+                            ->content(function ($get, $record): string {
+                                if (!$record || !$record->last_used_at) return 'Never';
+                                return $record->last_used_at->diffForHumans();
+                            }),
                     ])
-                    ->columns(3)
+                    ->columns(4)
                     ->hiddenOn('create'),
             ]);
     }
@@ -115,10 +134,21 @@ class ApiKeysRelationManager extends RelationManager
                     ->suffix(' /min')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('usage_count')
-                    ->label('Usage Count')
+                    ->label('Total Usage')
                     ->numeric()
                     ->sortable()
-                    ->formatStateUsing(fn ($state) => number_format($state)),
+                    ->formatStateUsing(function ($state, $record) {
+                        // Refresh the count to get latest data
+                        $record->refreshUsageCount();
+                        return number_format($record->usage_count) . ' requests';
+                    }),
+                Tables\Columns\TextColumn::make('today_usage')
+                    ->label('Today\'s Usage')
+                    ->getStateUsing(function ($record) {
+                        return $record->getTodayUsageCount();
+                    })
+                    ->formatStateUsing(fn ($state) => number_format($state) . ' requests')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('last_used_at')
                     ->label('Last Used')
                     ->dateTime('M j, Y H:i')
@@ -189,6 +219,24 @@ class ApiKeysRelationManager extends RelationManager
                             ->title('API Key Deleted')
                             ->body('API key has been deleted successfully.')
                     ),
+                Tables\Actions\Action::make('debug_usage')
+                    ->label('Debug Usage')
+                    ->icon('heroicon-o-bug-ant')
+                    ->color('info')
+                    ->action(function (ApiKey $record) {
+                        $totalUsages = $record->apiUsages()->count();
+                        $todayUsages = $record->apiUsages()->whereDate('created_at', today())->count();
+                        $monthlyUsages = $record->apiUsages()->whereMonth('created_at', now()->month)->whereYear('created_at', now()->year)->count();
+                        $storedCount = $record->usage_count;
+                        $lastUsed = $record->last_used_at ? $record->last_used_at->format('Y-m-d H:i:s') : 'Never';
+                        
+                        Notification::make()
+                            ->title('Usage Debug Info')
+                            ->body("API Key: {$record->name}\nAPI Usages in DB: {$totalUsages}\nToday: {$todayUsages}\nMonthly: {$monthlyUsages}\nStored Count: {$storedCount}\nLast Used: {$lastUsed}")
+                            ->info()
+                            ->persistent()
+                            ->send();
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
