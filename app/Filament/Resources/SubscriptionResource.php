@@ -118,7 +118,11 @@ class SubscriptionResource extends Resource
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('User')
                     ->sortable()
-                    ->searchable(),
+                    ->searchable()
+                    ->description(function (Subscription $record): ?string {
+                        $apiKeysCount = $record->user->apiKeys()->count();
+                        return $apiKeysCount > 0 ? "{$apiKeysCount} API key(s)" : 'No API keys';
+                    }),
                 Tables\Columns\TextColumn::make('plan.name')
                     ->label('Plan')
                     ->sortable()
@@ -326,7 +330,7 @@ class SubscriptionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\ApiKeysRelationManager::class,
         ];
     }
 
@@ -338,5 +342,15 @@ class SubscriptionResource extends Resource
             'view' => Pages\ViewSubscription::route('/{record}'),
             'edit' => Pages\EditSubscription::route('/{record}/edit'),
         ];
+    }
+    
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('status', Subscription::STATUS_ACTIVE)->count();
+    }
+    
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CourierController;
+use App\Http\Controllers\Api\CourierApiController;
 use App\Http\Controllers\CustomerReviewController;
 use App\Http\Controllers\SearchStatsController;
 
@@ -13,8 +14,8 @@ Route::prefix('public')->group(function () {
     Route::get('/live-stats', [SearchStatsController::class, 'getLiveStats'])->name('api.public.live.stats');
 });
 
-// Protected API endpoints (require API key authentication)
-Route::middleware(['api.auth'])->group(function () {
+// Protected API endpoints (require API subscription authentication)
+Route::middleware(['api.subscription'])->group(function () {
     // User info endpoint
     Route::get('/user', function (Request $request) {
         return response()->json([
@@ -29,7 +30,7 @@ Route::middleware(['api.auth'])->group(function () {
     });
 
     // Courier endpoints
-    Route::post('/courier-check', [CourierController::class, 'checkFromApi'])->name('api.courier.check');
+    Route::post('/customer/check', [CourierApiController::class, 'check'])->name('api.customer.check');
     
     // Customer review endpoints
     Route::post('/customer-review', [CustomerReviewController::class, 'storeFromApi'])->name('api.customer.review.store');
