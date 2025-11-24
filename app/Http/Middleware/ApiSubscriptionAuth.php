@@ -124,15 +124,29 @@ class ApiSubscriptionAuth
         $response = $next($request);
         
         // Debug log after processing
-        \Log::info('API Request Processed', [
-            'api_key_id' => $apiKeyRecord->id,
-            'endpoint' => $request->path(),
-            'status_code' => $response->getStatusCode(),
-            'response_time' => round((microtime(true) - $startTime) * 1000)
-        ]);
-        
-        // Log API usage immediately after request processing
-        $this->logApiUsage($request, $apiKeyRecord, $startTime, $response->getStatusCode());
+        try {
+            $statusCode = $response->getStatusCode();
+            $responseTime = round((microtime(true) - $startTime) * 1000);
+            
+            \Log::info('API Request Processed', [
+                'api_key_id' => $apiKeyRecord->id,
+                'endpoint' => $request->path(),
+                'status_code' => $statusCode,
+                'response_time' => $responseTime
+            ]);
+            
+            // Log API usage immediately after request processing
+            $this->logApiUsage($request, $apiKeyRecord, $startTime, $statusCode);
+        } catch (\Exception $e) {
+            \Log::error('Failed to process API response in middleware', [
+                'api_key_id' => $apiKeyRecord->id,
+                'endpoint' => $request->path(),
+                'error' => $e->getMessage()
+            ]);
+            
+            // Still try to log usage with default status code
+            $this->logApiUsage($request, $apiKeyRecord, $startTime, 500);
+        }
 
         // Add rate limit headers to response
         $remainingDaily = max(0, $dailyLimit - ($todayUsage + 1));

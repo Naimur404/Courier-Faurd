@@ -17,10 +17,11 @@ class ApiUsage extends Model
         'method',
         'ip_address',
         'user_agent',
-        'response_status',
+        'response_code',
         'response_time',
         'request_data',
         'response_data',
+        'requested_at',
     ];
 
     protected $casts = [
@@ -50,7 +51,7 @@ class ApiUsage extends Model
      */
     public function isSuccessful(): bool
     {
-        return $this->response_status >= 200 && $this->response_status < 300;
+        return $this->response_code >= 200 && $this->response_code < 300;
     }
 
     /**
@@ -70,7 +71,7 @@ class ApiUsage extends Model
      */
     public function scopeSuccessful($query)
     {
-        return $query->whereBetween('response_status', [200, 299]);
+        return $query->whereBetween('response_code', [200, 299]);
     }
 
     /**
@@ -78,7 +79,7 @@ class ApiUsage extends Model
      */
     public function scopeFailed($query)
     {
-        return $query->where('response_status', '>=', 400);
+        return $query->where('response_code', '>=', 400);
     }
 
     /**
