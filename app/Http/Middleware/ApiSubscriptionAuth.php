@@ -112,7 +112,24 @@ class ApiSubscriptionAuth
         $request->merge(['api_key_record' => $apiKeyRecord]);
 
         $startTime = microtime(true);
+        
+        // Debug log before processing
+        \Log::info('API Request Processing', [
+            'api_key_id' => $apiKeyRecord->id,
+            'endpoint' => $request->path(),
+            'method' => $request->method(),
+            'user_id' => $user->id
+        ]);
+        
         $response = $next($request);
+        
+        // Debug log after processing
+        \Log::info('API Request Processed', [
+            'api_key_id' => $apiKeyRecord->id,
+            'endpoint' => $request->path(),
+            'status_code' => $response->getStatusCode(),
+            'response_time' => round((microtime(true) - $startTime) * 1000)
+        ]);
         
         // Log API usage immediately after request processing
         $this->logApiUsage($request, $apiKeyRecord, $startTime, $response->getStatusCode());
@@ -161,28 +178,52 @@ class ApiSubscriptionAuth
     {
         $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
         
+        \Log::info('Attempting to log API usage', [
+            'api_key_id' => $apiKey->id,
+            'user_id' => $apiKey->user_id,
+            'endpoint' => $request->path(),
+            'method' => $request->method(),
+            'response_code' => $responseStatus,
+            'response_time' => round($responseTime)
+        ]);
+        
         try {
-            ApiUsage::create([
+            $apiUsage = ApiUsage::create([
                 'user_id' => $apiKey->user_id,
                 'api_key_id' => $apiKey->id,
                 'endpoint' => $request->path(),
                 'method' => $request->method(),
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
-                'response_status' => $responseStatus,
+                'response_code' => $responseStatus,
                 'response_time' => round($responseTime),
                 'request_data' => $request->except(['password', 'password_confirmation', 'api_key']),
+                'requested_at' => now(),
+            ]);
+            
+            \Log::info('API Usage record created successfully', [
+                'api_usage_id' => $apiUsage->id,
+                'api_key_id' => $apiKey->id
             ]);
             
             // Increment usage count on API key
+            $oldCount = $apiKey->usage_count;
             $apiKey->increment('usage_count');
+            $apiKey->refresh();
+            
+            \Log::info('API Key usage count incremented', [
+                'api_key_id' => $apiKey->id,
+                'old_count' => $oldCount,
+                'new_count' => $apiKey->usage_count
+            ]);
             
         } catch (\Exception $e) {
             // Log the error for debugging
             \Log::error('API Usage logging failed: ' . $e->getMessage(), [
                 'api_key_id' => $apiKey->id,
                 'endpoint' => $request->path(),
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
         }
     }
