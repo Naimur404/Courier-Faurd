@@ -100,9 +100,6 @@ class ApiSubscriptionAuth
             ], 429);
         }
 
-        // Log API usage (before request processing)
-        $this->logApiUsage($request, $apiKeyRecord);
-        
         // Update last used timestamp
         $apiKeyRecord->updateLastUsed();
         
@@ -114,7 +111,11 @@ class ApiSubscriptionAuth
         // Add API key to request for controller access
         $request->merge(['api_key_record' => $apiKeyRecord]);
 
+        $startTime = microtime(true);
         $response = $next($request);
+        
+        // Log API usage immediately after request processing
+        $this->logApiUsage($request, $apiKeyRecord, $startTime, $response->getStatusCode());
 
         // Add rate limit headers to response
         $remainingDaily = max(0, $dailyLimit - ($todayUsage + 1));
@@ -156,32 +157,33 @@ class ApiSubscriptionAuth
     /**
      * Log API usage
      */
-    private function logApiUsage(Request $request, ApiKey $apiKey): void
+    private function logApiUsage(Request $request, ApiKey $apiKey, float $startTime, int $responseStatus): void
     {
-        $startTime = microtime(true);
+        $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
         
-        register_shutdown_function(function () use ($request, $apiKey, $startTime) {
-            $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
+        try {
+            ApiUsage::create([
+                'user_id' => $apiKey->user_id,
+                'api_key_id' => $apiKey->id,
+                'endpoint' => $request->path(),
+                'method' => $request->method(),
+                'ip_address' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'response_status' => $responseStatus,
+                'response_time' => round($responseTime),
+                'request_data' => $request->except(['password', 'password_confirmation', 'api_key']),
+            ]);
             
-            try {
-                ApiUsage::create([
-                    'user_id' => $apiKey->user_id,
-                    'api_key_id' => $apiKey->id,
-                    'endpoint' => $request->path(),
-                    'method' => $request->method(),
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
-                    'response_status' => http_response_code() ?: 200,
-                    'response_time' => round($responseTime),
-                    'request_data' => $request->except(['password', 'password_confirmation', 'api_key']),
-                ]);
-                
-                // Increment usage count on API key
-                $apiKey->increment('usage_count');
-            } catch (\Exception $e) {
-                // Log the error but don't break the response
-             
-            }
-        });
+            // Increment usage count on API key
+            $apiKey->increment('usage_count');
+            
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('API Usage logging failed: ' . $e->getMessage(), [
+                'api_key_id' => $apiKey->id,
+                'endpoint' => $request->path(),
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }
