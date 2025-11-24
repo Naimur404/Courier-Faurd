@@ -13,13 +13,18 @@ use Filament\Notifications\Notification;
 
 class ApiKeysRelationManager extends RelationManager
 {
-    protected static string $relationship = 'user';
+    protected static string $relationship = 'userApiKeys';
     
-    protected static ?string $title = 'User API Keys';
+    protected static ?string $title = 'API Keys';
     
     protected static ?string $modelLabel = 'API Key';
     
     protected static ?string $pluralModelLabel = 'API Keys';
+    
+    public function getRelationshipQuery(): Builder
+    {
+        return ApiKey::query()->where('user_id', $this->getOwnerRecord()->user_id);
+    }
 
     public function form(Form $form): Form
     {
@@ -81,7 +86,6 @@ class ApiKeysRelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
-            ->relationship('apiKeys')
             ->recordTitleAttribute('name')
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -141,11 +145,15 @@ class ApiKeysRelationManager extends RelationManager
                     ->label('Generate New API Key')
                     ->modalHeading('Generate New API Key')
                     ->createAnother(false)
-                    ->mutateFormDataUsing(function (array $data): array {
-                        $data['user_id'] = $this->getOwnerRecord()->user_id;
-                        $data['key'] = ApiKey::generateKey();
-                        $data['secret'] = ApiKey::generateSecret();
-                        return $data;
+                    ->using(function (array $data): ApiKey {
+                        return ApiKey::create([
+                            'user_id' => $this->getOwnerRecord()->user_id,
+                            'name' => $data['name'],
+                            'key' => ApiKey::generateKey(),
+                            'secret' => ApiKey::generateSecret(),
+                            'rate_limit' => $data['rate_limit'],
+                            'is_active' => $data['is_active'],
+                        ]);
                     })
                     ->successNotification(
                         Notification::make()
@@ -218,9 +226,42 @@ class ApiKeysRelationManager extends RelationManager
             ->emptyStateDescription('This user doesn\'t have any API keys yet.')
             ->emptyStateIcon('heroicon-o-key')
             ->emptyStateActions([
-                Tables\Actions\CreateAction::make()
+                Tables\Actions\Action::make('create')
                     ->label('Generate First API Key')
-                    ->icon('heroicon-o-plus'),
+                    ->icon('heroicon-o-plus')
+                    ->modalHeading('Generate New API Key')
+                    ->form([
+                        Forms\Components\TextInput::make('name')
+                            ->label('Key Name')
+                            ->required()
+                            ->placeholder('e.g., Production API Key')
+                            ->maxLength(255),
+                        Forms\Components\Toggle::make('is_active')
+                            ->label('Active')
+                            ->default(true),
+                        Forms\Components\TextInput::make('rate_limit')
+                            ->label('Rate Limit (requests per minute)')
+                            ->numeric()
+                            ->default(60)
+                            ->required()
+                            ->minValue(1)
+                            ->maxValue(1000),
+                    ])
+                    ->action(function (array $data) {
+                        ApiKey::create([
+                            'user_id' => $this->getOwnerRecord()->user_id,
+                            'name' => $data['name'],
+                            'key' => ApiKey::generateKey(),
+                            'secret' => ApiKey::generateSecret(),
+                            'rate_limit' => $data['rate_limit'],
+                            'is_active' => $data['is_active'],
+                        ]);
+                        
+                        Notification::make()
+                            ->title('API Key Generated')
+                            ->success()
+                            ->send();
+                    }),
             ]);
     }
 }

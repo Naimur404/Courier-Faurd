@@ -53,6 +53,14 @@ class Subscription extends Model
     }
 
     /**
+     * Get the API keys for the subscription user
+     */
+    public function userApiKeys()
+    {
+        return $this->hasMany(\App\Models\ApiKey::class, 'user_id', 'user_id');
+    }
+
+    /**
      * Check if subscription is active
      */
     public function isActive(): bool
