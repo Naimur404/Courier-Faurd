@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -23,8 +25,9 @@ class CourierController extends Controller
         // Get existing customer data
         $existingCustomer = Customer::where('phone', $phone)->first();
         
-        // Get cache threshold from config (default: 2 searches before hitting API again)
-        $cacheSearches = (int) env('BDCOURIER_CACHE_SEARCHES', 2);
+        // Configuration
+        $cacheDays = 3; // Data is valid for 3 days
+        $maxSearchesBeforeApiCall = 3; // Hit API on 3rd search within the period
         
         // If customer exists and has data, check if we should return cached data
         if ($existingCustomer && $existingCustomer->data) {
@@ -33,14 +36,28 @@ class CourierController extends Controller
             // Check if we have valid courier data
             $hasValidData = isset($oldData['courierData']['summary']);
             
-            // Calculate searches since last API call
-            // We'll use count % (cacheSearches + 1) to determine if we need to hit API
-            // If count is 1, 2 -> return cached, if count is 3, 6, 9... -> hit API
-            $searchesSinceApiCall = $existingCustomer->count % ($cacheSearches + 1);
+            // Check if last API call was within the cache period (3 days)
+            $lastApiCall = Cache::get("customer_{$phone}_last_api_call");
+            $searchCountInPeriod = (int) Cache::get("customer_{$phone}_search_count", 0);
             
-            // If we have valid data and haven't reached the threshold, return cached data
-            if ($hasValidData && $searchesSinceApiCall != 0) {
-                // Update search count and return cached data
+            // If no record of last API call, check last_searched_at from database
+            if (!$lastApiCall && $existingCustomer->last_searched_at) {
+                $daysSinceLastSearch = $existingCustomer->last_searched_at->diffInDays(now());
+                $isWithinCachePeriod = $daysSinceLastSearch < $cacheDays;
+            } else {
+                $isWithinCachePeriod = $lastApiCall !== null;
+            }
+            
+            // Increment search count for this period
+            $searchCountInPeriod++;
+            
+            // If we have valid data, within cache period, and haven't reached max searches
+            if ($hasValidData && $isWithinCachePeriod && $searchCountInPeriod < $maxSearchesBeforeApiCall) {
+                // Update search count in cache (expires at end of cache period)
+                $cacheExpiry = now()->addDays($cacheDays);
+                Cache::put("customer_{$phone}_search_count", $searchCountInPeriod, $cacheExpiry);
+                
+                // Update customer record
                 $existingCustomer->update([
                     'count' => $existingCustomer->count + 1,
                     'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
@@ -50,11 +67,18 @@ class CourierController extends Controller
                 // Add logos if missing from cached data
                 $oldData = $this->ensureLogosInData($oldData);
                 
+                Log::info("Returning cached data for {$phone}. Search {$searchCountInPeriod} of {$maxSearchesBeforeApiCall} in {$cacheDays} day period.");
+                
                 return $oldData;
             }
+            
+            // Reset search count as we're hitting API
+            Cache::forget("customer_{$phone}_search_count");
         }
         
-        // Either new customer or time to refresh data from API
+        // Either new customer, data older than 3 days, or 3rd search - hit API
+        Log::info("Hitting API for {$phone}. Reason: " . (!$existingCustomer ? 'New customer' : 'Cache expired or max searches reached'));
+        
         $oldData = null;
         $oldTotalParcel = 0;
 
@@ -93,15 +117,33 @@ class CourierController extends Controller
 
         $newTotalParcel = $responseData['courierData']['summary']['total_parcel'] ?? 0;
 
-        // Determine which data to return
-        $dataToReturn = $responseData;
-        $dataToStore = $responseData; // Store as array, model will handle casting
-
-        // If new total parcel is less than old total parcel, return old data
+        // Compare API total_parcel with database total_parcel
+        // If API has less parcels than database, don't update - return database data
+        // If API has more or equal parcels, update database with API data
         if ($oldData && $newTotalParcel < $oldTotalParcel) {
-            $dataToReturn = $oldData;
-            // Still store the new data but return the old one
+            Log::info("API total_parcel ({$newTotalParcel}) < Database total_parcel ({$oldTotalParcel}) for {$phone}. Keeping database data.");
+            
+            // Update only search metadata, NOT the data
+            if ($existingCustomer) {
+                $existingCustomer->update([
+                    'count' => $existingCustomer->count + 1,
+                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                    'ip_address' => $request->ip(),
+                ]);
+            }
+            
+            // Set cache for search tracking
+            $cacheDays = 3;
+            $cacheExpiry = now()->addDays($cacheDays);
+            Cache::put("customer_{$phone}_last_api_call", now(), $cacheExpiry);
+            Cache::put("customer_{$phone}_search_count", 1, $cacheExpiry);
+            
+            // Return database data (with logos)
+            return $this->ensureLogosInData($oldData);
         }
+
+        // API has more or equal parcels - update database with new data
+        Log::info("API total_parcel ({$newTotalParcel}) >= Database total_parcel ({$oldTotalParcel}) for {$phone}. Updating with API data.");
 
         // Get subscription context for logged-in users
         $userId = null;
@@ -127,7 +169,7 @@ class CourierController extends Controller
             }
         }
 
-        // Update or create customer record
+        // Update or create customer record with new API data
         if ($existingCustomer) {
             $existingCustomer->update([
                 'user_id' => $userId,
@@ -137,7 +179,7 @@ class CourierController extends Controller
                 'ip_address' => $request->ip(),
                 'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => $existingCustomer->count + 1,
-                'data' => $dataToStore // Store as array, model casting will handle it
+                'data' => $responseData // Update with new API data
             ]);
         } else {
             Customer::create([
@@ -149,14 +191,20 @@ class CourierController extends Controller
                 'ip_address' => $request->ip(),
                 'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                 'count' => 1,
-                'data' => $dataToStore,
+                'data' => $responseData,
             ]);
         }
+
+        // Set cache to track API call time and reset search count
+        $cacheDays = 3;
+        $cacheExpiry = now()->addDays($cacheDays);
+        Cache::put("customer_{$phone}_last_api_call", now(), $cacheExpiry);
+        Cache::put("customer_{$phone}_search_count", 1, $cacheExpiry); // This is the 1st search after API call
 
         // Process reports from the API response
         $this->processReports($responseData, $phone);
 
-        return $dataToReturn; // Return either old or new data based on total_parcel comparison
+        return $responseData; // Return new API data
     }
 
     /**
@@ -251,18 +299,140 @@ class CourierController extends Controller
     }
 
     /**
-     * Call primary courier API
+     * Get the active token for API calls
+     * Implements token rotation with cooldown
+     */
+    private function getActiveToken()
+    {
+        $token1 = env('BDCOURIER_TOKEN_1');
+        $token2 = env('BDCOURIER_TOKEN_2');
+        $cooldownMinutes = (int) env('BDCOURIER_TOKEN_COOLDOWN_MINUTES', 30);
+        
+        // Get token status from cache
+        $token1Cooldown = Cache::get('bdcourier_token1_cooldown');
+        $token2Cooldown = Cache::get('bdcourier_token2_cooldown');
+        
+        // If token 1 is not on cooldown, use it
+        if (!$token1Cooldown && $token1) {
+            return ['token' => $token1, 'key' => 'token1'];
+        }
+        
+        // If token 2 is not on cooldown, use it
+        if (!$token2Cooldown && $token2) {
+            return ['token' => $token2, 'key' => 'token2'];
+        }
+        
+        // Both on cooldown - check which one expires first
+        $token1ExpiresAt = Cache::get('bdcourier_token1_cooldown_expires');
+        $token2ExpiresAt = Cache::get('bdcourier_token2_cooldown_expires');
+        
+        if ($token1ExpiresAt && $token2ExpiresAt) {
+            // Return the one that expires first
+            if ($token1ExpiresAt < $token2ExpiresAt) {
+                return ['token' => $token1, 'key' => 'token1'];
+            }
+            return ['token' => $token2, 'key' => 'token2'];
+        }
+        
+        // Default to token 1
+        return ['token' => $token1, 'key' => 'token1'];
+    }
+
+    /**
+     * Put a token on cooldown until midnight BDT (Bangladesh Time)
+     * Token will be available again at 12:00 AM BDT
+     */
+    private function putTokenOnCooldown($tokenKey)
+    {
+        // Get current time in Bangladesh timezone
+        $nowBDT = now()->timezone('Asia/Dhaka');
+        
+        // Calculate midnight BDT (next day at 00:00:00)
+        $midnightBDT = $nowBDT->copy()->addDay()->startOfDay();
+        
+        // Convert to UTC for cache storage
+        $expiresAt = $midnightBDT->timezone('UTC');
+        
+        Cache::put("bdcourier_{$tokenKey}_cooldown", true, $expiresAt);
+        Cache::put("bdcourier_{$tokenKey}_cooldown_expires", $expiresAt, $expiresAt);
+        
+        Log::info("BDCourier {$tokenKey} put on cooldown until midnight BDT ({$midnightBDT->format('Y-m-d H:i:s')} BDT)");
+    }
+
+    /**
+     * Mark token as working (remove from cooldown)
+     */
+    private function markTokenAsWorking($tokenKey)
+    {
+        Cache::forget("bdcourier_{$tokenKey}_cooldown");
+        Cache::forget("bdcourier_{$tokenKey}_cooldown_expires");
+    }
+
+    /**
+     * Call primary courier API with token rotation
      * Uses the new API format with bdc_ prefix token
      */
     private function callCourierApi($phone)
     {
+        // Try with first available token
+        $activeToken = $this->getActiveToken();
+        $result = $this->makeApiCall($phone, $activeToken['token']);
+        
+        if ($result !== null) {
+            // Success - mark token as working
+            $this->markTokenAsWorking($activeToken['key']);
+            return $result;
+        }
+        
+        // First token failed - put on cooldown and try the other
+        $this->putTokenOnCooldown($activeToken['key']);
+        
+        // Get the other token
+        $token1 = env('BDCOURIER_TOKEN_1');
+        $token2 = env('BDCOURIER_TOKEN_2');
+        $otherToken = $activeToken['key'] === 'token1' 
+            ? ['token' => $token2, 'key' => 'token2']
+            : ['token' => $token1, 'key' => 'token1'];
+        
+        if ($otherToken['token']) {
+            $result = $this->makeApiCall($phone, $otherToken['token']);
+            
+            if ($result !== null) {
+                $this->markTokenAsWorking($otherToken['key']);
+                return $result;
+            }
+            
+            // Both tokens failed
+            $this->putTokenOnCooldown($otherToken['key']);
+        }
+        
+        return null;
+    }
+
+    /**
+     * Make the actual API call with a specific token
+     */
+    private function makeApiCall($phone, $token)
+    {
+        if (!$token) {
+            return null;
+        }
+        
         try {
-            $token = env('BDCOURIER_PRIMARY_TOKEN');
             $response = Http::timeout(30)->withHeaders([
                 'Authorization' => 'Bearer ' . $token,
             ])->post('https://api.bdcourier.com/courier-check', [
                 'phone' => $phone,
             ]);
+
+            // Check for rate limit or auth errors
+            if ($response->status() === 429 || $response->status() === 401 || $response->status() === 403) {
+                Log::warning('BDCourier API token error', [
+                    'status' => $response->status(),
+                    'phone' => $phone
+                ]);
+                return null;
+            }
 
             if (!$response->successful()) {
                 return null;
@@ -270,10 +440,19 @@ class CourierController extends Controller
 
             $apiData = $response->json();
             
+            // Check for error in response body
+            if (isset($apiData['status']) && $apiData['status'] === 'error') {
+                Log::warning('BDCourier API returned error', [
+                    'message' => $apiData['message'] ?? 'Unknown error',
+                    'phone' => $phone
+                ]);
+                return null;
+            }
+            
             // Transform new format to old format for backward compatibility
             return $this->transformApiResponse($apiData);
         } catch (\Exception $e) {
-            \Log::warning('Primary courier API failed', [
+            Log::warning('BDCourier API call failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()
             ]);
@@ -309,7 +488,7 @@ class CourierController extends Controller
             // Transform new format to old format for backward compatibility
             return $this->transformApiResponse($apiData);
         } catch (\Exception $e) {
-            \Log::warning('Fallback courier API failed', [
+            Log::warning('Fallback courier API failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()
             ]);
