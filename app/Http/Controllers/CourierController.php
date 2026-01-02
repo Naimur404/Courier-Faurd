@@ -20,13 +20,45 @@ class CourierController extends Controller
     {
         $phone = $request->input('phone');
 
-        // Get existing customer data before making API call
+        // Get existing customer data
         $existingCustomer = Customer::where('phone', $phone)->first();
+        
+        // Get cache threshold from config (default: 2 searches before hitting API again)
+        $cacheSearches = (int) env('BDCOURIER_CACHE_SEARCHES', 2);
+        
+        // If customer exists and has data, check if we should return cached data
+        if ($existingCustomer && $existingCustomer->data) {
+            $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
+            
+            // Check if we have valid courier data
+            $hasValidData = isset($oldData['courierData']['summary']);
+            
+            // Calculate searches since last API call
+            // We'll use count % (cacheSearches + 1) to determine if we need to hit API
+            // If count is 1, 2 -> return cached, if count is 3, 6, 9... -> hit API
+            $searchesSinceApiCall = $existingCustomer->count % ($cacheSearches + 1);
+            
+            // If we have valid data and haven't reached the threshold, return cached data
+            if ($hasValidData && $searchesSinceApiCall != 0) {
+                // Update search count and return cached data
+                $existingCustomer->update([
+                    'count' => $existingCustomer->count + 1,
+                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                    'ip_address' => $request->ip(),
+                ]);
+                
+                // Add logos if missing from cached data
+                $oldData = $this->ensureLogosInData($oldData);
+                
+                return $oldData;
+            }
+        }
+        
+        // Either new customer or time to refresh data from API
         $oldData = null;
         $oldTotalParcel = 0;
 
         if ($existingCustomer && $existingCustomer->data) {
-            // Data is already an array due to model casting
             $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
             $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
         }
@@ -225,8 +257,9 @@ class CourierController extends Controller
     private function callCourierApi($phone)
     {
         try {
+            $token = env('BDCOURIER_PRIMARY_TOKEN');
             $response = Http::timeout(30)->withHeaders([
-                'Authorization' => 'Bearer bdc_ddsb5DmvKwfaQUHrgfduXahM5u7BZJaT66WsCdGmfqslhESGZEsZVirfVyrI',
+                'Authorization' => 'Bearer ' . $token,
             ])->post('https://api.bdcourier.com/courier-check', [
                 'phone' => $phone,
             ]);
@@ -255,8 +288,9 @@ class CourierController extends Controller
     private function callFallbackCourierApi($phone)
     {
         try {
+            $token = env('BDCOURIER_FALLBACK_TOKEN');
             $response = Http::timeout(30)->withHeaders([
-                'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
+                'Authorization' => $token,
             ])->post('https://bdcourier.com/api/courier-check', [
                 'phone' => $phone,
             ]);
@@ -269,7 +303,7 @@ class CourierController extends Controller
             
             // Check if it's already in old format or needs transformation
             if (isset($apiData['courierData'])) {
-                return $apiData;
+                return $this->ensureLogosInData($apiData);
             }
             
             // Transform new format to old format for backward compatibility
@@ -289,17 +323,8 @@ class CourierController extends Controller
      */
     private function transformApiResponse($apiData)
     {
-        // Define default logos for each courier
-        $defaultLogos = [
-            'pathao' => 'https://api.bdcourier.com/c-logo/pathao-logo.png',
-            'steadfast' => 'https://api.bdcourier.com/c-logo/steadfast-logo.png',
-            'parceldex' => 'https://api.bdcourier.com/c-logo/parceldex-logo.png',
-            'redx' => 'https://api.bdcourier.com/c-logo/redx-logo.png',
-            'paperfly' => 'https://api.bdcourier.com/c-logo/paperfly-logo.png',
-            'carrybee' => 'https://api.bdcourier.com/c-logo/carrybee-logo.webp',
-            'sundarban' => 'https://api.bdcourier.com/c-logo/sundarban-logo.png',
-            'dex' => 'https://api.bdcourier.com/c-logo/dex-logo.png',
-        ];
+        // Get default logos
+        $defaultLogos = $this->getDefaultLogos();
 
         // If already in old format, add logos if missing
         if (isset($apiData['courierData'])) {
@@ -363,6 +388,47 @@ class CourierController extends Controller
 
         // Unknown format, return as-is
         return $apiData;
+    }
+
+    /**
+     * Ensure logos are present in data
+     * Adds default logos if missing
+     */
+    private function ensureLogosInData($data)
+    {
+        $defaultLogos = $this->getDefaultLogos();
+        
+        if (isset($data['courierData'])) {
+            foreach ($data['courierData'] as $key => &$value) {
+                if ($key !== 'summary' && is_array($value)) {
+                    if (!isset($value['logo']) || empty($value['logo'])) {
+                        $value['logo'] = $defaultLogos[strtolower($key)] ?? '';
+                    }
+                    if (!isset($value['name']) || empty($value['name'])) {
+                        $value['name'] = ucfirst($key);
+                    }
+                }
+            }
+        }
+        
+        return $data;
+    }
+
+    /**
+     * Get default logos for couriers
+     */
+    private function getDefaultLogos()
+    {
+        return [
+            'pathao' => 'https://api.bdcourier.com/c-logo/pathao-logo.png',
+            'steadfast' => 'https://api.bdcourier.com/c-logo/steadfast-logo.png',
+            'parceldex' => 'https://api.bdcourier.com/c-logo/parceldex-logo.png',
+            'redx' => 'https://api.bdcourier.com/c-logo/redx-logo.png',
+            'paperfly' => 'https://api.bdcourier.com/c-logo/paperfly-logo.png',
+            'carrybee' => 'https://api.bdcourier.com/c-logo/carrybee-logo.webp',
+            'sundarban' => 'https://api.bdcourier.com/c-logo/sundarban-logo.png',
+            'dex' => 'https://api.bdcourier.com/c-logo/dex-logo.png',
+        ];
     }
 
     /**

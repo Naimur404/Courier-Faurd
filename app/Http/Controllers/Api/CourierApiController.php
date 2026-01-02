@@ -33,13 +33,50 @@ class CourierApiController extends Controller
         $phone = $request->input('phone');
 
         try {
-            // Get existing customer data before making API call
+            // Get existing customer data
             $existingCustomer = Customer::where('phone', $phone)->first();
+            
+            // Get cache threshold from config (default: 2 searches before hitting API again)
+            $cacheSearches = (int) env('BDCOURIER_CACHE_SEARCHES', 2);
+            
+            // If customer exists and has data, check if we should return cached data
+            if ($existingCustomer && $existingCustomer->data) {
+                $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
+                
+                // Check if we have valid courier data
+                $hasValidData = isset($oldData['courierData']['summary']);
+                
+                // Calculate searches since last API call
+                $searchesSinceApiCall = $existingCustomer->count % ($cacheSearches + 1);
+                
+                // If we have valid data and haven't reached the threshold, return cached data
+                if ($hasValidData && $searchesSinceApiCall != 0) {
+                    // Get subscription context
+                    $user = $request->user();
+                    $activeSubscription = $user->activeSubscription;
+                    
+                    // Update search count and return cached data
+                    $existingCustomer->update([
+                        'user_id' => $user->id,
+                        'subscription_type' => 'api',
+                        'subscription_id' => $activeSubscription->id,
+                        'count' => $existingCustomer->count + 1,
+                        'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                        'ip_address' => $request->ip(),
+                    ]);
+                    
+                    // Add logos if missing from cached data
+                    $oldData = $this->ensureLogosInData($oldData);
+                    
+                    return response()->json($oldData);
+                }
+            }
+
+            // Either new customer or time to refresh data from API
             $oldData = null;
             $oldTotalParcel = 0;
 
             if ($existingCustomer && $existingCustomer->data) {
-                // Data is already an array due to model casting
                 $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
                 $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
             }
@@ -55,7 +92,7 @@ class CourierApiController extends Controller
             // If both APIs fail, return error or old data if available
             if ($responseData === null) {
                 if ($oldData) {
-                    return response()->json($oldData);
+                    return response()->json($this->ensureLogosInData($oldData));
                 }
                 return response()->json([
                     'success' => false,
@@ -155,8 +192,9 @@ class CourierApiController extends Controller
     private function callCourierApi($phone)
     {
         try {
+            $token = env('BDCOURIER_PRIMARY_TOKEN');
             $response = Http::timeout(30)->withHeaders([
-                'Authorization' => 'Bearer bdc_ddsb5DmvKwfaQUHrgfduXahM5u7BZJaT66WsCdGmfqslhESGZEsZVirfVyrI',
+                'Authorization' => 'Bearer ' . $token,
             ])->post('https://api.bdcourier.com/courier-check', [
                 'phone' => $phone,
             ]);
@@ -185,8 +223,9 @@ class CourierApiController extends Controller
     private function callFallbackCourierApi($phone)
     {
         try {
+            $token = env('BDCOURIER_FALLBACK_TOKEN');
             $response = Http::timeout(30)->withHeaders([
-                'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
+                'Authorization' => $token,
             ])->post('https://bdcourier.com/api/courier-check', [
                 'phone' => $phone,
             ]);
@@ -199,7 +238,7 @@ class CourierApiController extends Controller
             
             // Check if it's already in old format or needs transformation
             if (isset($apiData['courierData'])) {
-                return $apiData;
+                return $this->ensureLogosInData($apiData);
             }
             
             // Transform new format to old format for backward compatibility
@@ -214,13 +253,11 @@ class CourierApiController extends Controller
     }
 
     /**
-     * Transform new API response format to old format
-     * New format has 'data' key, old format has 'courierData' key
+     * Get default logos for couriers
      */
-    private function transformApiResponse($apiData)
+    private function getDefaultLogos()
     {
-        // Define default logos for each courier
-        $defaultLogos = [
+        return [
             'pathao' => 'https://api.bdcourier.com/c-logo/pathao-logo.png',
             'steadfast' => 'https://api.bdcourier.com/c-logo/steadfast-logo.png',
             'parceldex' => 'https://api.bdcourier.com/c-logo/parceldex-logo.png',
@@ -230,6 +267,40 @@ class CourierApiController extends Controller
             'sundarban' => 'https://api.bdcourier.com/c-logo/sundarban-logo.png',
             'dex' => 'https://api.bdcourier.com/c-logo/dex-logo.png',
         ];
+    }
+
+    /**
+     * Ensure logos are present in data
+     * Adds default logos if missing
+     */
+    private function ensureLogosInData($data)
+    {
+        $defaultLogos = $this->getDefaultLogos();
+        
+        if (isset($data['courierData'])) {
+            foreach ($data['courierData'] as $key => &$value) {
+                if ($key !== 'summary' && is_array($value)) {
+                    if (!isset($value['logo']) || empty($value['logo'])) {
+                        $value['logo'] = $defaultLogos[strtolower($key)] ?? '';
+                    }
+                    if (!isset($value['name']) || empty($value['name'])) {
+                        $value['name'] = ucfirst($key);
+                    }
+                }
+            }
+        }
+        
+        return $data;
+    }
+
+    /**
+     * Transform new API response format to old format
+     * New format has 'data' key, old format has 'courierData' key
+     */
+    private function transformApiResponse($apiData)
+    {
+        // Get default logos
+        $defaultLogos = $this->getDefaultLogos();
 
         // If already in old format, add logos if missing
         if (isset($apiData['courierData'])) {
