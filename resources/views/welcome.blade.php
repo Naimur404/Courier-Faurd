@@ -972,8 +972,25 @@ function updateUI(data) {
             successRateDisplay = `<span class="px-2 py-1 text-xs rounded-full text-white" style="background-color: ${color}">${stats.success_ratio.toFixed(1)}%</span>`;
         }
 
+        // Get courier name and logo
+        const courierName = stats.name || courier.charAt(0).toUpperCase() + courier.slice(1);
+        const courierLogo = stats.logo || '';
+        
+        // Build courier cell with logo if available
+        let courierCell = '';
+        if (courierLogo) {
+            courierCell = `
+                <div class="flex items-center gap-2">
+                    <img src="${courierLogo}" alt="${courierName}" class="w-6 h-6 object-contain rounded" onerror="this.style.display='none'">
+                    <span>${courierName}</span>
+                </div>
+            `;
+        } else {
+            courierCell = courierName;
+        }
+
         row.innerHTML = `
-            <td class="py-3 px-4">${courier.charAt(0).toUpperCase() + courier.slice(1)}</td>
+            <td class="py-3 px-4">${courierCell}</td>
             <td class="py-3 px-4">${stats.total_parcel}</td>
             <td class="py-3 px-4">${stats.success_parcel}</td>
             <td class="py-3 px-4">${stats.cancelled_parcel}</td>

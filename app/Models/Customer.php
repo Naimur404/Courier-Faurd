@@ -96,11 +96,22 @@ class Customer extends Model
 
     /**
      * Get courier summary from data
+     * Handles both old format (courierData) and new format (data)
      */
     public function getCourierSummaryAttribute(): ?array
     {
-        if (is_array($this->data) && isset($this->data['courierData']['summary'])) {
+        if (!is_array($this->data)) {
+            return null;
+        }
+
+        // Check for old format with 'courierData' key
+        if (isset($this->data['courierData']['summary'])) {
             return $this->data['courierData']['summary'];
+        }
+
+        // Check for new format with 'data' key
+        if (isset($this->data['data']['summary'])) {
+            return $this->data['data']['summary'];
         }
         
         return null;
@@ -126,11 +137,24 @@ class Customer extends Model
 
     /**
      * Get courier services data
+     * Handles both old format (courierData) and new format (data)
      */
     public function getCourierServicesAttribute(): array
     {
-        if (is_array($this->data) && isset($this->data['courierData'])) {
+        if (!is_array($this->data)) {
+            return [];
+        }
+
+        // Check for old format with 'courierData' key
+        if (isset($this->data['courierData'])) {
             $couriers = $this->data['courierData'];
+            unset($couriers['summary']); // Remove summary from services list
+            return $couriers;
+        }
+
+        // Check for new format with 'data' key
+        if (isset($this->data['data'])) {
+            $couriers = $this->data['data'];
             unset($couriers['summary']); // Remove summary from services list
             return $couriers;
         }

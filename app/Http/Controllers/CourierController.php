@@ -31,13 +31,34 @@ class CourierController extends Controller
             $oldTotalParcel = $oldData['courierData']['summary']['total_parcel'] ?? 0;
         }
 
-        $response = Http::withHeaders([
-            'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
-        ])->post('https://bdcourier.com/api/courier-check', [
-            'phone' => $phone,
-        ]);
+        // Try primary API first
+        $responseData = $this->callCourierApi($phone);
+        
+        // If primary API fails, try fallback API
+        if ($responseData === null) {
+            $responseData = $this->callFallbackCourierApi($phone);
+        }
+        
+        // If both APIs fail, return error or old data if available
+        if ($responseData === null) {
+            if ($oldData) {
+                return $oldData;
+            }
+            return [
+                'status' => 'error',
+                'message' => 'Unable to fetch courier data. Please try again later.',
+                'courierData' => [
+                    'summary' => [
+                        'total_parcel' => 0,
+                        'success_parcel' => 0,
+                        'cancelled_parcel' => 0,
+                        'success_ratio' => 0
+                    ]
+                ],
+                'reports' => []
+            ];
+        }
 
-        $responseData = $response->json(); // Get response as array
         $newTotalParcel = $responseData['courierData']['summary']['total_parcel'] ?? 0;
 
         // Determine which data to return
@@ -195,6 +216,153 @@ class CourierController extends Controller
                 $review->save();
             }
         }
+    }
+
+    /**
+     * Call primary courier API
+     * Uses the new API format with bdc_ prefix token
+     */
+    private function callCourierApi($phone)
+    {
+        try {
+            $response = Http::timeout(30)->withHeaders([
+                'Authorization' => 'Bearer bdc_ddsb5DmvKwfaQUHrgfduXahM5u7BZJaT66WsCdGmfqslhESGZEsZVirfVyrI',
+            ])->post('https://api.bdcourier.com/courier-check', [
+                'phone' => $phone,
+            ]);
+
+            if (!$response->successful()) {
+                return null;
+            }
+
+            $apiData = $response->json();
+            
+            // Transform new format to old format for backward compatibility
+            return $this->transformApiResponse($apiData);
+        } catch (\Exception $e) {
+            \Log::warning('Primary courier API failed', [
+                'phone' => $phone,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Call fallback courier API
+     * Uses the old API format
+     */
+    private function callFallbackCourierApi($phone)
+    {
+        try {
+            $response = Http::timeout(30)->withHeaders([
+                'Authorization' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
+            ])->post('https://bdcourier.com/api/courier-check', [
+                'phone' => $phone,
+            ]);
+
+            if (!$response->successful()) {
+                return null;
+            }
+
+            $apiData = $response->json();
+            
+            // Check if it's already in old format or needs transformation
+            if (isset($apiData['courierData'])) {
+                return $apiData;
+            }
+            
+            // Transform new format to old format for backward compatibility
+            return $this->transformApiResponse($apiData);
+        } catch (\Exception $e) {
+            \Log::warning('Fallback courier API failed', [
+                'phone' => $phone,
+                'error' => $e->getMessage()
+            ]);
+            return null;
+        }
+    }
+
+    /**
+     * Transform new API response format to old format
+     * New format has 'data' key, old format has 'courierData' key
+     */
+    private function transformApiResponse($apiData)
+    {
+        // Define default logos for each courier
+        $defaultLogos = [
+            'pathao' => 'https://api.bdcourier.com/c-logo/pathao-logo.png',
+            'steadfast' => 'https://api.bdcourier.com/c-logo/steadfast-logo.png',
+            'parceldex' => 'https://api.bdcourier.com/c-logo/parceldex-logo.png',
+            'redx' => 'https://api.bdcourier.com/c-logo/redx-logo.png',
+            'paperfly' => 'https://api.bdcourier.com/c-logo/paperfly-logo.png',
+            'carrybee' => 'https://api.bdcourier.com/c-logo/carrybee-logo.webp',
+            'sundarban' => 'https://api.bdcourier.com/c-logo/sundarban-logo.png',
+            'dex' => 'https://api.bdcourier.com/c-logo/dex-logo.png',
+        ];
+
+        // If already in old format, add logos if missing
+        if (isset($apiData['courierData'])) {
+            foreach ($apiData['courierData'] as $key => &$value) {
+                if ($key !== 'summary' && is_array($value)) {
+                    if (!isset($value['logo']) || empty($value['logo'])) {
+                        $value['logo'] = $defaultLogos[strtolower($key)] ?? '';
+                    }
+                    if (!isset($value['name']) || empty($value['name'])) {
+                        $value['name'] = ucfirst($key);
+                    }
+                }
+            }
+            return $apiData;
+        }
+
+        // Check if it's the new format with 'data' key
+        if (isset($apiData['data']) && isset($apiData['status']) && $apiData['status'] === 'success') {
+            $data = $apiData['data'];
+            
+            // Extract summary
+            $summary = $data['summary'] ?? [
+                'total_parcel' => 0,
+                'success_parcel' => 0,
+                'cancelled_parcel' => 0,
+                'success_ratio' => 0
+            ];
+            
+            // Build courierData in old format
+            $courierData = [];
+            foreach ($data as $key => $value) {
+                if ($key === 'summary') {
+                    $courierData['summary'] = [
+                        'total_parcel' => (int) ($summary['total_parcel'] ?? 0),
+                        'success_parcel' => (int) ($summary['success_parcel'] ?? 0),
+                        'cancelled_parcel' => (int) ($summary['cancelled_parcel'] ?? 0),
+                        'success_ratio' => (float) ($summary['success_ratio'] ?? 0)
+                    ];
+                } else {
+                    // Courier specific data - ensure numeric values are integers
+                    $logo = $value['logo'] ?? '';
+                    if (empty($logo)) {
+                        $logo = $defaultLogos[strtolower($key)] ?? '';
+                    }
+                    $courierData[$key] = [
+                        'name' => $value['name'] ?? ucfirst($key),
+                        'logo' => $logo,
+                        'total_parcel' => (int) ($value['total_parcel'] ?? 0),
+                        'success_parcel' => (int) ($value['success_parcel'] ?? 0),
+                        'cancelled_parcel' => (int) ($value['cancelled_parcel'] ?? 0),
+                        'success_ratio' => (float) ($value['success_ratio'] ?? 0)
+                    ];
+                }
+            }
+            
+            return [
+                'courierData' => $courierData,
+                'reports' => $apiData['reports'] ?? []
+            ];
+        }
+
+        // Unknown format, return as-is
+        return $apiData;
     }
 
     /**
