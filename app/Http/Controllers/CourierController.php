@@ -25,59 +25,39 @@ class CourierController extends Controller
         // Get existing customer data
         $existingCustomer = Customer::where('phone', $phone)->first();
         
-        // Configuration
-        $cacheDays = 3; // Data is valid for 3 days
-        $maxSearchesBeforeApiCall = 3; // Hit API on 3rd search within the period
+        // Configuration: Cache days from .env (default 3 days)
+        $cacheDays = (int) env('BDCOURIER_CACHE_DAYS', 3);
         
-        // If customer exists and has data, check if we should return cached data
-        if ($existingCustomer && $existingCustomer->data) {
+        // If customer exists and has data, check if cache is still valid
+        if ($existingCustomer && $existingCustomer->data && $existingCustomer->last_searched_at) {
             $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
             
             // Check if we have valid courier data
             $hasValidData = isset($oldData['courierData']['summary']);
             
-            // Check if last API call was within the cache period (3 days)
-            $lastApiCall = Cache::get("customer_{$phone}_last_api_call");
-            $searchCountInPeriod = (int) Cache::get("customer_{$phone}_search_count", 0);
+            // Check if last search was within the cache period
+            $daysSinceLastSearch = $existingCustomer->last_searched_at->diffInDays(now());
+            $isWithinCachePeriod = $daysSinceLastSearch < $cacheDays;
             
-            // If no record of last API call, check last_searched_at from database
-            if (!$lastApiCall && $existingCustomer->last_searched_at) {
-                $daysSinceLastSearch = $existingCustomer->last_searched_at->diffInDays(now());
-                $isWithinCachePeriod = $daysSinceLastSearch < $cacheDays;
-            } else {
-                $isWithinCachePeriod = $lastApiCall !== null;
-            }
-            
-            // Increment search count for this period
-            $searchCountInPeriod++;
-            
-            // If we have valid data, within cache period, and haven't reached max searches
-            if ($hasValidData && $isWithinCachePeriod && $searchCountInPeriod < $maxSearchesBeforeApiCall) {
-                // Update search count in cache (expires at end of cache period)
-                $cacheExpiry = now()->addDays($cacheDays);
-                Cache::put("customer_{$phone}_search_count", $searchCountInPeriod, $cacheExpiry);
-                
-                // Update customer record
+            // If we have valid data and within cache period, return cached data
+            if ($hasValidData && $isWithinCachePeriod) {
+                // Update customer search count (don't update last_searched_at to preserve cache timer)
                 $existingCustomer->update([
                     'count' => $existingCustomer->count + 1,
-                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
                     'ip_address' => $request->ip(),
                 ]);
                 
                 // Add logos if missing from cached data
                 $oldData = $this->ensureLogosInData($oldData);
                 
-                Log::info("Returning cached data for {$phone}. Search {$searchCountInPeriod} of {$maxSearchesBeforeApiCall} in {$cacheDays} day period.");
+                Log::info("Returning cached data for {$phone}. Data is {$daysSinceLastSearch} days old, cache valid for {$cacheDays} days.");
                 
                 return $oldData;
             }
-            
-            // Reset search count as we're hitting API
-            Cache::forget("customer_{$phone}_search_count");
         }
         
-        // Either new customer, data older than 3 days, or 3rd search - hit API
-        Log::info("Hitting API for {$phone}. Reason: " . (!$existingCustomer ? 'New customer' : 'Cache expired or max searches reached'));
+        // Either new customer or cache expired - hit API
+        Log::info("Hitting API for {$phone}. Reason: " . (!$existingCustomer ? 'New customer' : 'Cache expired (data older than ' . $cacheDays . ' days)'));
         
         $oldData = null;
         $oldTotalParcel = 0;
