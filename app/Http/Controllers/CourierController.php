@@ -515,6 +515,13 @@ class CourierController extends Controller
                     $logo = $value['logo'] ?? '';
                     if (empty($logo)) {
                         $logo = $defaultLogos[strtolower($key)] ?? '';
+                    } else {
+                        // Replace bdcourier URLs with our domain
+                        $logo = str_replace(
+                            'https://api.bdcourier.com/c-logo',
+                            'https://fraudshieldbd.site/c-logo',
+                            $logo
+                        );
                     }
                     $courierData[$key] = [
                         'name' => $value['name'] ?? ucfirst($key),
@@ -538,8 +545,8 @@ class CourierController extends Controller
     }
 
     /**
-     * Ensure logos are present in data
-     * Adds default logos if missing
+     * Ensure logos are present in data and replace external URLs with our domain
+     * Adds default logos if missing, replaces bdcourier URLs with fraudshieldbd.site
      */
     private function ensureLogosInData($data)
     {
@@ -550,6 +557,13 @@ class CourierController extends Controller
                 if ($key !== 'summary' && is_array($value)) {
                     if (!isset($value['logo']) || empty($value['logo'])) {
                         $value['logo'] = $defaultLogos[strtolower($key)] ?? '';
+                    } else {
+                        // Replace bdcourier URLs with our domain
+                        $value['logo'] = str_replace(
+                            'https://api.bdcourier.com/c-logo',
+                            'https://fraudshieldbd.site/c-logo',
+                            $value['logo']
+                        );
                     }
                     if (!isset($value['name']) || empty($value['name'])) {
                         $value['name'] = ucfirst($key);
@@ -566,15 +580,16 @@ class CourierController extends Controller
      */
     private function getDefaultLogos()
     {
+        $baseUrl = 'https://fraudshieldbd.site/c-logo';
         return [
-            'pathao' => 'https://api.bdcourier.com/c-logo/pathao-logo.png',
-            'steadfast' => 'https://api.bdcourier.com/c-logo/steadfast-logo.png',
-            'parceldex' => 'https://api.bdcourier.com/c-logo/parceldex-logo.png',
-            'redx' => 'https://api.bdcourier.com/c-logo/redx-logo.png',
-            'paperfly' => 'https://api.bdcourier.com/c-logo/paperfly-logo.png',
-            'carrybee' => 'https://api.bdcourier.com/c-logo/carrybee-logo.webp',
-            'sundarban' => 'https://api.bdcourier.com/c-logo/sundarban-logo.png',
-            'dex' => 'https://api.bdcourier.com/c-logo/dex-logo.png',
+            'pathao' => $baseUrl . '/pathao-logo.png',
+            'steadfast' => $baseUrl . '/steadfast-logo.png',
+            'parceldex' => $baseUrl . '/parceldex-logo.png',
+            'redx' => $baseUrl . '/redx-logo.png',
+            'paperfly' => $baseUrl . '/paperfly-logo.png',
+            'carrybee' => $baseUrl . '/carrybee-logo.webp',
+            'sundarban' => $baseUrl . '/sundarban-logo.png',
+            'dex' => $baseUrl . '/dex-logo.png',
         ];
     }
 
