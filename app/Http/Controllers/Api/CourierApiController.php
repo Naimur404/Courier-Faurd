@@ -41,16 +41,16 @@ class CourierApiController extends Controller
             // Configuration: Cache days from .env (default 3 days)
             $cacheDays = (int) env('BDCOURIER_CACHE_DAYS', 3);
             
-            // If customer exists and has data, check if cache is still valid
-            if ($existingCustomer && $existingCustomer->data && $existingCustomer->last_searched_at) {
+            // If customer exists and has data, check if data is still fresh
+            if ($existingCustomer && $existingCustomer->data && $existingCustomer->updated_at) {
                 $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
                 
                 // Check if we have valid courier data
                 $hasValidData = isset($oldData['courierData']['summary']);
                 
-                // Check if last search was within the cache period
-                $daysSinceLastSearch = $existingCustomer->last_searched_at->diffInDays(now());
-                $isWithinCachePeriod = $daysSinceLastSearch < $cacheDays;
+                // Check if last update was within the cache period
+                $daysSinceLastUpdate = $existingCustomer->updated_at->diffInDays(now());
+                $isWithinCachePeriod = $daysSinceLastUpdate < $cacheDays;
                 
                 // If we have valid data and within cache period, return cached data
                 if ($hasValidData && $isWithinCachePeriod) {
@@ -70,7 +70,7 @@ class CourierApiController extends Controller
                     // Add logos if missing from cached data
                     $oldData = $this->ensureLogosInData($oldData);
                     
-                    Log::info("API: Returning cached data for {$phone}. Data is {$daysSinceLastSearch} days old, cache valid for {$cacheDays} days.");
+                    Log::info("API: Returning database data for {$phone}. Data is {$daysSinceLastUpdate} days old, valid for {$cacheDays} days.");
                     
                     return response()->json($oldData);
                 }
@@ -139,11 +139,6 @@ class CourierApiController extends Controller
                     ]);
                 }
                 
-                // Set cache for search tracking
-                $cacheExpiry = now()->addDays($cacheDays);
-                Cache::put("customer_{$phone}_last_api_call", now(), $cacheExpiry);
-                Cache::put("customer_{$phone}_search_count", 1, $cacheExpiry);
-                
                 // Return database data (with logos)
                 return response()->json($this->ensureLogosInData($oldData));
             }
@@ -185,11 +180,6 @@ class CourierApiController extends Controller
                     'data' => $responseData,
                 ]);
             }
-
-            // Set cache to track API call time and reset search count
-            $cacheExpiry = now()->addDays($cacheDays);
-            Cache::put("customer_{$phone}_last_api_call", now(), $cacheExpiry);
-            Cache::put("customer_{$phone}_search_count", 1, $cacheExpiry); // This is the 1st search after API call
 
             // Process reports from the API response
             $this->processReports($responseData, $phone);
