@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import AppLayout from '@/Layouts/AppLayout.vue';
 import Button from '@/components/ui/Button.vue';
@@ -16,7 +16,7 @@ import {
     Shield, TrendingUp, History, ChevronDown, ChevronUp,
     CheckCircle, XCircle, AlertCircle, HelpCircle,
     MessageSquare, Plus, Download, BarChart3, PieChart,
-    Send, RefreshCw
+    Send, RefreshCw, Truck
 } from 'lucide-vue-next';
 import { 
     formatBengaliNumber, 
@@ -25,6 +25,10 @@ import {
     maskPhoneNumber,
     formatBengaliDate
 } from '@/lib/utils';
+import { Chart, registerables } from 'chart.js';
+
+// Register Chart.js components
+Chart.register(...registerables);
 
 // Props from controller
 const props = defineProps<{
@@ -100,6 +104,152 @@ const courierList = computed(() => {
             successRatio: data.success_ratio,
         }));
 });
+
+// Chart.js instance
+const chartCanvas = ref<HTMLCanvasElement | null>(null);
+let chartInstance: Chart | null = null;
+
+// Function to update chart
+const updateChart = () => {
+    const canvas = chartCanvas.value;
+    if (!canvas) {
+        console.log('Chart canvas not found');
+        return;
+    }
+    
+    if (courierList.value.length === 0) {
+        console.log('No courier data');
+        return;
+    }
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+        console.log('Could not get canvas context');
+        return;
+    }
+    
+    // Destroy existing chart
+    if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
+    }
+    
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    const textColor = isDarkMode ? '#e2e8f0' : '#1f2937';
+    const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+    
+    const labels = courierList.value.map(c => c.name);
+    
+    try {
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Total Orders',
+                        data: courierList.value.map(c => c.totalParcel),
+                        backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                        borderColor: 'rgba(79, 70, 229, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Successful Deliveries',
+                        data: courierList.value.map(c => c.successParcel),
+                        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+                        borderColor: 'rgba(16, 185, 129, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Cancelled Orders',
+                        data: courierList.value.map(c => c.cancelledParcel),
+                        backgroundColor: 'rgba(239, 68, 68, 0.8)',
+                        borderColor: 'rgba(239, 68, 68, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        labels: {
+                            color: textColor,
+                            usePointStyle: true,
+                            pointStyle: 'rect',
+                            padding: 15,
+                            font: {
+                                size: 12
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: textColor,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: gridColor,
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: textColor,
+                            stepSize: 2,
+                            font: {
+                                size: 11
+                            }
+                        },
+                        grid: {
+                            color: gridColor
+                        }
+                    }
+                }
+            }
+        });
+        console.log('Chart created successfully');
+    } catch (error) {
+        console.error('Error creating chart:', error);
+    }
+};
+
+// Watch for changes in courierList to update chart
+watch(courierList, (newVal) => {
+    if (newVal.length > 0) {
+        // Use multiple nextTick and setTimeout to ensure DOM is fully rendered
+        nextTick(() => {
+            nextTick(() => {
+                setTimeout(() => {
+                    updateChart();
+                }, 200);
+            });
+        });
+    }
+}, { deep: true });
+
+// Also watch for searchResults changes
+watch(searchResults, (newVal) => {
+    if (newVal?.courierData) {
+        nextTick(() => {
+            nextTick(() => {
+                setTimeout(() => {
+                    updateChart();
+                }, 200);
+            });
+        });
+    }
+}, { deep: true });
 
 // Methods
 const loadStats = async () => {
@@ -291,6 +441,11 @@ onMounted(() => {
 onUnmounted(() => {
     if (statsInterval) {
         clearInterval(statsInterval);
+    }
+    // Destroy chart instance
+    if (chartInstance) {
+        chartInstance.destroy();
+        chartInstance = null;
     }
 });
 </script>
@@ -622,59 +777,69 @@ onUnmounted(() => {
                             />
                         </Card>
                     
-                    <!-- Courier Table -->
-                    <Card class="p-6">
-                        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                            <BarChart3 class="w-5 h-5 text-primary" />
-                            কুরিয়ার ডিটেইলস
+                    <!-- Courier Chart & Table Combined -->
+                    <Card class="p-4 md:p-6" v-if="courierList.length > 0">
+                        <h3 class="text-base md:text-lg font-bold mb-4 md:mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                            <Truck class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            কুরিয়ার
                         </h3>
                         
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead class="w-[180px]">Courier</TableHead>
-                                    <TableHead>Orders</TableHead>
-                                    <TableHead>Delivered</TableHead>
-                                    <TableHead>Cancelled</TableHead>
-                                    <TableHead class="text-right">Success Rate</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                <TableRow 
-                                    v-for="courier in courierList" 
-                                    :key="courier.name"
-                                >
-                                    <TableCell class="font-medium">
-                                        <div class="flex items-center gap-2">
-                                            <img 
-                                                v-if="courier.logo" 
-                                                :src="courier.logo" 
-                                                :alt="courier.name"
-                                                class="w-6 h-6 object-contain rounded"
-                                            />
-                                            <span>{{ courier.name }}</span>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="outline">{{ courier.totalParcel }}</Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="success">{{ courier.successParcel }}</Badge>
-                                    </TableCell>
-                                    <TableCell>
-                                        <Badge variant="destructive">{{ courier.cancelledParcel }}</Badge>
-                                    </TableCell>
-                                    <TableCell class="text-right">
-                                        <Badge 
-                                            :class="courier.successRatio >= 90 ? 'bg-green-500 hover:bg-green-600' : courier.successRatio >= 70 ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-red-500 hover:bg-red-600'"
-                                            class="text-white"
+                        <!-- Chart.js Canvas -->
+                        <div class="relative mb-6 h-64 md:h-72 w-full">
+                            <canvas 
+                                ref="chartCanvas" 
+                                class="w-full h-full"
+                                @vue:mounted="updateChart"
+                            ></canvas>
+                        </div>
+                        
+                        <!-- Courier Table - Mobile Responsive -->
+                        <div class="overflow-x-auto -mx-4 md:mx-0">
+                            <div class="min-w-[500px] px-4 md:px-0">
+                                <Table>
+                                    <TableHeader>
+                                        <TableRow class="bg-gray-50 dark:bg-gray-800">
+                                            <TableHead class="w-[140px] md:w-[180px] font-bold text-xs md:text-sm">Courier</TableHead>
+                                            <TableHead class="font-bold text-xs md:text-sm">Orders</TableHead>
+                                            <TableHead class="font-bold text-xs md:text-sm">Delivered</TableHead>
+                                            <TableHead class="font-bold text-xs md:text-sm">Cancelled</TableHead>
+                                            <TableHead class="text-right font-bold text-xs md:text-sm">Success Rate</TableHead>
+                                        </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                        <TableRow 
+                                            v-for="courier in courierList" 
+                                            :key="courier.name + '-table'"
+                                            class="hover:bg-gray-50 dark:hover:bg-gray-800/50"
                                         >
-                                            {{ courier.successRatio.toFixed(1) }}%
-                                        </Badge>
-                                    </TableCell>
-                                </TableRow>
-                            </TableBody>
-                        </Table>
+                                            <TableCell class="font-medium py-3">
+                                                <div class="flex items-center gap-2">
+                                                    <img 
+                                                        v-if="courier.logo" 
+                                                        :src="courier.logo" 
+                                                        :alt="courier.name"
+                                                        class="w-5 h-5 md:w-6 md:h-6 object-contain"
+                                                    />
+                                                    <span class="text-xs md:text-sm">{{ courier.name }}</span>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">{{ courier.totalParcel }}</TableCell>
+                                            <TableCell class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">{{ courier.successParcel }}</TableCell>
+                                            <TableCell class="text-gray-700 dark:text-gray-300 text-xs md:text-sm">{{ courier.cancelledParcel }}</TableCell>
+                                            <TableCell class="text-right">
+                                                <Badge 
+                                                    v-if="courier.totalParcel > 0"
+                                                    class="bg-green-500 hover:bg-green-600 text-white px-2 md:px-3 text-xs"
+                                                >
+                                                    {{ courier.successRatio.toFixed(1) }}%
+                                                </Badge>
+                                                <span v-else class="text-gray-500 dark:text-gray-400 text-xs md:text-sm">N/A</span>
+                                            </TableCell>
+                                        </TableRow>
+                                    </TableBody>
+                                </Table>
+                            </div>
+                        </div>
                     </Card>
                     
                     <!-- Customer Reviews Section -->
