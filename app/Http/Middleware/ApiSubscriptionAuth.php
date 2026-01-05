@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use Log;
+use Exception;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -114,7 +116,7 @@ class ApiSubscriptionAuth
         $startTime = microtime(true);
         
         // Debug log before processing
-        \Log::info('API Request Processing', [
+        Log::info('API Request Processing', [
             'api_key_id' => $apiKeyRecord->id,
             'endpoint' => $request->path(),
             'method' => $request->method(),
@@ -128,7 +130,7 @@ class ApiSubscriptionAuth
             $statusCode = $response->getStatusCode();
             $responseTime = round((microtime(true) - $startTime) * 1000);
             
-            \Log::info('API Request Processed', [
+            Log::info('API Request Processed', [
                 'api_key_id' => $apiKeyRecord->id,
                 'endpoint' => $request->path(),
                 'status_code' => $statusCode,
@@ -137,8 +139,8 @@ class ApiSubscriptionAuth
             
             // Log API usage immediately after request processing
             $this->logApiUsage($request, $apiKeyRecord, $startTime, $statusCode);
-        } catch (\Exception $e) {
-            \Log::error('Failed to process API response in middleware', [
+        } catch (Exception $e) {
+            Log::error('Failed to process API response in middleware', [
                 'api_key_id' => $apiKeyRecord->id,
                 'endpoint' => $request->path(),
                 'error' => $e->getMessage()
@@ -192,7 +194,7 @@ class ApiSubscriptionAuth
     {
         $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
         
-        \Log::info('Attempting to log API usage', [
+        Log::info('Attempting to log API usage', [
             'api_key_id' => $apiKey->id,
             'user_id' => $apiKey->user_id,
             'endpoint' => $request->path(),
@@ -215,7 +217,7 @@ class ApiSubscriptionAuth
                 'requested_at' => now(),
             ]);
             
-            \Log::info('API Usage record created successfully', [
+            Log::info('API Usage record created successfully', [
                 'api_usage_id' => $apiUsage->id,
                 'api_key_id' => $apiKey->id
             ]);
@@ -225,15 +227,15 @@ class ApiSubscriptionAuth
             $apiKey->increment('usage_count');
             $apiKey->refresh();
             
-            \Log::info('API Key usage count incremented', [
+            Log::info('API Key usage count incremented', [
                 'api_key_id' => $apiKey->id,
                 'old_count' => $oldCount,
                 'new_count' => $apiKey->usage_count
             ]);
             
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Log the error for debugging
-            \Log::error('API Usage logging failed: ' . $e->getMessage(), [
+            Log::error('API Usage logging failed: ' . $e->getMessage(), [
                 'api_key_id' => $apiKey->id,
                 'endpoint' => $request->path(),
                 'error' => $e->getMessage(),

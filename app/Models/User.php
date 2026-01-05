@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +15,7 @@ use Filament\Panel;
 
 class User extends Authenticatable implements FilamentUser
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
     /**
@@ -200,7 +201,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function getTodayApiUsage(): int
     {
-        return \App\Models\ApiUsage::where('user_id', $this->id)
+        return ApiUsage::where('user_id', $this->id)
                       ->whereDate('created_at', today())
                       ->count();
     }
@@ -210,7 +211,7 @@ class User extends Authenticatable implements FilamentUser
      */
     public function getMonthlyApiUsage(): int
     {
-        return \App\Models\ApiUsage::where('user_id', $this->id)
+        return ApiUsage::where('user_id', $this->id)
                       ->whereMonth('created_at', now()->month)
                       ->whereYear('created_at', now()->year)
                       ->count();

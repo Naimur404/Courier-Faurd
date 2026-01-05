@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
@@ -62,7 +63,7 @@ class BdCourierToken extends Model
             'cooldown_until' => $midnightBDT,
         ]);
         
-        \Illuminate\Support\Facades\Log::info("BdCourier token '{$this->name}' (ID: {$this->id}) put on cooldown until midnight BDT ({$midnightBDT->format('Y-m-d H:i:s')} BDT)");
+        Log::info("BdCourier token '{$this->name}' (ID: {$this->id}) put on cooldown until midnight BDT ({$midnightBDT->format('Y-m-d H:i:s')} BDT)");
     }
 
     /**

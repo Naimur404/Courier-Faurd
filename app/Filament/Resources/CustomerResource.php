@@ -2,11 +2,30 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\BadgeColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\ExportBulkAction;
+use App\Filament\Resources\CustomerResource\Pages\ListCustomers;
+use App\Filament\Resources\CustomerResource\Pages\CreateCustomer;
+use App\Filament\Resources\CustomerResource\Pages\EditCustomer;
 use App\Filament\Resources\CustomerResource\Pages;
 use App\Filament\Resources\CustomerResource\RelationManagers;
 use App\Models\Customer;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,32 +36,32 @@ class CustomerResource extends Resource
 {
     protected static ?string $model = Customer::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-magnifying-glass';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-magnifying-glass';
     
-    protected static ?string $navigationGroup = 'Search Data';
+    protected static string | \UnitEnum | null $navigationGroup = 'Search Data';
     
     protected static ?int $navigationSort = 1;
 
     protected static ?string $navigationLabel = 'Search Records';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Search Information')
+        return $schema
+            ->components([
+                Section::make('Search Information')
                     ->schema([
-                        Forms\Components\TextInput::make('phone')
+                        TextInput::make('phone')
                             ->label('Phone Number')
                             ->tel()
                             ->required()
                             ->placeholder('01XXXXXXXXX'),
-                        Forms\Components\TextInput::make('count')
+                        TextInput::make('count')
                             ->label('Search Count')
                             ->required()
                             ->numeric()
                             ->default(0)
                             ->helperText('Number of times this number was searched'),
-                        Forms\Components\Select::make('search_by')
+                        Select::make('search_by')
                             ->label('Search Source')
                             ->options([
                                 'web' => 'Web Browser',
@@ -53,19 +72,19 @@ class CustomerResource extends Resource
                             ->default('web'),
                     ])->columns(3),
                 
-                Forms\Components\Section::make('Tracking Information')
+                Section::make('Tracking Information')
                     ->schema([
-                        Forms\Components\TextInput::make('ip_address')
+                        TextInput::make('ip_address')
                             ->label('IP Address')
                             ->placeholder('192.168.1.1'),
-                        Forms\Components\DateTimePicker::make('last_searched_at')
+                        DateTimePicker::make('last_searched_at')
                             ->label('Last Searched')
                             ->displayFormat('Y-m-d H:i:s'),
                     ])->columns(2),
                 
-                Forms\Components\Section::make('Search Data')
+                Section::make('Search Data')
                     ->schema([
-                        Forms\Components\Textarea::make('data')
+                        Textarea::make('data')
                             ->label('Raw Search Data (JSON)')
                             ->rows(15)
                             ->columnSpanFull()
@@ -85,15 +104,15 @@ class CustomerResource extends Resource
                             }),
                     ]),
                 
-                Forms\Components\Section::make('Courier Summary')
+                Section::make('Courier Summary')
                     ->schema([
-                        Forms\Components\Placeholder::make('total_parcels')
+                        Placeholder::make('total_parcels')
                             ->label('Total Parcels')
                             ->content(fn (?Customer $record): string => $record ? number_format($record->total_parcels) : 'N/A'),
-                        Forms\Components\Placeholder::make('success_ratio')
+                        Placeholder::make('success_ratio')
                             ->label('Success Ratio')
                             ->content(fn (?Customer $record): string => $record ? $record->success_ratio . '%' : 'N/A'),
-                        Forms\Components\Placeholder::make('courier_services_count')
+                        Placeholder::make('courier_services_count')
                             ->label('Courier Services')
                             ->content(fn (?Customer $record): string => $record ? count($record->courier_services) . ' services' : 'N/A'),
                     ])
@@ -106,19 +125,19 @@ class CustomerResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('phone')
+                TextColumn::make('phone')
                     ->label('Phone Number')
                     ->searchable()
                     ->sortable()
                     ->copyable()
                     ->copyMessage('Phone number copied!'),
-                Tables\Columns\TextColumn::make('count')
+                TextColumn::make('count')
                     ->label('Searches')
                     ->numeric()
                     ->sortable()
                     ->color('success')
                     ->badge(),
-                Tables\Columns\BadgeColumn::make('search_by')
+                BadgeColumn::make('search_by')
                     ->label('Source')
                     ->colors([
                         'primary' => 'web',
@@ -126,23 +145,23 @@ class CustomerResource extends Resource
                         'warning' => 'api',
                     ])
                     ->searchable(),
-                Tables\Columns\TextColumn::make('ip_address')
+                TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('last_searched_at')
+                TextColumn::make('last_searched_at')
                     ->label('Last Search')
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->since(),
-                Tables\Columns\TextColumn::make('total_parcels')
+                TextColumn::make('total_parcels')
                     ->label('Total Parcels')
                     ->getStateUsing(fn (Customer $record): string => number_format($record->total_parcels))
                     ->badge()
                     ->color('info')
                     ->sortable(false)
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('success_ratio')
+                TextColumn::make('success_ratio')
                     ->label('Success Rate')
                     ->getStateUsing(fn (Customer $record): string => $record->success_ratio . '%')
                     ->badge()
@@ -155,52 +174,52 @@ class CustomerResource extends Resource
                     })
                     ->sortable(false)
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('courier_services_count')
+                TextColumn::make('courier_services_count')
                     ->label('Courier Services')
                     ->getStateUsing(fn (Customer $record): string => count($record->courier_services) . ' services')
                     ->badge()
                     ->color('gray')
                     ->sortable(false)
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('First Search')
                     ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('search_by')
+                SelectFilter::make('search_by')
                     ->label('Search Source')
                     ->options([
                         'web' => 'Web Browser',
                         'app' => 'Mobile App',
                         'api' => 'API Request',
                     ]),
-                Tables\Filters\Filter::make('high_activity')
+                Filter::make('high_activity')
                     ->query(fn (Builder $query): Builder => $query->where('count', '>=', 10))
                     ->label('High Activity (10+ searches)'),
-                Tables\Filters\Filter::make('recent')
+                Filter::make('recent')
                     ->query(fn (Builder $query): Builder => $query->where('last_searched_at', '>=', now()->subDays(7)))
                     ->label('Recent (Last 7 days)'),
-                Tables\Filters\Filter::make('has_courier_data')
+                Filter::make('has_courier_data')
                     ->query(fn (Builder $query): Builder => $query->whereNotNull('data'))
                     ->label('Has Courier Data'),
-                Tables\Filters\Filter::make('high_success_rate')
+                Filter::make('high_success_rate')
                     ->query(fn (Builder $query): Builder => $query->whereRaw("JSON_EXTRACT(data, '$.courierData.summary.success_ratio') >= 90"))
                     ->label('High Success Rate (90%+)'),
-                Tables\Filters\Filter::make('many_parcels')
+                Filter::make('many_parcels')
                     ->query(fn (Builder $query): Builder => $query->whereRaw("JSON_EXTRACT(data, '$.courierData.summary.total_parcel') >= 10"))
                     ->label('Many Parcels (10+)'),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                ViewAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\ExportBulkAction::make()
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    ExportBulkAction::make()
                         ->label('Export Selected')
                         ->icon('heroicon-o-arrow-down-tray'),
                 ]),
@@ -220,9 +239,9 @@ class CustomerResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListCustomers::route('/'),
-            'create' => Pages\CreateCustomer::route('/create'),
-            'edit' => Pages\EditCustomer::route('/{record}/edit'),
+            'index' => ListCustomers::route('/'),
+            'create' => CreateCustomer::route('/create'),
+            'edit' => EditCustomer::route('/{record}/edit'),
         ];
     }
 }

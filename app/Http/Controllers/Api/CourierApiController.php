@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use Carbon\Carbon;
+use Illuminate\Http\Client\RequestException;
+use Exception;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerReview;
@@ -135,7 +138,7 @@ class CourierApiController extends Controller
                         'subscription_type' => 'api',
                         'subscription_id' => $activeSubscription->id,
                         'count' => $existingCustomer->count + 1,
-                        'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                        'last_searched_at' => Carbon::now('Asia/Dhaka'),
                         'ip_address' => $request->ip(),
                     ]);
                 }
@@ -164,7 +167,7 @@ class CourierApiController extends Controller
                     'subscription_id' => $subscriptionId,
                     'search_by' => 'api',
                     'ip_address' => $request->ip(),
-                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                    'last_searched_at' => Carbon::now('Asia/Dhaka'),
                     'count' => $existingCustomer->count + 1,
                     'data' => $responseData // Update with new API data
                 ]);
@@ -176,7 +179,7 @@ class CourierApiController extends Controller
                     'subscription_id' => $subscriptionId,
                     'search_by' => 'api',
                     'ip_address' => $request->ip(),
-                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                    'last_searched_at' => Carbon::now('Asia/Dhaka'),
                     'count' => 1,
                     'data' => $responseData,
                 ]);
@@ -188,13 +191,13 @@ class CourierApiController extends Controller
             // Return the new API data
             return response()->json($responseData);
 
-        } catch (\Illuminate\Http\Client\RequestException $e) {
+        } catch (RequestException $e) {
             return response()->json([
                 'success' => false,
                 'error' => 'Network Error',
                 'message' => 'Failed to connect to courier service. Please try again later.'
             ], 503);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('API Courier Check Error', [
                 'phone' => $phone,
                 'user_id' => $request->user()->id ?? null,
@@ -325,7 +328,7 @@ class CourierApiController extends Controller
             }
             
             return $this->transformApiResponse($apiData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('BDCourier API call failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()
@@ -361,7 +364,7 @@ class CourierApiController extends Controller
             
             // Transform new format to old format for backward compatibility
             return $this->transformApiResponse($apiData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('Fallback courier API failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()

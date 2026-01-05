@@ -57,7 +57,7 @@ class Subscription extends Model
      */
     public function userApiKeys()
     {
-        return $this->hasMany(\App\Models\ApiKey::class, 'user_id', 'user_id');
+        return $this->hasMany(ApiKey::class, 'user_id', 'user_id');
     }
 
     /**
@@ -69,9 +69,9 @@ class Subscription extends Model
             return false;
         }
         
-        $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+        $expiresAt = $this->expires_at instanceof Carbon 
             ? $this->expires_at 
-            : \Carbon\Carbon::parse($this->expires_at);
+            : Carbon::parse($this->expires_at);
             
         return $expiresAt->isFuture();
     }
@@ -86,9 +86,9 @@ class Subscription extends Model
         }
         
         if ($this->status === self::STATUS_ACTIVE && $this->expires_at) {
-            $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+            $expiresAt = $this->expires_at instanceof Carbon 
                 ? $this->expires_at 
-                : \Carbon\Carbon::parse($this->expires_at);
+                : Carbon::parse($this->expires_at);
                 
             return $expiresAt->isPast();
         }
@@ -105,9 +105,9 @@ class Subscription extends Model
             return 0;
         }
         
-        $expiresAt = $this->expires_at instanceof \Carbon\Carbon 
+        $expiresAt = $this->expires_at instanceof Carbon 
             ? $this->expires_at 
-            : \Carbon\Carbon::parse($this->expires_at);
+            : Carbon::parse($this->expires_at);
         
         return max(0, Carbon::now()->diffInDays($expiresAt, false));
     }

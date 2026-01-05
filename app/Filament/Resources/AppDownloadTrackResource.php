@@ -2,11 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Tables\Columns\TextColumn;
+use Carbon\Carbon;
+use Exception;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\EditAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\AppDownloadTrackResource\Pages\ListAppDownloadTracks;
+use App\Filament\Resources\AppDownloadTrackResource\Pages\CreateAppDownloadTrack;
+use App\Filament\Resources\AppDownloadTrackResource\Pages\EditAppDownloadTrack;
 use App\Filament\Resources\AppDownloadTrackResource\Pages;
 use App\Filament\Resources\AppDownloadTrackResource\RelationManagers;
 use App\Models\AppDownloadTrack;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,25 +32,25 @@ class AppDownloadTrackResource extends Resource
 {
     protected static ?string $model = AppDownloadTrack::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-down-on-square';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-arrow-down-on-square';
     
-    protected static ?string $navigationGroup = 'Search Data';
+    protected static string | \UnitEnum | null $navigationGroup = 'Search Data';
     
     protected static ?int $navigationSort = 3;
     
     protected static ?string $navigationLabel = 'App Downloads';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Download Information')
+        return $schema
+            ->components([
+                Section::make('Download Information')
                     ->schema([
-                        Forms\Components\TextInput::make('ip_address')
+                        TextInput::make('ip_address')
                             ->label('IP Address')
                             ->required()
                             ->placeholder('192.168.1.1'),
-                        Forms\Components\Select::make('status')
+                        Select::make('status')
                             ->label('Download Status')
                             ->options([
                                 'pending' => 'Pending',
@@ -45,7 +60,7 @@ class AppDownloadTrackResource extends Resource
                             ])
                             ->default('complete')
                             ->required(),
-                        Forms\Components\DateTimePicker::make('completed_at')
+                        DateTimePicker::make('completed_at')
                             ->label('Completed At')
                             ->nullable(),
                     ])
@@ -57,13 +72,13 @@ class AppDownloadTrackResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('ip_address')
+                TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable()
                     ->sortable()
                     ->weight('medium')
                     ->copyable(),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->label('Download Status')
                     ->searchable()
                     ->sortable()
@@ -77,14 +92,14 @@ class AppDownloadTrackResource extends Resource
                             default => 'gray',
                         };
                     }),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Download Started')
                     ->dateTime('M j, Y H:i')
                     ->sortable()
                     ->description(function ($record) {
                         return $record->created_at->diffForHumans();
                     }),
-                Tables\Columns\TextColumn::make('completed_at')
+                TextColumn::make('completed_at')
                     ->label('Completed At')
                     ->dateTime('M j, Y H:i')
                     ->sortable()
@@ -96,15 +111,15 @@ class AppDownloadTrackResource extends Resource
                         
                         try {
                             // Ensure completed_at is a Carbon instance
-                            $completedAt = $record->completed_at instanceof \Carbon\Carbon 
+                            $completedAt = $record->completed_at instanceof Carbon 
                                 ? $record->completed_at 
-                                : \Carbon\Carbon::parse($record->completed_at);
+                                : Carbon::parse($record->completed_at);
                             return $completedAt->diffForHumans();
-                        } catch (\Exception $e) {
+                        } catch (Exception $e) {
                             return null;
                         }
                     }),
-                Tables\Columns\TextColumn::make('formatted_duration')
+                TextColumn::make('formatted_duration')
                     ->label('Duration')
                     ->sortable(false)
                     ->getStateUsing(function ($record) {
@@ -112,7 +127,7 @@ class AppDownloadTrackResource extends Resource
                     }),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
+                SelectFilter::make('status')
                     ->label('Download Status')
                     ->options([
                         'pending' => 'Pending',
@@ -120,20 +135,20 @@ class AppDownloadTrackResource extends Resource
                         'complete' => 'Complete',
                         'failed' => 'Failed',
                     ]),
-                Tables\Filters\Filter::make('recent_downloads')
+                Filter::make('recent_downloads')
                     ->label('Recent Downloads (Last 24 hours)')
                     ->query(fn (Builder $query): Builder => $query->where('created_at', '>=', now()->subDay())),
-                Tables\Filters\Filter::make('failed_downloads')
+                Filter::make('failed_downloads')
                     ->label('Failed Downloads')
                     ->query(fn (Builder $query): Builder => $query->where('status', 'failed')),
             ])
             ->defaultSort('created_at', 'desc')
-            ->actions([
-                Tables\Actions\EditAction::make(),
+            ->recordActions([
+                EditAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -148,9 +163,9 @@ class AppDownloadTrackResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListAppDownloadTracks::route('/'),
-            'create' => Pages\CreateAppDownloadTrack::route('/create'),
-            'edit' => Pages\EditAppDownloadTrack::route('/{record}/edit'),
+            'index' => ListAppDownloadTracks::route('/'),
+            'create' => CreateAppDownloadTrack::route('/create'),
+            'edit' => EditAppDownloadTrack::route('/{record}/edit'),
         ];
     }
 }

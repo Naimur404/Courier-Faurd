@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\SubscriptionResource\Pages;
 
+use Filament\Actions\Action;
+use Filament\Notifications\Notification;
+use Filament\Actions\EditAction;
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
 use App\Filament\Resources\SubscriptionResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
-use Filament\Infolists\Infolist;
-use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\IconEntry;
 use App\Models\Subscription;
@@ -18,7 +21,7 @@ class ViewSubscription extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\Action::make('toggle_status')
+            Action::make('toggle_status')
                 ->label(fn (): string => 
                     $this->record->status === Subscription::STATUS_ACTIVE ? 'Deactivate' : 'Activate'
                 )
@@ -43,7 +46,7 @@ class ViewSubscription extends ViewRecord
                             'status' => Subscription::STATUS_CANCELLED,
                         ]);
                         
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Subscription Deactivated')
                             ->body('The subscription has been successfully deactivated.')
                             ->success()
@@ -51,7 +54,7 @@ class ViewSubscription extends ViewRecord
                     } else {
                         $this->record->activate();
                         
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Subscription Activated')
                             ->body('The subscription has been successfully activated.')
                             ->success()
@@ -61,11 +64,11 @@ class ViewSubscription extends ViewRecord
                 ->visible(fn (): bool => 
                     in_array($this->record->status, [Subscription::STATUS_ACTIVE, Subscription::STATUS_PENDING, Subscription::STATUS_CANCELLED])
                 ),
-            Actions\EditAction::make(),
+            EditAction::make(),
         ];
     }
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
         return $infolist
             ->schema([

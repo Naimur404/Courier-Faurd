@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ApiUsageResource\Pages;
 
+use Filament\Actions\CreateAction;
 use App\Filament\Resources\ApiUsageResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
@@ -13,7 +14,7 @@ class ListApiUsages extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            CreateAction::make(),
         ];
     }
 }

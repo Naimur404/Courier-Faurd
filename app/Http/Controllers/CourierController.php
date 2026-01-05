@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Exception;
 use App\Models\Customer;
 use App\Models\CustomerReview;
 use App\Models\WebsiteSubscription;
@@ -25,21 +27,21 @@ class CourierController extends Controller
 
         // Get existing customer data
         $existingCustomer = Customer::where('phone', $phone)->first();
-        
+
         // Configuration: Cache days from .env (default 3 days)
         $cacheDays = (int) env('BDCOURIER_CACHE_DAYS', 3);
-        
+
         // If customer exists and has data, check if data is still fresh
         if ($existingCustomer && $existingCustomer->data && $existingCustomer->updated_at) {
             $oldData = is_array($existingCustomer->data) ? $existingCustomer->data : json_decode($existingCustomer->data, true);
-            
+
             // Check if we have valid courier data
             $hasValidData = isset($oldData['courierData']['summary']);
-            
+
             // Check if last update was within the cache period
             $daysSinceLastUpdate = $existingCustomer->updated_at->diffInDays(now());
             $isWithinCachePeriod = $daysSinceLastUpdate < $cacheDays;
-            
+
             // If we have valid data and within cache period, return cached data
             if ($hasValidData && $isWithinCachePeriod) {
                 // Update customer search count (don't update last_searched_at to preserve cache timer)
@@ -47,19 +49,19 @@ class CourierController extends Controller
                     'count' => $existingCustomer->count + 1,
                     'ip_address' => $request->ip(),
                 ]);
-                
+
                 // Add logos if missing from cached data
                 $oldData = $this->ensureLogosInData($oldData);
-                
+
                 Log::info("Returning database data for {$phone}. Data is {$daysSinceLastUpdate} days old, valid for {$cacheDays} days.");
-                
+
                 return $oldData;
             }
         }
-        
+
         // Either new customer or cache expired - hit API
         Log::info("Hitting API for {$phone}. Reason: " . (!$existingCustomer ? 'New customer' : 'Cache expired (data older than ' . $cacheDays . ' days)'));
-        
+
         $oldData = null;
         $oldTotalParcel = 0;
 
@@ -70,12 +72,12 @@ class CourierController extends Controller
 
         // Try primary API first
         $responseData = $this->callCourierApi($phone);
-        
+
         // If primary API fails, try fallback API
         if ($responseData === null) {
             $responseData = $this->callFallbackCourierApi($phone);
         }
-        
+
         // If both APIs fail, return error or old data if available
         if ($responseData === null) {
             if ($oldData) {
@@ -103,16 +105,16 @@ class CourierController extends Controller
         // If API has more or equal parcels, update database with API data
         if ($oldData && $newTotalParcel < $oldTotalParcel) {
             Log::info("API total_parcel ({$newTotalParcel}) < Database total_parcel ({$oldTotalParcel}) for {$phone}. Keeping database data.");
-            
+
             // Update only search metadata, NOT the data
             if ($existingCustomer) {
                 $existingCustomer->update([
                     'count' => $existingCustomer->count + 1,
-                    'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                    'last_searched_at' => Carbon::now('Asia/Dhaka'),
                     'ip_address' => $request->ip(),
                 ]);
             }
-            
+
             // Return database data (with logos)
             return $this->ensureLogosInData($oldData);
         }
@@ -124,11 +126,11 @@ class CourierController extends Controller
         $userId = null;
         $subscriptionType = null;
         $subscriptionId = null;
-        
+
         if (Auth::check()) {
             $user = Auth::user();
             $userId = $user->id;
-            
+
             // Check for active website subscription first
             $websiteSubscription = WebsiteSubscription::getActiveForUser($user->id);
             if ($websiteSubscription && $websiteSubscription->isActive()) {
@@ -152,7 +154,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                'last_searched_at' => Carbon::now('Asia/Dhaka'),
                 'count' => $existingCustomer->count + 1,
                 'data' => $responseData // Update with new API data
             ]);
@@ -164,7 +166,7 @@ class CourierController extends Controller
                 'subscription_id' => $subscriptionId,
                 'search_by' => 'web',
                 'ip_address' => $request->ip(),
-                'last_searched_at' => \Carbon\Carbon::now('Asia/Dhaka'),
+                'last_searched_at' => Carbon::now('Asia/Dhaka'),
                 'count' => 1,
                 'data' => $responseData,
             ]);
@@ -385,7 +387,7 @@ class CourierController extends Controller
             
             // Transform new format to old format for backward compatibility
             return $this->transformApiResponse($apiData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('BDCourier API call failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()
@@ -421,7 +423,7 @@ class CourierController extends Controller
             
             // Transform new format to old format for backward compatibility
             return $this->transformApiResponse($apiData);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::warning('Fallback courier API failed', [
                 'phone' => $phone,
                 'error' => $e->getMessage()

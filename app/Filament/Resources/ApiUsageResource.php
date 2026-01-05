@@ -2,11 +2,22 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\ApiUsageResource\Pages\ListApiUsages;
 use App\Filament\Resources\ApiUsageResource\Pages;
 use App\Filament\Resources\ApiUsageResource\RelationManagers;
 use App\Models\ApiUsage;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -17,34 +28,34 @@ class ApiUsageResource extends Resource
 {
     protected static ?string $model = ApiUsage::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-chart-bar';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-chart-bar';
     
-    protected static ?string $navigationGroup = 'API Management';
+    protected static string | \UnitEnum | null $navigationGroup = 'API Management';
     
     protected static ?int $navigationSort = 1;
     
     protected static ?string $navigationLabel = 'API Usage Logs';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Request Information')
+        return $schema
+            ->components([
+                Section::make('Request Information')
                     ->schema([
-                        Forms\Components\Select::make('user_id')
+                        Select::make('user_id')
                             ->label('User')
                             ->relationship('user', 'name')
                             ->searchable()
                             ->preload(),
-                        Forms\Components\Select::make('api_key_id')
+                        Select::make('api_key_id')
                             ->label('API Key')
                             ->relationship('apiKey', 'name')
                             ->searchable()
                             ->preload(),
-                        Forms\Components\TextInput::make('endpoint')
+                        TextInput::make('endpoint')
                             ->label('API Endpoint')
                             ->required(),
-                        Forms\Components\Select::make('method')
+                        Select::make('method')
                             ->label('HTTP Method')
                             ->options([
                                 'GET' => 'GET',
@@ -57,32 +68,32 @@ class ApiUsageResource extends Resource
                     ])
                     ->columns(2),
                     
-                Forms\Components\Section::make('Request Details')
+                Section::make('Request Details')
                     ->schema([
-                        Forms\Components\TextInput::make('ip_address')
+                        TextInput::make('ip_address')
                             ->label('IP Address')
                             ->required(),
-                        Forms\Components\TextInput::make('user_agent')
+                        TextInput::make('user_agent')
                             ->label('User Agent')
                             ->columnSpanFull(),
-                        Forms\Components\Textarea::make('request_data')
+                        Textarea::make('request_data')
                             ->label('Request Data (JSON)')
                             ->columnSpanFull()
                             ->rows(3),
                     ])
                     ->columns(2),
                     
-                Forms\Components\Section::make('Response Information')
+                Section::make('Response Information')
                     ->schema([
-                        Forms\Components\TextInput::make('response_status')
+                        TextInput::make('response_status')
                             ->label('Response Status')
                             ->numeric()
                             ->required(),
-                        Forms\Components\TextInput::make('response_time')
+                        TextInput::make('response_time')
                             ->label('Response Time (ms)')
                             ->numeric()
                             ->required(),
-                        Forms\Components\Textarea::make('response_data')
+                        Textarea::make('response_data')
                             ->label('Response Data (JSON)')
                             ->columnSpanFull()
                             ->rows(3),
@@ -95,12 +106,12 @@ class ApiUsageResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('User')
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
-                Tables\Columns\TextColumn::make('endpoint')
+                TextColumn::make('endpoint')
                     ->label('Endpoint')
                     ->searchable()
                     ->sortable()
@@ -108,7 +119,7 @@ class ApiUsageResource extends Resource
                     ->tooltip(function ($record) {
                         return $record->endpoint;
                     }),
-                Tables\Columns\TextColumn::make('method')
+                TextColumn::make('method')
                     ->label('Method')
                     ->badge()
                     ->color(static function ($state): string {
@@ -120,7 +131,7 @@ class ApiUsageResource extends Resource
                             default => 'gray',
                         };
                     }),
-                Tables\Columns\TextColumn::make('response_status')
+                TextColumn::make('response_status')
                     ->label('Status')
                     ->badge()
                     ->color(static function ($state): string {
@@ -132,7 +143,7 @@ class ApiUsageResource extends Resource
                             default => 'gray',
                         };
                     }),
-                Tables\Columns\TextColumn::make('response_time')
+                TextColumn::make('response_time')
                     ->label('Response Time')
                     ->getStateUsing(function ($record) {
                         if ($record->response_time < 1000) {
@@ -148,12 +159,12 @@ class ApiUsageResource extends Resource
                             default => 'danger',
                         };
                     }),
-                Tables\Columns\TextColumn::make('ip_address')
+                TextColumn::make('ip_address')
                     ->label('IP Address')
                     ->searchable()
                     ->copyable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Request Time')
                     ->dateTime('M j, Y H:i:s')
                     ->sortable()
@@ -162,7 +173,7 @@ class ApiUsageResource extends Resource
                     }),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('method')
+                SelectFilter::make('method')
                     ->label('HTTP Method')
                     ->options([
                         'GET' => 'GET',
@@ -171,7 +182,7 @@ class ApiUsageResource extends Resource
                         'PATCH' => 'PATCH',
                         'DELETE' => 'DELETE',
                     ]),
-                Tables\Filters\SelectFilter::make('response_status')
+                SelectFilter::make('response_status')
                     ->label('Response Status')
                     ->options([
                         '200' => '200 - OK',
@@ -184,28 +195,28 @@ class ApiUsageResource extends Resource
                         '429' => '429 - Too Many Requests',
                         '500' => '500 - Internal Server Error',
                     ]),
-                Tables\Filters\Filter::make('successful_requests')
+                Filter::make('successful_requests')
                     ->label('Successful Requests')
                     ->query(fn (Builder $query): Builder => $query->whereBetween('response_status', [200, 299])),
-                Tables\Filters\Filter::make('failed_requests')
+                Filter::make('failed_requests')
                     ->label('Failed Requests')
                     ->query(fn (Builder $query): Builder => $query->where('response_status', '>=', 400)),
-                Tables\Filters\Filter::make('slow_requests')
+                Filter::make('slow_requests')
                     ->label('Slow Requests (>1s)')
                     ->query(fn (Builder $query): Builder => $query->where('response_time', '>', 1000)),
-                Tables\Filters\Filter::make('today')
+                Filter::make('today')
                     ->label('Today')
                     ->query(fn (Builder $query): Builder => $query->whereDate('created_at', today())),
-                Tables\Filters\Filter::make('this_week')
+                Filter::make('this_week')
                     ->label('This Week')
                     ->query(fn (Builder $query): Builder => $query->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make(),
+            ->recordActions([
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -222,7 +233,7 @@ class ApiUsageResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListApiUsages::route('/'),
+            'index' => ListApiUsages::route('/'),
         ];
     }
     

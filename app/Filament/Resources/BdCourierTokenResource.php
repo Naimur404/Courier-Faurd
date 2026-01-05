@@ -2,11 +2,26 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteBulkAction;
+use App\Filament\Resources\BdCourierTokenResource\Pages\ListBdCourierTokens;
+use App\Filament\Resources\BdCourierTokenResource\Pages\CreateBdCourierToken;
+use App\Filament\Resources\BdCourierTokenResource\Pages\EditBdCourierToken;
 use App\Filament\Resources\BdCourierTokenResource\Pages;
 use App\Filament\Resources\BdCourierTokenResource\RelationManagers;
 use App\Models\BdCourierToken;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,34 +34,32 @@ class BdCourierTokenResource extends Resource
 {
     protected static ?string $model = BdCourierToken::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-key';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-key';
     
-    protected static ?string $navigationLabel = 'API Tokens';
+    protected static ?string $navigationLabel = 'BD Courier Tokens';
     
-    protected static ?string $navigationGroup = 'Settings';
-    
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 100;
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
+        return $schema
+            ->components([
+                TextInput::make('name')
                     ->label('Token Name')
                     ->placeholder('e.g., Token 1, Main Token')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('token')
+                TextInput::make('token')
                     ->label('API Token')
                     ->required()
                     ->maxLength(255)
                     ->placeholder('Enter the BDCourier API token'),
-                Forms\Components\TextInput::make('priority')
+                TextInput::make('priority')
                     ->label('Priority')
                     ->helperText('Lower number = higher priority (used first)')
                     ->required()
                     ->numeric()
                     ->default(0),
-                Forms\Components\Toggle::make('is_active')
+                Toggle::make('is_active')
                     ->label('Active')
                     ->helperText('Inactive tokens will not be used')
                     ->required()
@@ -58,28 +71,28 @@ class BdCourierTokenResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('token')
+                TextColumn::make('token')
                     ->label('Token')
                     ->limit(20)
                     ->searchable()
                     ->copyable()
                     ->copyMessage('Token copied!'),
-                Tables\Columns\IconColumn::make('is_active')
+                IconColumn::make('is_active')
                     ->label('Active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('priority')
+                TextColumn::make('priority')
                     ->label('Priority')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('usage_count')
+                TextColumn::make('usage_count')
                     ->label('Uses Today')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('cooldown_until')
+                TextColumn::make('cooldown_until')
                     ->label('Cooldown Until')
                     ->dateTime('M d, Y H:i')
                     ->sortable()
@@ -87,7 +100,7 @@ class BdCourierTokenResource extends Resource
                     ->formatStateUsing(fn ($state, $record) => $record->isOnCooldown() 
                         ? Carbon::parse($state)->timezone('Asia/Dhaka')->format('M d, Y H:i') . ' BDT'
                         : 'Available'),
-                Tables\Columns\TextColumn::make('last_used_at')
+                TextColumn::make('last_used_at')
                     ->label('Last Used')
                     ->dateTime('M d, Y H:i')
                     ->sortable()
@@ -95,14 +108,14 @@ class BdCourierTokenResource extends Resource
             ])
             ->defaultSort('priority', 'asc')
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')
+                TernaryFilter::make('is_active')
                     ->label('Active Status'),
-                Tables\Filters\Filter::make('on_cooldown')
+                Filter::make('on_cooldown')
                     ->label('On Cooldown')
                     ->query(fn (Builder $query) => $query->whereNotNull('cooldown_until')->where('cooldown_until', '>', now())),
             ])
-            ->actions([
-                Tables\Actions\Action::make('clear_cooldown')
+            ->recordActions([
+                Action::make('clear_cooldown')
                     ->label('Clear Cooldown')
                     ->icon('heroicon-o-arrow-path')
                     ->color('success')
@@ -115,12 +128,12 @@ class BdCourierTokenResource extends Resource
                             ->success()
                             ->send();
                     }),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('clear_all_cooldowns')
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    BulkAction::make('clear_all_cooldowns')
                         ->label('Clear All Cooldowns')
                         ->icon('heroicon-o-arrow-path')
                         ->color('success')
@@ -134,7 +147,7 @@ class BdCourierTokenResource extends Resource
                                 ->success()
                                 ->send();
                         }),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -149,9 +162,9 @@ class BdCourierTokenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListBdCourierTokens::route('/'),
-            'create' => Pages\CreateBdCourierToken::route('/create'),
-            'edit' => Pages\EditBdCourierToken::route('/{record}/edit'),
+            'index' => ListBdCourierTokens::route('/'),
+            'create' => CreateBdCourierToken::route('/create'),
+            'edit' => EditBdCourierToken::route('/{record}/edit'),
         ];
     }
 }

@@ -15,17 +15,17 @@ class DownloadController extends Controller
     {
         // Count only completed downloads
         $downloadCount = AppDownloadTrack::where('status', 'completed')->count();
-        
+
         // Get the last download time
         $lastDownload = AppDownloadTrack::where('status', 'completed')
             ->latest('created_at')
             ->first();
-            
+
         $lastDownloadTime = $lastDownload ? $lastDownload->created_at->diffForHumans() : null;
-        
+
         return view('download', compact('downloadCount', 'lastDownloadTime'));
     }
-    
+
     public function trackIntent()
     {
         // Only track the intent without starting the download
@@ -33,13 +33,13 @@ class DownloadController extends Controller
             "ip_address" => request()->ip(),
             "status" => "initiated"
         ])->id;
-        
+
         return response()->json([
             'success' => true,
             'track_id' => $trackId
         ]);
     }
-    
+
     public function download(Request $request)
     {
         // Update the existing record if a track_id is provided
@@ -50,9 +50,9 @@ class DownloadController extends Controller
                     'completed_at' => now()
                 ]);
         }
-        
+
         $file = public_path('assets/FraudShield.apk');
-        
+
         return response()->download($file, 'FraudShield.apk', [
             'Content-Type' => 'application/vnd.android.package-archive'
         ]);
@@ -74,9 +74,9 @@ class DownloadController extends Controller
                 'ip_address' => request()->ip()
             ]);
         }
-        
+
         $file = public_path('assets/FraudShield.apk');
-        
+
         return response()->download($file, 'FraudShield.apk', [
             'Content-Type' => 'application/vnd.android.package-archive'
         ]);
@@ -87,10 +87,10 @@ class DownloadController extends Controller
     {
         // Generate a unique tracking ID
         $trackId = Str::uuid();
-        
+
         // Get download format (csv, apk, etc.)
         $format = $request->input('format', 'csv');
-        
+
         // Record the download intent in database
         DownloadTracker::create([
             'track_id' => $trackId,
@@ -100,18 +100,18 @@ class DownloadController extends Controller
             'status' => 'intent', // Track initial intent, will be updated to 'completed' when download starts
             'completed_at' => null,
         ]);
-        
+
         // Return the tracking ID to be used in the actual download request
         return response()->json([
             'success' => true,
             'track_id' => $trackId
         ]);
     }
-    
+
     public function downloadCsv(Request $request)
     {
         $trackId = $request->query('track_id');
-        
+
         // Update the download status if tracking ID exists
         if ($trackId) {
             AppDownloadTrack::where('track_id', $trackId)
@@ -121,10 +121,10 @@ class DownloadController extends Controller
                     'completed_at' => now()
                 ]);
         }
-        
+
         // Handle based on requested file type
         $fileType = $request->query('file_type', 'customer'); // Default to customer file
-        
+
         if ($fileType === 'customer') {
             return $this->downloadCustomerData();
         } else if ($fileType === 'analytics') {
@@ -133,7 +133,7 @@ class DownloadController extends Controller
             return response()->json(['error' => 'Invalid file type requested'], 400);
         }
     }
-    
+
     private function downloadCustomerData()
     {
         // Generate CSV data
@@ -144,11 +144,11 @@ class DownloadController extends Controller
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0'
         ];
-        
+
         // Create a streamed response with CSV data
         $callback = function() {
             $file = fopen('php://output', 'w');
-            
+
             // Add CSV headers
             fputcsv($file, [
                 'ID', 
@@ -160,7 +160,7 @@ class DownloadController extends Controller
                 'Last Searched At',
                 'Created At'
             ]);
-            
+
             // Fetch records from database and add to CSV
             Customer::chunk(100, function($customers) use ($file) {
                 foreach ($customers as $customer) {
@@ -176,14 +176,14 @@ class DownloadController extends Controller
                     ]);
                 }
             });
-            
+
             // Close the file
             fclose($file);
         };
-        
+
         return response()->stream($callback, 200, $headers);
     }
-    
+
     private function downloadAnalyticsData()
     {
         // Generate CSV data for analytics
@@ -194,11 +194,11 @@ class DownloadController extends Controller
             'Cache-Control' => 'must-revalidate, post-check=0, pre-check=0',
             'Expires' => '0'
         ];
-        
+
         // Create a streamed response with CSV data
         $callback = function() {
             $file = fopen('php://output', 'w');
-            
+
             // Add CSV headers for analytics data
             fputcsv($file, [
                 'ID', 
@@ -207,7 +207,7 @@ class DownloadController extends Controller
                 'Completed At',
                 'Created At'
             ]);
-            
+
             // Fetch analytics records from database and add to CSV
             AppDownloadTrack::chunk(100, function($records) use ($file) {
                 foreach ($records as $record) {
@@ -220,11 +220,11 @@ class DownloadController extends Controller
                     ]);
                 }
             });
-            
+
             // Close the file
             fclose($file);
         };
-        
+
         return response()->stream($callback, 200, $headers);
     }
     /**

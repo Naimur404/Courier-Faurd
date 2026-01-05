@@ -2,11 +2,12 @@
 
 namespace App\Filament\Resources\SubscriptionResource\Pages;
 
+use Filament\Actions\CreateAction;
+use Filament\Schemas\Components\Tabs\Tab;
 use App\Filament\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Resources\Components\Tab;
 use Illuminate\Database\Eloquent\Builder;
 
 class ListSubscriptions extends ListRecords
@@ -16,7 +17,7 @@ class ListSubscriptions extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()
+            CreateAction::make()
                 ->label('New Subscription')
                 ->icon('heroicon-o-plus'),
         ];

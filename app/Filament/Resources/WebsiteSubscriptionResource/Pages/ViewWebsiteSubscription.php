@@ -2,6 +2,9 @@
 
 namespace App\Filament\Resources\WebsiteSubscriptionResource\Pages;
 
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Textarea;
 use App\Filament\Resources\WebsiteSubscriptionResource;
 use Illuminate\Support\Facades\Auth;
 use Filament\Actions;
@@ -16,15 +19,15 @@ class ViewWebsiteSubscription extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
+            EditAction::make(),
             
-            Actions\Action::make('verify')
+            Action::make('verify')
                 ->label('Verify Subscription')
                 ->icon('heroicon-o-check-circle')
                 ->color('success')
                 ->visible(fn (): bool => $this->record->isPending())
-                ->form([
-                    \Filament\Forms\Components\Textarea::make('admin_notes')
+                ->schema([
+                    Textarea::make('admin_notes')
                         ->label('Admin Notes')
                         ->placeholder('Add notes about verification...')
                         ->rows(3),
@@ -40,13 +43,13 @@ class ViewWebsiteSubscription extends ViewRecord
                     $this->refreshFormData(['verification_status', 'verified_by', 'verified_at', 'admin_notes']);
                 }),
 
-            Actions\Action::make('reject')
+            Action::make('reject')
                 ->label('Reject Subscription')
                 ->icon('heroicon-o-x-circle')
                 ->color('danger')
                 ->visible(fn (): bool => $this->record->isPending())
-                ->form([
-                    \Filament\Forms\Components\Textarea::make('admin_notes')
+                ->schema([
+                    Textarea::make('admin_notes')
                         ->label('Rejection Reason')
                         ->placeholder('Please provide reason for rejection...')
                         ->required()

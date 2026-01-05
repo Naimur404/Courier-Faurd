@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\WebsiteSubscriptionResource\Pages;
 
+use Filament\Actions\ViewAction;
+use Filament\Actions\DeleteAction;
 use App\Filament\Resources\WebsiteSubscriptionResource;
 use Illuminate\Support\Facades\Auth;
 use Filament\Actions;
@@ -15,8 +17,8 @@ class EditWebsiteSubscription extends EditRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\ViewAction::make(),
-            Actions\DeleteAction::make(),
+            ViewAction::make(),
+            DeleteAction::make(),
         ];
     }
 

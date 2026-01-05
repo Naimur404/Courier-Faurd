@@ -2,11 +2,32 @@
 
 namespace App\Filament\Resources;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\Filter;
+use Filament\Actions\Action;
+use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\BulkAction;
+use Illuminate\Database\Eloquent\Collection;
+use App\Filament\Resources\SubscriptionResource\RelationManagers\ApiKeysRelationManager;
+use App\Filament\Resources\SubscriptionResource\Pages\ListSubscriptions;
+use App\Filament\Resources\SubscriptionResource\Pages\CreateSubscription;
+use App\Filament\Resources\SubscriptionResource\Pages\ViewSubscription;
+use App\Filament\Resources\SubscriptionResource\Pages\EditSubscription;
 use App\Filament\Resources\SubscriptionResource\Pages;
 use App\Filament\Resources\SubscriptionResource\RelationManagers;
 use App\Models\Subscription;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -19,31 +40,31 @@ class SubscriptionResource extends Resource
 {
     protected static ?string $model = Subscription::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-credit-card';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-credit-card';
     
-    protected static ?string $navigationGroup = 'User Management';
+    protected static string | \UnitEnum | null $navigationGroup = 'User Management';
     
     protected static ?int $navigationSort = 3;
 
     protected static ?string $recordTitleAttribute = 'id';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('Subscription Details')
+        return $schema
+            ->components([
+                Section::make('Subscription Details')
                     ->schema([
-                        Forms\Components\Select::make('user_id')
+                        Select::make('user_id')
                             ->relationship('user', 'name')
                             ->required()
                             ->searchable()
                             ->preload(),
-                        Forms\Components\Select::make('plan_id')
+                        Select::make('plan_id')
                             ->relationship('plan', 'name')
                             ->required()
                             ->searchable()
                             ->preload(),
-                        Forms\Components\Select::make('status')
+                        Select::make('status')
                             ->options([
                                 Subscription::STATUS_PENDING => 'Pending',
                                 Subscription::STATUS_ACTIVE => 'Active',
@@ -53,7 +74,7 @@ class SubscriptionResource extends Resource
                             ->required()
                             ->default(Subscription::STATUS_PENDING)
                             ->live()
-                            ->afterStateUpdated(function ($state, Forms\Set $set) {
+                            ->afterStateUpdated(function ($state, Set $set) {
                                 if ($state === Subscription::STATUS_ACTIVE && !request()->route('record')) {
                                     $set('starts_at', now());
                                     $set('activated_at', now());
@@ -62,12 +83,12 @@ class SubscriptionResource extends Resource
                     ])
                     ->columns(3),
                 
-                Forms\Components\Section::make('Payment Information')
+                Section::make('Payment Information')
                     ->schema([
-                        Forms\Components\TextInput::make('transaction_id')
+                        TextInput::make('transaction_id')
                             ->label('Transaction ID')
                             ->maxLength(255),
-                        Forms\Components\Select::make('payment_method')
+                        Select::make('payment_method')
                             ->options([
                                 'bkash' => 'bKash',
                                 'nagad' => 'Nagad',
@@ -79,7 +100,7 @@ class SubscriptionResource extends Resource
                             ])
                             ->required()
                             ->searchable(),
-                        Forms\Components\TextInput::make('amount_paid')
+                        TextInput::make('amount_paid')
                             ->required()
                             ->numeric()
                             ->prefix('৳')
@@ -87,23 +108,23 @@ class SubscriptionResource extends Resource
                     ])
                     ->columns(3),
                 
-                Forms\Components\Section::make('Timeline')
+                Section::make('Timeline')
                     ->schema([
-                        Forms\Components\DateTimePicker::make('starts_at')
+                        DateTimePicker::make('starts_at')
                             ->label('Start Date')
                             ->seconds(false),
-                        Forms\Components\DateTimePicker::make('expires_at')
+                        DateTimePicker::make('expires_at')
                             ->label('Expiry Date')
                             ->seconds(false),
-                        Forms\Components\DateTimePicker::make('activated_at')
+                        DateTimePicker::make('activated_at')
                             ->label('Activated Date')
                             ->seconds(false),
                     ])
                     ->columns(3),
                 
-                Forms\Components\Section::make('Additional Information')
+                Section::make('Additional Information')
                     ->schema([
-                        Forms\Components\Textarea::make('admin_notes')
+                        Textarea::make('admin_notes')
                             ->label('Admin Notes')
                             ->rows(3)
                             ->columnSpanFull(),
@@ -115,7 +136,7 @@ class SubscriptionResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name')
+                TextColumn::make('user.name')
                     ->label('User')
                     ->sortable()
                     ->searchable()
@@ -123,15 +144,15 @@ class SubscriptionResource extends Resource
                         $apiKeysCount = $record->user->apiKeys()->count();
                         return $apiKeysCount > 0 ? "{$apiKeysCount} API key(s)" : 'No API keys';
                     }),
-                Tables\Columns\TextColumn::make('plan.name')
+                TextColumn::make('plan.name')
                     ->label('Plan')
                     ->sortable()
                     ->searchable(),
-                Tables\Columns\TextColumn::make('transaction_id')
+                TextColumn::make('transaction_id')
                     ->label('Transaction ID')
                     ->searchable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('status')
+                TextColumn::make('status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         Subscription::STATUS_ACTIVE => 'success',
@@ -147,7 +168,7 @@ class SubscriptionResource extends Resource
                         Subscription::STATUS_CANCELLED => 'Cancelled',
                         default => ucfirst($state),
                     }),
-                Tables\Columns\TextColumn::make('payment_method')
+                TextColumn::make('payment_method')
                     ->label('Payment Method')
                     ->badge()
                     ->color('primary')
@@ -161,16 +182,16 @@ class SubscriptionResource extends Resource
                         'card' => 'Credit/Debit Card',
                         default => ucfirst($state),
                     }),
-                Tables\Columns\TextColumn::make('amount_paid')
+                TextColumn::make('amount_paid')
                     ->label('Amount')
                     ->money('BDT')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('starts_at')
+                TextColumn::make('starts_at')
                     ->label('Start Date')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(),
-                Tables\Columns\TextColumn::make('expires_at')
+                TextColumn::make('expires_at')
                     ->label('Expiry Date')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
@@ -187,31 +208,31 @@ class SubscriptionResource extends Resource
                         }
                         return null;
                     }),
-                Tables\Columns\TextColumn::make('activated_at')
+                TextColumn::make('activated_at')
                     ->label('Activated')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
+                TextColumn::make('updated_at')
                     ->label('Updated')
                     ->dateTime('M j, Y g:i A')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('status')
+                SelectFilter::make('status')
                     ->options([
                         Subscription::STATUS_PENDING => 'Pending',
                         Subscription::STATUS_ACTIVE => 'Active',
                         Subscription::STATUS_EXPIRED => 'Expired',
                         Subscription::STATUS_CANCELLED => 'Cancelled',
                     ]),
-                Tables\Filters\SelectFilter::make('payment_method')
+                SelectFilter::make('payment_method')
                     ->options([
                         'bkash' => 'bKash',
                         'nagad' => 'Nagad',
@@ -221,15 +242,15 @@ class SubscriptionResource extends Resource
                         'cash' => 'Cash',
                         'card' => 'Credit/Debit Card',
                     ]),
-                Tables\Filters\Filter::make('active_subscriptions')
+                Filter::make('active_subscriptions')
                     ->label('Active Only')
                     ->query(fn (Builder $query): Builder => $query->where('status', Subscription::STATUS_ACTIVE)),
-                Tables\Filters\Filter::make('expired_subscriptions')
+                Filter::make('expired_subscriptions')
                     ->label('Expired Only')
                     ->query(fn (Builder $query): Builder => $query->where('status', Subscription::STATUS_EXPIRED)),
             ])
-            ->actions([
-                Tables\Actions\Action::make('toggle_status')
+            ->recordActions([
+                Action::make('toggle_status')
                     ->label(fn (Subscription $record): string => 
                         $record->status === Subscription::STATUS_ACTIVE ? 'Deactivate' : 'Activate'
                     )
@@ -272,20 +293,20 @@ class SubscriptionResource extends Resource
                     ->visible(fn (Subscription $record): bool => 
                         in_array($record->status, [Subscription::STATUS_ACTIVE, Subscription::STATUS_PENDING, Subscription::STATUS_CANCELLED])
                     ),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\ViewAction::make(),
+                EditAction::make(),
+                ViewAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\BulkAction::make('activate_selected')
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    BulkAction::make('activate_selected')
                         ->label('Activate Selected')
                         ->icon('heroicon-o-play-circle')
                         ->color('success')
                         ->requiresConfirmation()
                         ->modalHeading('Activate Selected Subscriptions')
                         ->modalDescription('Are you sure you want to activate the selected subscriptions?')
-                        ->action(function (\Illuminate\Database\Eloquent\Collection $records): void {
+                        ->action(function (Collection $records): void {
                             $count = 0;
                             foreach ($records as $record) {
                                 if ($record->status !== Subscription::STATUS_ACTIVE) {
@@ -300,14 +321,14 @@ class SubscriptionResource extends Resource
                                 ->success()
                                 ->send();
                         }),
-                    Tables\Actions\BulkAction::make('deactivate_selected')
+                    BulkAction::make('deactivate_selected')
                         ->label('Deactivate Selected')
                         ->icon('heroicon-o-pause-circle')
                         ->color('warning')
                         ->requiresConfirmation()
                         ->modalHeading('Deactivate Selected Subscriptions')
                         ->modalDescription('Are you sure you want to deactivate the selected subscriptions?')
-                        ->action(function (\Illuminate\Database\Eloquent\Collection $records): void {
+                        ->action(function (Collection $records): void {
                             $count = 0;
                             foreach ($records as $record) {
                                 if ($record->status === Subscription::STATUS_ACTIVE) {
@@ -330,17 +351,17 @@ class SubscriptionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\ApiKeysRelationManager::class,
+            ApiKeysRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListSubscriptions::route('/'),
-            'create' => Pages\CreateSubscription::route('/create'),
-            'view' => Pages\ViewSubscription::route('/{record}'),
-            'edit' => Pages\EditSubscription::route('/{record}/edit'),
+            'index' => ListSubscriptions::route('/'),
+            'create' => CreateSubscription::route('/create'),
+            'view' => ViewSubscription::route('/{record}'),
+            'edit' => EditSubscription::route('/{record}/edit'),
         ];
     }
     

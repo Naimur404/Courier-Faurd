@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use App\Models\Customer;
 use App\Models\ApiKey;
 use App\Models\ApiUsage;
 use App\Models\Plan;
@@ -36,7 +38,7 @@ class DashboardController extends Controller
         
         // Get current website subscription (including pending/rejected)
         // Use Bangladesh timezone for proper date comparison
-        $bangladeshNow = \Carbon\Carbon::now('Asia/Dhaka');
+        $bangladeshNow = Carbon::now('Asia/Dhaka');
         $activeWebsiteSubscription = WebsiteSubscription::where('user_id', $user->id)
                                                        ->where('status', WebsiteSubscription::STATUS_ACTIVE)
                                                        ->where('expires_at', '>', $bangladeshNow)
@@ -56,7 +58,7 @@ class DashboardController extends Controller
         // Get recent website search logs (only if user has active website subscription)
         $recentWebsiteSearches = [];
         if ($activeWebsiteSubscription && $activeWebsiteSubscription->isVerified()) {
-            $recentWebsiteSearches = \App\Models\Customer::where('user_id', $user->id)
+            $recentWebsiteSearches = Customer::where('user_id', $user->id)
                                                          ->where('search_by', 'web')
                                                          ->whereNotNull('ip_address')
                                                          ->latest('last_searched_at')

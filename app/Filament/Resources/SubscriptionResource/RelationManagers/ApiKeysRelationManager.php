@@ -2,8 +2,23 @@
 
 namespace App\Filament\Resources\SubscriptionResource\RelationManagers;
 
+use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\Placeholder;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Filters\TernaryFilter;
+use Filament\Actions\CreateAction;
+use Filament\Actions\ViewAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\Action;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\BulkAction;
+use Filament\Actions\DeleteBulkAction;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -26,22 +41,22 @@ class ApiKeysRelationManager extends RelationManager
         return ApiKey::query()->where('user_id', $this->getOwnerRecord()->user_id);
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
-            ->schema([
-                Forms\Components\Section::make('API Key Details')
+        return $schema
+            ->components([
+                Section::make('API Key Details')
                     ->schema([
-                        Forms\Components\TextInput::make('name')
+                        TextInput::make('name')
                             ->label('Key Name')
                             ->required()
                             ->placeholder('e.g., Production API Key')
                             ->maxLength(255),
-                        Forms\Components\Toggle::make('is_active')
+                        Toggle::make('is_active')
                             ->label('Active')
                             ->default(true)
                             ->helperText('Toggle to enable/disable this API key'),
-                        Forms\Components\TextInput::make('rate_limit')
+                        TextInput::make('rate_limit')
                             ->label('Rate Limit (requests per minute)')
                             ->numeric()
                             ->default(60)
@@ -51,14 +66,14 @@ class ApiKeysRelationManager extends RelationManager
                             ->helperText('Maximum number of requests per minute'),
                     ])
                     ->columns(3),
-                Forms\Components\Section::make('Generated Keys')
+                Section::make('Generated Keys')
                     ->schema([
-                        Forms\Components\TextInput::make('key')
+                        TextInput::make('key')
                             ->label('API Key')
                             ->disabled()
                             ->dehydrated(false)
                             ->placeholder('Will be generated upon creation'),
-                        Forms\Components\TextInput::make('secret')
+                        TextInput::make('secret')
                             ->label('API Secret')
                             ->disabled()
                             ->dehydrated(false)
@@ -66,9 +81,9 @@ class ApiKeysRelationManager extends RelationManager
                     ])
                     ->columns(2)
                     ->hiddenOn('create'),
-                Forms\Components\Section::make('Usage Statistics')
+                Section::make('Usage Statistics')
                     ->schema([
-                        Forms\Components\Placeholder::make('usage_count')
+                        Placeholder::make('usage_count')
                             ->label('Total Usage')
                             ->content(function ($get, $record, $livewire): string {
                                 if (!$record) return '0 requests';
@@ -76,21 +91,21 @@ class ApiKeysRelationManager extends RelationManager
                                 $record->refreshUsageCount();
                                 return number_format($record->usage_count) . ' requests';
                             }),
-                        Forms\Components\Placeholder::make('today_usage')
+                        Placeholder::make('today_usage')
                             ->label('Today\'s Usage')
                             ->content(function ($get, $record): string {
                                 if (!$record) return '0 requests';
                                 $todayCount = $record->getTodayUsageCount();
                                 return number_format($todayCount) . ' requests';
                             }),
-                        Forms\Components\Placeholder::make('monthly_usage')
+                        Placeholder::make('monthly_usage')
                             ->label('Monthly Usage')
                             ->content(function ($get, $record): string {
                                 if (!$record) return '0 requests';
                                 $monthlyCount = $record->getMonthlyUsageCount();
                                 return number_format($monthlyCount) . ' requests';
                             }),
-                        Forms\Components\Placeholder::make('last_used_at')
+                        Placeholder::make('last_used_at')
                             ->label('Last Used')
                             ->content(function ($get, $record): string {
                                 if (!$record || !$record->last_used_at) return 'Never';
@@ -107,12 +122,12 @@ class ApiKeysRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('name')
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('name')
                     ->label('Key Name')
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
-                Tables\Columns\TextColumn::make('key')
+                TextColumn::make('key')
                     ->label('API Key')
                     ->limit(20)
                     ->copyable()
@@ -122,18 +137,18 @@ class ApiKeysRelationManager extends RelationManager
                     ->formatStateUsing(function ($state) {
                         return substr($state, 0, 8) . '...' . substr($state, -8);
                     }),
-                Tables\Columns\IconColumn::make('is_active')
+                IconColumn::make('is_active')
                     ->label('Status')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-circle')
                     ->falseIcon('heroicon-o-x-circle')
                     ->trueColor('success')
                     ->falseColor('danger'),
-                Tables\Columns\TextColumn::make('rate_limit')
+                TextColumn::make('rate_limit')
                     ->label('Rate Limit')
                     ->suffix(' /min')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('usage_count')
+                TextColumn::make('usage_count')
                     ->label('Total Usage')
                     ->numeric()
                     ->sortable()
@@ -142,14 +157,14 @@ class ApiKeysRelationManager extends RelationManager
                         $record->refreshUsageCount();
                         return number_format($record->usage_count) . ' requests';
                     }),
-                Tables\Columns\TextColumn::make('today_usage')
+                TextColumn::make('today_usage')
                     ->label('Today\'s Usage')
                     ->getStateUsing(function ($record) {
                         return $record->getTodayUsageCount();
                     })
                     ->formatStateUsing(fn ($state) => number_format($state) . ' requests')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('last_used_at')
+                TextColumn::make('last_used_at')
                     ->label('Last Used')
                     ->dateTime('M j, Y H:i')
                     ->sortable()
@@ -157,21 +172,21 @@ class ApiKeysRelationManager extends RelationManager
                     ->description(function ($record) {
                         return $record->last_used_at ? $record->last_used_at->diffForHumans() : null;
                     }),
-                Tables\Columns\TextColumn::make('created_at')
+                TextColumn::make('created_at')
                     ->label('Created')
                     ->dateTime('M j, Y')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\TernaryFilter::make('is_active')
+                TernaryFilter::make('is_active')
                     ->label('Status')
                     ->placeholder('All Keys')
                     ->trueLabel('Active Keys')
                     ->falseLabel('Inactive Keys'),
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make()
+                CreateAction::make()
                     ->label('Generate New API Key')
                     ->modalHeading('Generate New API Key')
                     ->createAnother(false)
@@ -192,12 +207,12 @@ class ApiKeysRelationManager extends RelationManager
                             ->body('New API key has been created successfully.')
                     ),
             ])
-            ->actions([
-                Tables\Actions\ViewAction::make()
+            ->recordActions([
+                ViewAction::make()
                     ->modalHeading('View API Key Details'),
-                Tables\Actions\EditAction::make()
+                EditAction::make()
                     ->modalHeading('Edit API Key'),
-                Tables\Actions\Action::make('toggle_status')
+                Action::make('toggle_status')
                     ->label(fn (ApiKey $record) => $record->is_active ? 'Deactivate' : 'Activate')
                     ->icon(fn (ApiKey $record) => $record->is_active ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
                     ->color(fn (ApiKey $record) => $record->is_active ? 'danger' : 'success')
@@ -212,14 +227,14 @@ class ApiKeysRelationManager extends RelationManager
                     ->requiresConfirmation()
                     ->modalHeading(fn (ApiKey $record) => ($record->is_active ? 'Deactivate' : 'Activate') . ' API Key')
                     ->modalDescription(fn (ApiKey $record) => 'Are you sure you want to ' . ($record->is_active ? 'deactivate' : 'activate') . ' this API key?'),
-                Tables\Actions\DeleteAction::make()
+                DeleteAction::make()
                     ->successNotification(
                         Notification::make()
                             ->success()
                             ->title('API Key Deleted')
                             ->body('API key has been deleted successfully.')
                     ),
-                Tables\Actions\Action::make('debug_usage')
+                Action::make('debug_usage')
                     ->label('Debug Usage')
                     ->icon('heroicon-o-bug-ant')
                     ->color('info')
@@ -238,9 +253,9 @@ class ApiKeysRelationManager extends RelationManager
                             ->send();
                     }),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\BulkAction::make('activate')
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    BulkAction::make('activate')
                         ->label('Activate Selected')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
@@ -253,7 +268,7 @@ class ApiKeysRelationManager extends RelationManager
                                 ->send();
                         })
                         ->requiresConfirmation(),
-                    Tables\Actions\BulkAction::make('deactivate')
+                    BulkAction::make('deactivate')
                         ->label('Deactivate Selected')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
@@ -266,7 +281,7 @@ class ApiKeysRelationManager extends RelationManager
                                 ->send();
                         })
                         ->requiresConfirmation(),
-                    Tables\Actions\DeleteBulkAction::make(),
+                    DeleteBulkAction::make(),
                 ]),
             ])
             ->defaultSort('created_at', 'desc')
@@ -274,20 +289,20 @@ class ApiKeysRelationManager extends RelationManager
             ->emptyStateDescription('This user doesn\'t have any API keys yet.')
             ->emptyStateIcon('heroicon-o-key')
             ->emptyStateActions([
-                Tables\Actions\Action::make('create')
+                Action::make('create')
                     ->label('Generate First API Key')
                     ->icon('heroicon-o-plus')
                     ->modalHeading('Generate New API Key')
-                    ->form([
-                        Forms\Components\TextInput::make('name')
+                    ->schema([
+                        TextInput::make('name')
                             ->label('Key Name')
                             ->required()
                             ->placeholder('e.g., Production API Key')
                             ->maxLength(255),
-                        Forms\Components\Toggle::make('is_active')
+                        Toggle::make('is_active')
                             ->label('Active')
                             ->default(true),
-                        Forms\Components\TextInput::make('rate_limit')
+                        TextInput::make('rate_limit')
                             ->label('Rate Limit (requests per minute)')
                             ->numeric()
                             ->default(60)
