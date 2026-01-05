@@ -1,12 +1,280 @@
 @import 'tailwindcss';
 
+/* Enable class-based dark mode */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source "../**/*.blade.php";
 @source "../**/*.js";
+@source "../**/*.ts";
 @source "../**/*.vue";
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Noto Sans Bengali', 'Hind Siliguri', 'Mukti', 'SutonnyMJ', 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-bengali: 'Noto Sans Bengali', 'Hind Siliguri', 'Mukti', 'SolaimanLipi', sans-serif;
+    --font-english: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
+    
+    --color-primary: #4f46e5;
+    --color-secondary: #f97316;
+    --color-success: #10b981;
+    --color-warning: #f59e0b;
+    --color-danger: #ef4444;
+}
+
+/* shadcn-vue CSS variables */
+@layer base {
+    :root {
+        --background: 0 0% 100%;
+        --foreground: 222.2 84% 4.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 222.2 84% 4.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 222.2 84% 4.9%;
+        --primary: 221.2 83.2% 53.3%;
+        --primary-foreground: 210 40% 98%;
+        --secondary: 210 40% 96.1%;
+        --secondary-foreground: 222.2 47.4% 11.2%;
+        --muted: 210 40% 96.1%;
+        --muted-foreground: 215.4 16.3% 46.9%;
+        --accent: 210 40% 96.1%;
+        --accent-foreground: 222.2 47.4% 11.2%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 214.3 31.8% 91.4%;
+        --input: 214.3 31.8% 91.4%;
+        --ring: 221.2 83.2% 53.3%;
+        --radius: 0.75rem;
+    }
+    
+    .dark {
+        --background: 222.2 84% 4.9%;
+        --foreground: 210 40% 98%;
+        --card: 222.2 84% 4.9%;
+        --card-foreground: 210 40% 98%;
+        --popover: 222.2 84% 4.9%;
+        --popover-foreground: 210 40% 98%;
+        --primary: 217.2 91.2% 59.8%;
+        --primary-foreground: 222.2 47.4% 11.2%;
+        --secondary: 217.2 32.6% 17.5%;
+        --secondary-foreground: 210 40% 98%;
+        --muted: 217.2 32.6% 17.5%;
+        --muted-foreground: 215 20.2% 65.1%;
+        --accent: 217.2 32.6% 17.5%;
+        --accent-foreground: 210 40% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 210 40% 98%;
+        --border: 217.2 32.6% 17.5%;
+        --input: 217.2 32.6% 17.5%;
+        --ring: 224.3 76.3% 48%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground;
+        font-family: var(--font-sans);
+        line-height: 1.6;
+    }
+    /* Fix for Bengali text clipping */
+    html {
+        line-height: 1.6;
+    }
+    button:not(:disabled),
+    [role="button"]:not(:disabled) {
+        cursor: pointer;
+    }
+}
+
+/* CSS variable mappings for Tailwind v4 */
+@theme inline {
+    --color-background: hsl(var(--background));
+    --color-foreground: hsl(var(--foreground));
+    --color-card: hsl(var(--card));
+    --color-card-foreground: hsl(var(--card-foreground));
+    --color-popover: hsl(var(--popover));
+    --color-popover-foreground: hsl(var(--popover-foreground));
+    --color-primary: hsl(var(--primary));
+    --color-primary-foreground: hsl(var(--primary-foreground));
+    --color-secondary: hsl(var(--secondary));
+    --color-secondary-foreground: hsl(var(--secondary-foreground));
+    --color-muted: hsl(var(--muted));
+    --color-muted-foreground: hsl(var(--muted-foreground));
+    --color-accent: hsl(var(--accent));
+    --color-accent-foreground: hsl(var(--accent-foreground));
+    --color-destructive: hsl(var(--destructive));
+    --color-destructive-foreground: hsl(var(--destructive-foreground));
+    --color-border: hsl(var(--border));
+    --color-input: hsl(var(--input));
+    --color-ring: hsl(var(--ring));
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(79, 70, 229, 0.8);
+    }
+}
+
+.animate-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+/* Glass effect */
+.glass-effect {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.dark .glass-effect {
+    background-color: rgba(31, 41, 55, 0.8);
+}
+
+/* Custom shadow */
+.shadow-custom {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.dark .shadow-custom {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Gradient text */
+.gradient-text {
+    background: linear-gradient(90deg, #4f46e5, #f97316);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+/* Bengali text fix - prevent clipping of Bengali characters */
+.bengali-text,
+[lang="bn"] {
+    line-height: 1.8;
+    padding-top: 0.1em;
+}
+
+/* Enhanced Bengali Typography */
+@layer utilities {
+    /* Bengali Font Classes */
+    .font-bengali {
+        font-family: var(--font-bengali);
+    }
+    
+    .font-english {
+        font-family: var(--font-english);
+    }
+    
+    .font-noto-bengali {
+        font-family: 'Noto Sans Bengali', sans-serif;
+    }
+    
+    .font-hind-siliguri {
+        font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-mukti {
+        font-family: 'Mukti', sans-serif;
+    }
+    
+    .font-solaimanlpi {
+        font-family: 'SolaimanLipi', sans-serif;
+    }
+    
+    /* Bengali Text Styling */
+    .text-bengali {
+        line-height: 1.7;
+        letter-spacing: 0.02em;
+        word-spacing: 0.1em;
+    }
+    
+    .text-bengali-title {
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+        font-weight: 600;
+    }
+    
+    .text-bengali-body {
+        line-height: 1.8;
+        letter-spacing: 0.025em;
+        word-spacing: 0.05em;
+    }
+    
+    /* Responsive Bengali Text */
+    .text-bengali-responsive {
+        @apply text-sm md:text-base lg:text-lg;
+        line-height: 1.8;
+    }
+    
+    /* Bengali heading styles */
+    .heading-bengali {
+        font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
+        line-height: 1.3;
+        letter-spacing: 0.01em;
+    }
+    
+    /* Mixed language support */
+    .text-mixed-lang {
+        font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+        line-height: 1.7;
+    }
 }

@@ -1,0 +1,45 @@
+{
+  "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন",
+  "short_name": "FraudShield",
+  "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন।",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1b4b",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "bn",
+  "categories": ["business", "utilities"],
+  "icons": [
+    {
+      "src": "/assets/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "সার্চ করুন",
+      "short_name": "সার্চ",
+      "description": "কুরিয়ার নম্বর সার্চ করুন",
+      "url": "/",
+      "icons": [{ "src": "/assets/favicon.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "প্রাইসিং",
+      "short_name": "প্রাইসিং",
+      "description": "API প্রাইসিং দেখুন",
+      "url": "/pricing",
+      "icons": [{ "src": "/assets/favicon.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

@@ -6,6 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\WebsiteSubscription;
+use Inertia\Inertia;
 
 class WebsiteSubscriptionController extends Controller
 {
@@ -21,7 +22,10 @@ class WebsiteSubscriptionController extends Controller
             $activeSubscription = WebsiteSubscription::getActiveForUser(Auth::id());
         }
         
-        return view('website-subscriptions.index', compact('plans', 'activeSubscription'));
+        return Inertia::render('WebsiteSubscriptions/Index', [
+            'plans' => $plans,
+            'activeSubscription' => $activeSubscription,
+        ]);
     }
 
     /**

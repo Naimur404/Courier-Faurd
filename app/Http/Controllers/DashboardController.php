@@ -10,6 +10,7 @@ use App\Models\Plan;
 use App\Models\WebsiteSubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
@@ -21,7 +22,18 @@ class DashboardController extends Controller
         $user = Auth::user();
         
         // Get user's API keys
-        $apiKeys = $user->apiKeys()->with('apiUsages')->get();
+        $apiKeys = $user->apiKeys()->with('apiUsages')->get()->map(function ($key) {
+            return [
+                'id' => $key->id,
+                'name' => $key->name,
+                'key' => $key->key,
+                'masked_key' => $key->masked_key,
+                'is_active' => $key->is_active,
+                'created_at' => $key->created_at->toISOString(),
+                'last_used_at' => $key->last_used_at?->toISOString(),
+                'usage_count' => $key->usage_count,
+            ];
+        });
         
         // Get usage statistics
         $todayUsage = ApiUsage::where('user_id', $user->id)
@@ -45,38 +57,48 @@ class DashboardController extends Controller
                                                        ->latest()
                                                        ->first();
         
-        // Get available plans for upgrade
-        $plans = Plan::active()->ordered()->get();
-        
-        // Get recent API usage
-        $recentUsage = ApiUsage::where('user_id', $user->id)
-                             ->with('apiKey')
-                             ->latest()
-                             ->take(10)
-                             ->get();
-        
-        // Get recent website search logs (only if user has active website subscription)
-        $recentWebsiteSearches = [];
-        if ($activeWebsiteSubscription && $activeWebsiteSubscription->isVerified()) {
-            $recentWebsiteSearches = Customer::where('user_id', $user->id)
-                                                         ->where('search_by', 'web')
-                                                         ->whereNotNull('ip_address')
-                                                         ->latest('last_searched_at')
-                                                         ->take(5)
-                                                         ->get(['id', 'phone', 'count', 'ip_address', 'last_searched_at', 'subscription_type']);
+        // Format subscription data for Inertia
+        $subscriptionData = null;
+        if ($activeSubscription) {
+            $subscriptionData = [
+                'id' => $activeSubscription->id,
+                'plan' => [
+                    'id' => $activeSubscription->plan->id,
+                    'name' => $activeSubscription->plan->name,
+                    'description' => $activeSubscription->plan->description,
+                    'request_limit' => $activeSubscription->plan->request_limit,
+                ],
+                'expires_at' => $activeSubscription->expires_at?->toISOString(),
+                'days_remaining' => $activeSubscription->getDaysRemainingAttribute(),
+            ];
         }
         
-        return view('dashboard.index', compact(
-            'user', 
-            'apiKeys', 
-            'todayUsage', 
-            'monthlyUsage', 
-            'activeSubscription',
-            'activeWebsiteSubscription',
-            'plans',
-            'recentUsage',
-            'recentWebsiteSearches'
-        ));
+        $websiteSubscriptionData = null;
+        if ($activeWebsiteSubscription) {
+            $websiteSubscriptionData = [
+                'id' => $activeWebsiteSubscription->id,
+                'plan_type' => $activeWebsiteSubscription->plan_type,
+                'formatted_amount' => $activeWebsiteSubscription->formatted_amount,
+                'verification_status' => $activeWebsiteSubscription->verification_status,
+                'expires_at' => $activeWebsiteSubscription->expires_at?->toISOString(),
+                'days_remaining' => $activeWebsiteSubscription->days_remaining,
+                'admin_notes' => $activeWebsiteSubscription->admin_notes,
+            ];
+        }
+        
+        return Inertia::render('Dashboard/Index', [
+            'apiKeys' => $apiKeys,
+            'todayUsage' => $todayUsage,
+            'monthlyUsage' => $monthlyUsage,
+            'activeSubscription' => $subscriptionData,
+            'activeWebsiteSubscription' => $websiteSubscriptionData,
+            'flash' => [
+                'success' => session('success'),
+                'error' => session('error'),
+                'new_api_key' => session('new_api_key'),
+                'new_api_secret' => session('new_api_secret'),
+            ],
+        ]);
     }
 
     /**

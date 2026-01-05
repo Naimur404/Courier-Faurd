@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Inertia\Inertia;
 
 class AuthController extends Controller
 {
@@ -16,7 +17,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('auth.login');
+        return Inertia::render('Auth/Login');
     }
 
     /**
@@ -24,7 +25,7 @@ class AuthController extends Controller
      */
     public function showRegister()
     {
-        return view('auth.register');
+        return Inertia::render('Auth/Register');
     }
 
     /**
@@ -44,7 +45,8 @@ class AuthController extends Controller
             
             // Redirect based on user role
             if ($user->role === 'admin') {
-                return redirect()->intended('/admin');
+                // Use Inertia location for full page redirect to Filament admin
+                return Inertia::location('/admin');
             } else {
                 return redirect()->intended('/dashboard');
             }

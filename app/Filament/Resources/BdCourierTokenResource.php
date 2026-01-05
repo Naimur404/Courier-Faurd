@@ -38,6 +38,8 @@ class BdCourierTokenResource extends Resource
     
     protected static ?string $navigationLabel = 'BD Courier Tokens';
     
+    protected static string | \UnitEnum | null $navigationGroup = 'Settings';
+    
     protected static ?int $navigationSort = 100;
 
     public static function form(Schema $schema): Schema

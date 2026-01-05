@@ -17,6 +17,11 @@ use App\Http\Middleware\VerifyRequestOrigin;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
+// Offline page for PWA
+Route::get('/offline', function () {
+    return inertia('Offline');
+})->name('offline');
+
 // Pricing routes
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing');
 
@@ -58,8 +63,12 @@ Route::get('/api/documentation', [ApiDocumentationController::class, 'index'])->
 
 
 
-// Courier tracking routes with IP rate limiting (5 searches per day per IP)
-Route::post('/courier-check', [CourierController::class, 'check'])->name('courier.check')->middleware([VerifyRequestOrigin::class, 'ip.rate.limit']);
+// Courier tracking routes with Web Rate Limiting
+// - Subscribed users: 5 hits per minute
+// - Non-subscribed users: 5 searches per day
+// - Blocked IPs are rejected
+// - Only requests from our website are allowed
+Route::post('/courier-check', [CourierController::class, 'check'])->name('courier.check')->middleware(['web.rate.limit']);
 Route::get('/customer', [CourierController::class, 'showTokenForm'])->name('customer.form')->middleware([VerifyRequestOrigin::class]);
 Route::post('customer-review', [CustomerReviewController::class, 'store'])->name('customer.review.store')->middleware([VerifyRequestOrigin::class]);
 Route::get('customer-reviews/{phone}', [CustomerReviewController::class, 'list'])->name('customer.review.list')->middleware([VerifyRequestOrigin::class]);
