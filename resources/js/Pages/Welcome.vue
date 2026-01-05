@@ -702,6 +702,120 @@ onUnmounted(() => {
                             </li>
                         </ul>
                     </div>
+                    
+                    <!-- Quick Stats Summary - Only show when results available -->
+                    <div v-if="searchResults" class="mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-medium text-xs mb-3 flex items-center gap-1.5 text-gray-800 dark:text-gray-100">
+                            <BarChart3 class="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                            Quick Stats
+                        </h3>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="text-center p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                                <div class="text-lg font-bold text-indigo-600 dark:text-indigo-400">
+                                    {{ searchResults.courierData?.summary?.total_parcel || 0 }}
+                                </div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400">মোট অর্ডার</div>
+                            </div>
+                            <div class="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <div class="text-lg font-bold text-green-600 dark:text-green-400">
+                                    {{ searchResults.courierData?.summary?.success_parcel || 0 }}
+                                </div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400">সফল ডেলিভারি</div>
+                            </div>
+                            <div class="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                                <div class="text-lg font-bold text-red-600 dark:text-red-400">
+                                    {{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}
+                                </div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400">বাতিল</div>
+                            </div>
+                            <div class="text-center p-2 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                                <div class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                    {{ courierList.length }}
+                                </div>
+                                <div class="text-[10px] text-gray-500 dark:text-gray-400">কুরিয়ার</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recommendation Box -->
+                    <div v-if="searchResults" class="mt-4 p-3 rounded-lg border" :class="{
+                        'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800': riskLevel.level === 'low',
+                        'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-200 dark:border-yellow-800': riskLevel.level === 'medium',
+                        'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800': riskLevel.level === 'high',
+                        'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700': riskLevel.level === 'unknown'
+                    }">
+                        <h3 class="font-medium text-xs mb-2 flex items-center gap-1.5" :class="{
+                            'text-green-800 dark:text-green-300': riskLevel.level === 'low',
+                            'text-yellow-800 dark:text-yellow-300': riskLevel.level === 'medium',
+                            'text-red-800 dark:text-red-300': riskLevel.level === 'high',
+                            'text-gray-800 dark:text-gray-300': riskLevel.level === 'unknown'
+                        }">
+                            <TrendingUp class="w-3 h-3" />
+                            সুপারিশ
+                        </h3>
+                        <p class="text-xs leading-relaxed" :class="{
+                            'text-green-700 dark:text-green-400': riskLevel.level === 'low',
+                            'text-yellow-700 dark:text-yellow-400': riskLevel.level === 'medium',
+                            'text-red-700 dark:text-red-400': riskLevel.level === 'high',
+                            'text-gray-600 dark:text-gray-400': riskLevel.level === 'unknown'
+                        }">
+                            <template v-if="riskLevel.level === 'low'">
+                                এই গ্রাহককে নিশ্চিন্তে ডেলিভারি দিতে পারেন। তাদের চমৎকার ট্র্যাক রেকর্ড রয়েছে।
+                            </template>
+                            <template v-else-if="riskLevel.level === 'medium'">
+                                অর্ডার কনফার্ম করার আগে গ্রাহকের সাথে ফোনে যোগাযোগ করুন এবং ঠিকানা যাচাই করুন।
+                            </template>
+                            <template v-else-if="riskLevel.level === 'high'">
+                                ⚠️ সতর্কতা! এডভান্স পেমেন্ট নিন অথবা ডেলিভারি এড়িয়ে যান। ঝুঁকি বেশি।
+                            </template>
+                            <template v-else>
+                                নতুন গ্রাহক। প্রথম অর্ডারে সতর্কতা অবলম্বন করুন।
+                            </template>
+                        </p>
+                    </div>
+                    
+                    <!-- Delivery History Timeline (when results available) -->
+                    <div v-if="searchResults && courierList.length > 0" class="mt-4 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-medium text-xs mb-3 flex items-center gap-1.5 text-gray-800 dark:text-gray-100">
+                            <History class="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                            কুরিয়ার সামারি
+                        </h3>
+                        <div class="space-y-2 max-h-32 overflow-y-auto">
+                            <div 
+                                v-for="courier in courierList.slice(0, 4)" 
+                                :key="courier.name + '-summary'"
+                                class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded text-xs"
+                            >
+                                <span class="font-medium text-gray-700 dark:text-gray-300">{{ courier.name }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-green-600 dark:text-green-400">{{ courier.successParcel }}✓</span>
+                                    <span class="text-red-500 dark:text-red-400">{{ courier.cancelledParcel }}✗</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tips Section (when no results) -->
+                    <div v-if="!searchResults" class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <h3 class="font-medium text-xs mb-2 flex items-center gap-1.5 text-blue-800 dark:text-blue-300">
+                            <HelpCircle class="w-3 h-3" />
+                            টিপস
+                        </h3>
+                        <ul class="text-xs text-blue-700 dark:text-blue-400 space-y-1.5">
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-blue-500">•</span>
+                                <span>১১ ডিজিটের মোবাইল নম্বর দিন</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-blue-500">•</span>
+                                <span>01 দিয়ে শুরু হওয়া নম্বর</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <span class="text-blue-500">•</span>
+                                <span>ফ্রড স্কোর ও রিস্ক দেখুন</span>
+                            </li>
+                        </ul>
+                    </div>
                 </Card>
                 
                 <!-- Right Panel -->
@@ -734,48 +848,6 @@ onUnmounted(() => {
                                 </template>
                             </AlertDescription>
                         </Alert>
-                        
-                        <!-- Stats Cards with Progress -->
-                        <div class="grid grid-cols-3 gap-4">
-                            <Card class="p-5 text-center hover:shadow-lg transition-all">
-                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট অর্ডার</div>
-                                <div class="text-4xl font-bold text-primary mb-2">
-                                    {{ searchResults.courierData?.summary?.total_parcel || 0 }}
-                                </div>
-                                <Badge variant="outline" class="text-xs">Total Orders</Badge>
-                            </Card>
-                            
-                            <Card class="p-5 text-center hover:shadow-lg transition-all">
-                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট ডেলিভারি</div>
-                                <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
-                                    {{ searchResults.courierData?.summary?.success_parcel || 0 }}
-                                </div>
-                                <Badge variant="success" class="text-xs">Delivered</Badge>
-                            </Card>
-                            
-                            <Card class="p-5 text-center hover:shadow-lg transition-all">
-                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট বাতিল</div>
-                                <div class="text-4xl font-bold text-red-600 dark:text-red-400 mb-2">
-                                    {{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}
-                                </div>
-                                <Badge variant="destructive" class="text-xs">Cancelled</Badge>
-                            </Card>
-                        </div>
-                        
-                        <!-- Success Rate Progress Bar -->
-                        <Card class="p-5">
-                            <div class="flex items-center justify-between mb-3">
-                                <span class="text-sm font-medium text-muted-foreground">সাফল্যের হার</span>
-                                <Badge :variant="successRatio >= 90 ? 'success' : successRatio >= 70 ? 'warning' : 'destructive'">
-                                    {{ successRatio.toFixed(1) }}%
-                                </Badge>
-                            </div>
-                            <Progress 
-                                :model-value="successRatio" 
-                                class="h-3"
-                                :indicator-class="successRatio >= 90 ? 'bg-green-500' : successRatio >= 70 ? 'bg-yellow-500' : 'bg-red-500'"
-                            />
-                        </Card>
                     
                     <!-- Courier Chart & Table Combined -->
                     <Card class="p-4 md:p-6" v-if="courierList.length > 0">
