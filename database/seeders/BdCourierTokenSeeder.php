@@ -10,39 +10,43 @@ class BdCourierTokenSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     * 
+     * Tokens should be added via admin panel at /admin/bd-courier-tokens
+     * or by setting environment variables:
+     * BDCOURIER_TOKEN_1, BDCOURIER_TOKEN_2, BDCOURIER_TOKEN_3, BDCOURIER_TOKEN_4
      */
     public function run(): void
     {
-        $tokens = [
-            [
-                'name' => 'Token 1',
-                'token' => 'bdc_ddsb5DmvKwfaQUHrgfduXahM5u7BZJaT66WsCdGmfqslhESGZEsZVirfVyrI',
-                'priority' => 1,
-            ],
-            [
-                'name' => 'Token 2',
-                'token' => 'bdc_rYKpOfVFbm5a6HE121UK9OHcZcP6NRuYdw6kUVR3PJcQyjl8XpXpVHgJL7mA',
-                'priority' => 2,
-            ],
-            [
-                'name' => 'Token 3',
-                'token' => 'toh3OAL9Vl1GV4xfo8tHCiZCW862udypeD3uS1ocNrBjLJYjALQcJRKRUYvY',
-                'priority' => 3,
-            ],
-            [
-                'name' => 'Token 4 (Fallback)',
-                'token' => 'jcDS13SxRAtm69cANU9J1O0DjFKTlk24reQSFCsCw8EGOSG72lsgCz3R5TyG',
-                'priority' => 4,
-            ],
+        // Load tokens from environment variables (don't hardcode secrets!)
+        $envTokens = [
+            ['name' => 'Token 1', 'env' => 'BDCOURIER_TOKEN_1', 'priority' => 1],
+            ['name' => 'Token 2', 'env' => 'BDCOURIER_TOKEN_2', 'priority' => 2],
+            ['name' => 'Token 3', 'env' => 'BDCOURIER_TOKEN_3', 'priority' => 3],
+            ['name' => 'Token 4', 'env' => 'BDCOURIER_TOKEN_4', 'priority' => 4],
         ];
 
-        foreach ($tokens as $tokenData) {
-            BdCourierToken::updateOrCreate(
-                ['token' => $tokenData['token']],
-                $tokenData
-            );
+        $addedCount = 0;
+        foreach ($envTokens as $tokenData) {
+            $token = env($tokenData['env']);
+            
+            if ($token) {
+                BdCourierToken::updateOrCreate(
+                    ['token' => $token],
+                    [
+                        'name' => $tokenData['name'],
+                        'token' => $token,
+                        'priority' => $tokenData['priority'],
+                        'is_active' => true,
+                    ]
+                );
+                $addedCount++;
+            }
         }
 
-        $this->command->info('BDCourier tokens seeded successfully!');
+        if ($addedCount > 0) {
+            $this->command->info("Added {$addedCount} BDCourier tokens from environment variables.");
+        } else {
+            $this->command->warn('No tokens found in environment variables. Add tokens via admin panel at /admin/bd-courier-tokens');
+        }
     }
 }
