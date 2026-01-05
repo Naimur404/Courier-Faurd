@@ -801,13 +801,13 @@ onUnmounted(() => {
         </section>
         
         <!-- FAQ Section -->
-        <section class="container mx-auto px-4 py-12">
+        <section class="container mx-auto px-4 py-8 md:py-12">
             <div class="text-center mb-8">
                 <h2 class="text-2xl font-bold mb-2">সাধারণ জিজ্ঞাসা (FAQ)</h2>
                 <p class="text-gray-600 dark:text-gray-400">আপনার FraudShield সম্পর্কিত সব প্রশ্নের উত্তর এখানে পাবেন</p>
             </div>
             
-            <div class="max-w-3xl mx-auto space-y-4">
+            <div class="max-w-3xl mx-auto space-y-3">
                 <Card 
                     v-for="(faq, index) in faqs" 
                     :key="index"
@@ -815,12 +815,12 @@ onUnmounted(() => {
                 >
                     <button
                         @click="toggleFaq(index)"
-                        class="w-full p-5 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                        class="w-full p-4 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
                     >
-                        <span>{{ faq.question }}</span>
-                        <div class="p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400">
-                            <ChevronUp v-if="activeFaq === index" class="w-5 h-5" />
-                            <ChevronDown v-else class="w-5 h-5" />
+                        <span class="text-sm md:text-base">{{ faq.question }}</span>
+                        <div class="p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2">
+                            <ChevronUp v-if="activeFaq === index" class="w-4 h-4 md:w-5 md:h-5" />
+                            <ChevronDown v-else class="w-4 h-4 md:w-5 md:h-5" />
                         </div>
                     </button>
                     <Transition
@@ -831,7 +831,7 @@ onUnmounted(() => {
                         leave-from-class="opacity-100 max-h-96"
                         leave-to-class="opacity-0 max-h-0"
                     >
-                        <div v-if="activeFaq === index" class="px-5 pb-5 text-gray-600 dark:text-gray-300 overflow-hidden">
+                        <div v-if="activeFaq === index" class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 overflow-hidden">
                             {{ faq.answer }}
                         </div>
                     </Transition>
@@ -839,8 +839,8 @@ onUnmounted(() => {
             </div>
         </section>
         
-        <!-- Floating Download Button -->
-        <div class="fixed bottom-8 right-8 z-40">
+        <!-- Floating Download Button (hidden on mobile) -->
+        <div class="fixed bottom-8 right-8 z-40 hidden md:block">
             <a
                 href="/download"
                 class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl animate-pulse"
