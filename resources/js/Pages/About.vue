@@ -6,6 +6,33 @@ import {
     Database, Smartphone, Users, Lock, Clock, Activity,
     Zap, Eye, Download
 } from 'lucide-vue-next';
+import { ref, onMounted } from 'vue';
+
+// Search stats
+const totalVerifications = ref<number | null>(null);
+
+onMounted(async () => {
+    try {
+        const response = await fetch('/api/search-stats');
+        const data = await response.json();
+        if (data.success && data.data?.all_time) {
+            totalVerifications.value = data.data.all_time;
+        }
+    } catch (error) {
+        console.error('Failed to fetch search stats:', error);
+    }
+});
+
+// Format number to Bengali
+const formatBengaliNumber = (num: number): string => {
+    const bengaliDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toLocaleString('en-IN').split('').map(char => {
+        if (char >= '0' && char <= '9') {
+            return bengaliDigits[parseInt(char)];
+        }
+        return char;
+    }).join('');
+};
 
 // Hero badges
 const heroBadges = [
@@ -114,7 +141,9 @@ const teamMembers = [
                 
                 <div class="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
                     <div class="text-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl">
-                        <div class="text-4xl md:text-5xl font-bold text-white mb-2">৩৯,১০১</div>
+                        <div class="text-4xl md:text-5xl font-bold text-white mb-2">
+                            {{ totalVerifications ? formatBengaliNumber(totalVerifications) : '...' }}
+                        </div>
                         <p class="text-indigo-200">মোট যাচাইকরণ</p>
                     </div>
                     <div class="text-center p-8 bg-white/10 backdrop-blur-sm rounded-2xl">
