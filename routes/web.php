@@ -17,6 +17,11 @@ use App\Http\Middleware\VerifyRequestOrigin;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
+// Offline page for PWA
+Route::get('/offline', function () {
+    return inertia('Offline');
+})->name('offline');
+
 // Pricing routes
 Route::get('/pricing', [PricingController::class, 'index'])->name('pricing');
 

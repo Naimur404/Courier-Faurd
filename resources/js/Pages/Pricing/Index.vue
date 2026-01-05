@@ -104,17 +104,17 @@ const getPlanIcon = (index: number) => {
   </Head>
 
   <AppLayout>
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 py-12 sm:py-16">
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 sm:py-16">
       <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-16">
-        <div class="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-6">
-          <i class="fas fa-crown text-blue-600 text-2xl"></i>
+        <div class="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-6">
+          <i class="fas fa-crown text-blue-600 dark:text-blue-400 text-2xl"></i>
         </div>
-        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-          Choose Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Plan</span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+          Choose Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">Plan</span>
         </h1>
-        <p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+        <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
           Select the perfect plan for your business needs. All plans include our comprehensive courier tracking API with real-time updates and 24/7 support.
         </p>
       </div>
@@ -149,8 +149,8 @@ const getPlanIcon = (index: number) => {
             <!-- Features -->
             <ul class="space-y-4 mb-8">
               <li v-for="feature in plan.features" :key="feature" class="flex items-start">
-                <div class="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-0.5">
-                  <i class="fas fa-check text-green-600 text-sm"></i>
+                <div class="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                  <i class="fas fa-check text-green-600 dark:text-green-400 text-sm"></i>
                 </div>
                 <span class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ feature }}</span>
               </li>
@@ -162,7 +162,7 @@ const getPlanIcon = (index: number) => {
                 <button 
                   v-if="hasActiveSubscription"
                   disabled 
-                  class="w-full bg-gray-100 text-gray-500 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200"
+                  class="w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200 dark:border-gray-600"
                 >
                   <i class="fas fa-check-circle mr-2"></i>Already Subscribed
                 </button>
@@ -199,22 +199,22 @@ const getPlanIcon = (index: number) => {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
           <div>
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
-              <div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3">
-                <i class="fas fa-mobile-alt text-pink-600"></i>
+              <div class="w-10 h-10 bg-pink-100 dark:bg-pink-900/50 rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-mobile-alt text-pink-600 dark:text-pink-400"></i>
               </div>
               Bkash Payment
             </h3>
-            <div class="bg-gradient-to-r from-pink-50 to-rose-50 border-2 border-pink-200 rounded-xl p-6">
+            <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6">
               <div class="text-center">
-                <p class="text-gray-700 mb-3 font-medium">Send money to:</p>
-                <div class="bg-white rounded-lg p-4 mb-4 shadow-sm">
-                  <p class="text-3xl font-bold text-pink-600 mb-2">01309092748</p>
-                  <button @click="copyToClipboard('01309092748')" class="text-sm text-pink-600 hover:text-pink-700 font-medium">
+                <p class="text-gray-700 dark:text-gray-300 mb-3 font-medium">Send money to:</p>
+                <div class="bg-white dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-sm">
+                  <p class="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2">01309092748</p>
+                  <button @click="copyToClipboard('01309092748')" class="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium">
                     <i class="fas fa-copy mr-1"></i>Copy Number
                   </button>
                 </div>
-                <div class="bg-pink-100 rounded-lg p-4">
-                  <p class="text-sm text-pink-800 font-medium">
+                <div class="bg-pink-100 dark:bg-pink-900/30 rounded-lg p-4">
+                  <p class="text-sm text-pink-800 dark:text-pink-300 font-medium">
                     <i class="fas fa-info-circle mr-2"></i>
                     Send money and provide the transaction ID during subscription.
                   </p>
@@ -225,8 +225,8 @@ const getPlanIcon = (index: number) => {
           
           <div>
             <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
-              <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3">
-                <i class="fas fa-clock text-blue-600"></i>
+              <div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mr-3">
+                <i class="fas fa-clock text-blue-600 dark:text-blue-400"></i>
               </div>
               Process Timeline
             </h3>

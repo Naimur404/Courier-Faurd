@@ -24,14 +24,25 @@ const checkMobile = () => {
 const user = computed(() => page.props.auth?.user);
 const isAdmin = computed(() => user.value?.role === 'admin');
 
+// Helper function to get cookie value
+const getCookie = (name: string): string | null => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop()?.split(';').shift() || null;
+    return null;
+};
+
 onMounted(() => {
-    // Check for saved theme preference or default to system preference
-    const savedTheme = localStorage.getItem('theme');
+    // Check for saved theme preference (localStorage takes priority, then cookie, then system)
+    const savedTheme = localStorage.getItem('theme') || getCookie('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
     if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
         isDark.value = true;
         document.documentElement.classList.add('dark');
+    } else {
+        isDark.value = false;
+        document.documentElement.classList.remove('dark');
     }
     
     // Check if mobile
@@ -43,14 +54,23 @@ onUnmounted(() => {
     window.removeEventListener('resize', checkMobile);
 });
 
+// Helper function to set cookie
+const setCookie = (name: string, value: string, days: number = 365) => {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+};
+
 const toggleTheme = () => {
     isDark.value = !isDark.value;
     if (isDark.value) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('theme', 'dark');
+        setCookie('theme', 'dark');
     } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
+        setCookie('theme', 'light');
     }
 };
 
