@@ -1,7 +1,7 @@
-import { defineComponent, ref, computed, mergeProps, useSSRContext, unref } from "vue";
-import { ssrRenderAttrs, ssrRenderSlot } from "vue/server-renderer";
-import { c as cn } from "./Card-BKxb1AUA.js";
-const _sfc_main$1 = /* @__PURE__ */ defineComponent({
+import { defineComponent, ref, computed, mergeProps, useSSRContext } from "vue";
+import { ssrRenderAttrs } from "vue/server-renderer";
+import { c as cn } from "./utils-DvCvi0aN.js";
+const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "Input",
   __ssrInlineRender: true,
   props: {
@@ -34,38 +34,12 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const _sfc_setup$1 = _sfc_main$1.setup;
-_sfc_main$1.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/Input.vue");
-  return _sfc_setup$1 ? _sfc_setup$1(props, ctx) : void 0;
-};
-const _sfc_main = /* @__PURE__ */ defineComponent({
-  __name: "Label",
-  __ssrInlineRender: true,
-  props: {
-    class: {},
-    for: {}
-  },
-  setup(__props) {
-    const props = __props;
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<label${ssrRenderAttrs(mergeProps({
-        for: props.for,
-        class: unref(cn)("text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70", props.class)
-      }, _attrs))}>`);
-      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
-      _push(`</label>`);
-    };
-  }
-});
 const _sfc_setup = _sfc_main.setup;
 _sfc_main.setup = (props, ctx) => {
   const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/label/Label.vue");
+  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/Input.vue");
   return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
 };
 export {
-  _sfc_main as _,
-  _sfc_main$1 as a
+  _sfc_main as _
 };

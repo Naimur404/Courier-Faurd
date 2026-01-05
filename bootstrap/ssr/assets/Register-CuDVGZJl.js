@@ -1,17 +1,19 @@
 import { defineComponent, unref, withCtx, createVNode, createTextVNode, createBlock, createCommentVNode, openBlock, withModifiers, toDisplayString, withDirectives, vModelCheckbox, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrInterpolate, ssrIncludeBooleanAttr, ssrLooseContain } from "vue/server-renderer";
 import { u as useForm, h as head_default, l as link_default } from "../ssr.js";
-import { _ as _sfc_main$4 } from "./Button-AaQimkH7.js";
-import { _ as _sfc_main$1 } from "./Card-BKxb1AUA.js";
-import { _ as _sfc_main$2, a as _sfc_main$3 } from "./Label-DkFFRWIJ.js";
+import { _ as _sfc_main$4 } from "./Button-Dm3W5gAW.js";
+import { _ as _sfc_main$1 } from "./Card-DfyUDDxC.js";
+import { _ as _sfc_main$3 } from "./Input-DYYSdVaj.js";
+import { _ as _sfc_main$2 } from "./Label-Cl3p6AAe.js";
 import "@vue/server-renderer";
 import "@inertiajs/core";
 import "lodash-es";
 import "laravel-precognition";
 import "@inertiajs/core/server";
-import "class-variance-authority";
+import "./utils-DvCvi0aN.js";
 import "clsx";
 import "tailwind-merge";
+import "class-variance-authority";
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "Register",
   __ssrInlineRender: true,

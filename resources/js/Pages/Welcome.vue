@@ -308,8 +308,8 @@ onUnmounted(() => {
     
     <AppLayout>
         <!-- Stats Section -->
-        <section class="py-12 px-4">
-            <div class="container mx-auto">
+        <section class="py-12 px-4 overflow-visible">
+            <div class="container mx-auto overflow-visible">
                 <div class="text-center mb-8">
                     <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2">
                         <BarChart3 class="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
@@ -318,112 +318,96 @@ onUnmounted(() => {
                     <p class="text-gray-600 dark:text-gray-300">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
                 </div>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Last Hour -->
-                    <Card class="p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-blue-500 text-white rounded-xl shadow-lg">
-                                <Clock class="w-6 h-6" />
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-blue-600 dark:text-blue-300">
-                                    {{ formatBengaliNumber(stats.lastHour) }}
-                                </div>
-                                <div class="text-sm text-blue-500 dark:text-blue-300 font-medium">শেষ ১ ঘন্টায়</div>
-                            </div>
+                    <Card class="p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-xl shadow-lg mb-3">
+                            <Clock class="w-5 h-5" />
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">সর্বশেষ ৬০ মিনিটের সার্চ</p>
+                        <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-1">
+                            {{ formatBengaliNumber(stats.lastHour) }}
+                        </div>
+                        <div class="text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1">শেষ ১ ঘন্টায়</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">সর্বশেষ ৬০ মিনিটের সার্চ</p>
                     </Card>
                     
                     <!-- Today -->
-                    <Card class="p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-green-500 text-white rounded-xl shadow-lg">
-                                <Calendar class="w-6 h-6" />
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-green-600 dark:text-green-300">
-                                    {{ formatBengaliNumber(stats.today) }}
-                                </div>
-                                <div class="text-sm text-green-500 dark:text-green-300 font-medium">আজকের সার্চ</div>
-                            </div>
+                    <Card class="p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 bg-green-500 text-white rounded-xl shadow-lg mb-3">
+                            <Calendar class="w-5 h-5" />
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">আজ রাত ১২টা থেকে এখন পর্যন্ত</p>
+                        <div class="text-2xl font-bold text-green-600 dark:text-green-300 mb-1">
+                            {{ formatBengaliNumber(stats.today) }}
+                        </div>
+                        <div class="text-sm text-green-500 dark:text-green-300 font-semibold mb-1">আজকের সার্চ</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">আজ রাত ১২টা থেকে এখন পর্যন্ত</p>
                     </Card>
                     
                     <!-- All Time -->
-                    <Card class="p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-purple-500 text-white rounded-xl shadow-lg">
-                                <Infinity class="w-6 h-6" />
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-purple-600 dark:text-purple-300">
-                                    {{ formatBengaliNumber(stats.allTime) }}
-                                </div>
-                                <div class="text-sm text-purple-500 dark:text-purple-300 font-medium">সর্বমোট সার্চ</div>
-                            </div>
+                    <Card class="p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 bg-purple-500 text-white rounded-xl shadow-lg mb-3">
+                            <Infinity class="w-5 h-5" />
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">সর্বকালের মোট সার্চ সংখ্যা</p>
+                        <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 mb-1">
+                            {{ formatBengaliNumber(stats.allTime) }}
+                        </div>
+                        <div class="text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1">সর্বমোট সার্চ</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">সর্বকালের মোট সার্চ সংখ্যা</p>
                     </Card>
                     
                     <!-- Unique Numbers -->
-                    <Card class="p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform">
-                        <div class="flex items-center justify-between mb-4">
-                            <div class="p-3 bg-orange-500 text-white rounded-xl shadow-lg">
-                                <PhoneCall class="w-6 h-6" />
-                            </div>
-                            <div class="text-right">
-                                <div class="text-2xl font-bold text-orange-600 dark:text-orange-300">
-                                    {{ formatBengaliNumber(stats.uniqueNumbers) }}
-                                </div>
-                                <div class="text-sm text-orange-500 dark:text-orange-300 font-medium">ইউনিক নাম্বার</div>
-                            </div>
+                    <Card class="p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform text-center">
+                        <div class="inline-flex items-center justify-center w-10 h-10 bg-orange-500 text-white rounded-xl shadow-lg mb-3">
+                            <PhoneCall class="w-5 h-5" />
                         </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-300">চেক করা মোট নাম্বার সংখ্যা</p>
+                        <div class="text-2xl font-bold text-orange-600 dark:text-orange-300 mb-1">
+                            {{ formatBengaliNumber(stats.uniqueNumbers) }}
+                        </div>
+                        <div class="text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1">ইউনিক নাম্বার</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">চেক করা মোট নাম্বার সংখ্যা</p>
                     </Card>
                 </div>
                 
                 <!-- Last Updated -->
                 <div class="text-center mt-6">
-                    <p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
-                        <RefreshCw class="w-4 h-4" />
-                        সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300">{{ lastUpdated }}</span>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        <RefreshCw class="w-4 h-4 inline-block align-middle mr-1" />
+                        <span class="align-middle">সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300">{{ lastUpdated }}</span></span>
                     </p>
                 </div>
             </div>
         </section>
         
         <!-- Search Section -->
-        <section class="container mx-auto px-4 py-8">
+        <section class="container mx-auto px-4 py-4">
             <!-- Search Bar -->
-            <Card class="p-6 mb-8 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800">
-                <div class="text-center mb-6">
-                    <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+            <Card class="p-4 mb-4 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800">
+                <div class="text-center mb-3">
+                    <h1 class="text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1">
                         কুরিয়ার ফ্রড চেক করুন
                     </h1>
-                    <p class="text-gray-600 dark:text-gray-400">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p>
                 </div>
-                <div class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
+                <div class="flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
                     <div class="relative flex-1">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Phone class="h-5 w-5 text-indigo-500" />
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Phone class="h-4 w-4 text-indigo-500" />
                         </div>
                         <input
                             v-model="phoneInput"
                             type="text"
                             placeholder="মোবাইল নাম্বার লিখুন (যেমন: 01600000000)"
-                            class="w-full pl-12 p-4 border-2 border-indigo-200 dark:border-indigo-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-lg"
+                            class="w-full pl-10 p-3 border border-indigo-200 dark:border-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-sm"
                             @keypress.enter="performSearch"
                         />
                     </div>
                     <Button 
-                        size="xl" 
+                        size="default" 
                         :loading="isSearching"
                         @click="performSearch"
-                        class="min-w-[200px] shadow-lg shadow-indigo-500/25"
+                        class="min-w-[140px] shadow-md"
                     >
-                        <Search class="w-5 h-5 mr-2" />
+                        <Search class="w-4 h-4 mr-1" />
                         রিপোর্ট দেখুন
                     </Button>
                 </div>
@@ -440,24 +424,24 @@ onUnmounted(() => {
             </div>
             
             <!-- Main Content Grid - Always Show -->
-            <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-4">
                 <!-- Left Panel - Delivery Success Ratio (Always Visible) -->
-                <Card class="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100">
-                        <div class="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
-                            <PieChart class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <Card class="p-4 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-base font-bold mb-3 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                        <div class="p-1.5 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
+                            <PieChart class="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                         </div>
                         Delivery Success Ratio
                     </h2>
                     
                     <!-- Progress Ring -->
-                    <div class="flex justify-center mb-6">
-                        <div class="relative w-44 h-44">
+                    <div class="flex justify-center mb-3">
+                        <div class="relative w-28 h-28">
                             <!-- Decorative rings -->
-                            <div class="absolute inset-0 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-700 animate-spin" style="animation-duration: 20s;"></div>
-                            <div class="absolute inset-2 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner"></div>
+                            <div class="absolute inset-0 rounded-full border-2 border-dashed border-gray-200 dark:border-gray-700 animate-spin" style="animation-duration: 20s;"></div>
+                            <div class="absolute inset-1 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner"></div>
                             
-                            <svg class="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transform -rotate-90" viewBox="0 0 100 100">
+                            <svg class="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] transform -rotate-90" viewBox="0 0 100 100">
                                 <circle
                                     class="text-gray-200 dark:text-gray-700 stroke-current"
                                     stroke-width="10"
@@ -480,10 +464,10 @@ onUnmounted(() => {
                                 />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                <span class="text-4xl font-bold" :class="searchResults ? '' : 'text-gray-400 dark:text-gray-500'">
-                                    {{ searchResults ? successRatio.toFixed(1) : '0' }}%
+                                <span class="text-xl font-bold" :class="searchResults ? '' : 'text-gray-400 dark:text-gray-500'">
+                                    {{ searchResults ? successRatio.toFixed(0) : '0' }}%
                                 </span>
-                                <span class="text-sm font-medium px-3 py-1 rounded-full mt-1" :class="{
+                                <span class="text-xs font-medium px-2 py-0.5 rounded-full" :class="{
                                     'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300': searchResults && ratingText === 'Excellent',
                                     'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300': searchResults && ratingText === 'Good',
                                     'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300': searchResults && ratingText === 'Poor',
@@ -496,17 +480,17 @@ onUnmounted(() => {
                     </div>
                     
                     <!-- Status Message -->
-                    <div class="text-center mb-6 p-4 rounded-xl" :class="{
+                    <div class="text-center mb-3 p-2 rounded-lg text-sm" :class="{
                         'bg-gray-100 dark:bg-gray-800': !searchResults,
                         'bg-green-50 dark:bg-green-900/30': searchResults && riskLevel.level === 'low',
                         'bg-yellow-50 dark:bg-yellow-900/30': searchResults && riskLevel.level === 'medium',
                         'bg-red-50 dark:bg-red-900/30': searchResults && riskLevel.level === 'high',
                     }">
-                        <p class="text-gray-600 dark:text-gray-400" v-if="!searchResults">
-                            <Phone class="w-5 h-5 inline-block mr-1 -mt-1" />
+                        <p class="text-gray-600 dark:text-gray-400 text-xs" v-if="!searchResults">
+                            <Phone class="w-3 h-3 inline-block mr-1 -mt-0.5" />
                             মোবাইল নাম্বার দিয়ে সার্চ করুন
                         </p>
-                        <p v-else class="font-medium" :class="{
+                        <p v-else class="font-medium text-xs" :class="{
                             'text-green-700 dark:text-green-300': riskLevel.level === 'low',
                             'text-yellow-700 dark:text-yellow-300': riskLevel.level === 'medium',
                             'text-red-700 dark:text-red-300': riskLevel.level === 'high',
@@ -520,67 +504,46 @@ onUnmounted(() => {
                     
                     <!-- Risk Indicator -->
                     <div 
-                        class="text-center py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all duration-300"
+                        class="text-center py-2 px-3 rounded-lg flex items-center justify-center gap-2 font-medium text-sm transition-all duration-300"
                         :class="{
-                            'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30': searchResults && riskLevel.level === 'low',
-                            'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30': searchResults && riskLevel.level === 'medium',
-                            'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/30': searchResults && riskLevel.level === 'high',
+                            'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md': searchResults && riskLevel.level === 'low',
+                            'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-md': searchResults && riskLevel.level === 'medium',
+                            'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-md': searchResults && riskLevel.level === 'high',
                             'bg-gradient-to-r from-gray-400 to-gray-500 text-white': !searchResults || riskLevel.level === 'unknown',
                         }"
                     >
-                        <component :is="searchResults ? riskLevel.icon : HelpCircle" class="w-5 h-5" />
-                        {{ searchResults ? riskLevel.label : 'Waiting for Search' }}
-                    </div>
-                    
-                    <!-- Quote Box -->
-                    <div class="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-l-4 border-indigo-500 rounded-r-xl">
-                        <p class="italic text-gray-600 dark:text-gray-300 text-sm">
-                            <template v-if="!searchResults">
-                                "ফোন নম্বর দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।"
-                            </template>
-                            <template v-else-if="riskLevel.level === 'low'">
-                                "বিশ্বাসই সম্পর্কের ভিত্তি। এই গ্রাহকের চমৎকার রেকর্ড অনেক কিছু বলে।"
-                            </template>
-                            <template v-else-if="riskLevel.level === 'medium'">
-                                "বিশ্বাস করুন কিন্তু যাচাই করুন। মাঝে মাঝে সমস্যা সতর্কতার পরামর্শ দেয়।"
-                            </template>
-                            <template v-else-if="riskLevel.level === 'high'">
-                                "অতীত আচরণ ভবিষ্যৎ ক্রিয়াকলাপের পূর্বাভাস দেয়। উচ্চ বাতিল হার উল্লেখযোগ্য ঝুঁকি নির্দেশ করে।"
-                            </template>
-                            <template v-else>
-                                "এই নম্বরের জন্য কোন ডেলিভারি রেকর্ড পাওয়া যায়নি।"
-                            </template>
-                        </p>
+                        <component :is="searchResults ? riskLevel.icon : HelpCircle" class="w-4 h-4" />
+                        {{ searchResults ? riskLevel.label : 'Waiting' }}
                     </div>
                     
                     <!-- Fraud Risk Factors -->
-                    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-                        <h3 class="font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
-                            <Shield class="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                            Fraud Risk Factors
+                    <div class="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-medium text-xs mb-2 flex items-center gap-1.5 text-gray-800 dark:text-gray-100">
+                            <Shield class="w-3 h-3 text-indigo-600 dark:text-indigo-400" />
+                            Risk Factors
                         </h3>
-                        <ul class="space-y-3">
-                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg" :class="searchResults && successRatio >= 90 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
-                                <div class="p-1.5 rounded-full" :class="searchResults && successRatio >= 90 ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'">
-                                    <CheckCircle class="w-3.5 h-3.5 text-white" />
+                        <ul class="space-y-1.5">
+                            <li class="flex items-center text-xs gap-2 p-1.5 rounded" :class="searchResults && successRatio >= 90 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
+                                <div class="p-1 rounded-full" :class="searchResults && successRatio >= 90 ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'">
+                                    <CheckCircle class="w-2.5 h-2.5 text-white" />
                                 </div>
-                                <span :class="searchResults && successRatio >= 90 ? 'text-green-700 dark:text-green-300 font-medium' : 'text-gray-600 dark:text-gray-400'">
-                                    High delivery success rate
+                                <span :class="searchResults && successRatio >= 90 ? 'text-green-700 dark:text-green-300' : 'text-gray-500 dark:text-gray-400'">
+                                    High success rate
                                 </span>
                             </li>
-                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
-                                <div class="p-1.5 rounded-full" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-600'">
-                                    <XCircle class="w-3.5 h-3.5 text-white" />
+                            <li class="flex items-center text-xs gap-2 p-1.5 rounded" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
+                                <div class="p-1 rounded-full" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-600'">
+                                    <XCircle class="w-2.5 h-2.5 text-white" />
                                 </div>
-                                <span :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'text-red-700 dark:text-red-300 font-medium' : 'text-gray-600 dark:text-gray-400'">
-                                    Multiple cancelled orders
+                                <span :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'text-red-700 dark:text-red-300' : 'text-gray-500 dark:text-gray-400'">
+                                    Multiple cancellations
                                 </span>
                             </li>
-                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                <div class="p-1.5 rounded-full bg-gray-300 dark:bg-gray-600">
-                                    <AlertCircle class="w-3.5 h-3.5 text-white" />
+                            <li class="flex items-center text-xs gap-2 p-1.5 rounded bg-gray-50 dark:bg-gray-700/50">
+                                <div class="p-1 rounded-full bg-gray-300 dark:bg-gray-600">
+                                    <AlertCircle class="w-2.5 h-2.5 text-white" />
                                 </div>
-                                <span class="text-gray-600 dark:text-gray-400">Inconsistent delivery patterns</span>
+                                <span class="text-gray-500 dark:text-gray-400">Inconsistent patterns</span>
                             </li>
                         </ul>
                     </div>
@@ -761,28 +724,28 @@ onUnmounted(() => {
                     
                     <!-- Empty State when no search results -->
                     <template v-else>
-                        <Card class="h-full p-10 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center">
+                        <Card class="h-full p-6 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center">
                             <img 
                                 src="https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060" 
                                 alt="Search illustration" 
-                                class="mx-auto mb-6 rounded-xl shadow-lg w-64 sm:w-72 md:w-80 lg:w-96"
+                                class="mx-auto mb-4 rounded-lg shadow-md w-48 sm:w-56 md:w-64"
                             />
-                            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">কুরিয়ার ফ্রড চেক করুন</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg">
-                                বাম পাশে মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস ও ঝুঁকি মূল্যায়ন দেখুন।
+                            <h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-gray-100">কুরিয়ার ফ্রড চেক করুন</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-4 max-w-sm mx-auto text-sm">
+                                মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।
                             </p>
-                            <div class="flex flex-wrap justify-center gap-4">
-                                <div class="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 px-5 py-3 rounded-full">
-                                    <div class="w-4 h-4 rounded-full bg-green-500"></div>
-                                    <span class="text-sm text-green-700 dark:text-green-300 font-medium">Low Risk</span>
+                            <div class="flex flex-wrap justify-center gap-2">
+                                <div class="flex items-center gap-1.5 bg-green-50 dark:bg-green-900/30 px-3 py-1.5 rounded-full">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                                    <span class="text-xs text-green-700 dark:text-green-300 font-medium">Low Risk</span>
                                 </div>
-                                <div class="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-5 py-3 rounded-full">
-                                    <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
-                                    <span class="text-sm text-yellow-700 dark:text-yellow-300 font-medium">Medium Risk</span>
+                                <div class="flex items-center gap-1.5 bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1.5 rounded-full">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                                    <span class="text-xs text-yellow-700 dark:text-yellow-300 font-medium">Medium Risk</span>
                                 </div>
-                                <div class="flex items-center gap-2 bg-red-50 dark:bg-red-900/30 px-5 py-3 rounded-full">
-                                    <div class="w-4 h-4 rounded-full bg-red-500"></div>
-                                    <span class="text-sm text-red-700 dark:text-red-300 font-medium">High Risk</span>
+                                <div class="flex items-center gap-1.5 bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded-full">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                                    <span class="text-xs text-red-700 dark:text-red-300 font-medium">High Risk</span>
                                 </div>
                             </div>
                         </Card>

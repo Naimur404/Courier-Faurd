@@ -12,7 +12,10 @@ export function convertToBengaliNumbers(number: number | string): string {
 }
 
 // Format number with commas and convert to Bengali
-export function formatBengaliNumber(number: number): string {
+export function formatBengaliNumber(number: number | null | undefined): string {
+    if (number === null || number === undefined || isNaN(number)) {
+        return '০';
+    }
     const formattedNumber = Math.round(number).toLocaleString('en-US');
     return convertToBengaliNumbers(formattedNumber);
 }

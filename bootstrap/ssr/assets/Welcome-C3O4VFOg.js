@@ -2,10 +2,11 @@ import { defineComponent, onMounted, onUnmounted, watch, unref, useSSRContext, r
 import { ssrRenderTeleport, ssrRenderClass, ssrRenderComponent, ssrRenderSlot, ssrRenderAttrs, ssrRenderList, ssrIncludeBooleanAttr, ssrInterpolate, ssrRenderAttr, ssrRenderStyle, ssrRenderVNode } from "vue/server-renderer";
 import { h as head_default } from "../ssr.js";
 import { _ as _sfc_main$9 } from "./AppLayout-BWjM9ngr.js";
-import { _ as _sfc_main$b } from "./Button-AaQimkH7.js";
-import { c as cn, _ as _sfc_main$a, f as formatBengaliNumber, g as getColorForRatio, m as maskPhoneNumber, a as formatBengaliDate, b as convertToBengaliNumbers } from "./Card-BKxb1AUA.js";
+import { _ as _sfc_main$b } from "./Button-Dm3W5gAW.js";
+import { _ as _sfc_main$a } from "./Card-DfyUDDxC.js";
+import { c as cn, f as formatBengaliNumber, g as getColorForRatio, m as maskPhoneNumber, a as formatBengaliDate, b as convertToBengaliNumbers } from "./utils-DvCvi0aN.js";
 import { X, Star, HelpCircle, CheckCircle, AlertCircle, XCircle, BarChart3, Clock, Calendar, Infinity, PhoneCall, RefreshCw, Phone, Search, Shield, PieChart, MessageSquare, Plus, TrendingUp, History, ChevronUp, ChevronDown, Download, Send } from "lucide-vue-next";
-import { _ as _sfc_main$c, b as _sfc_main$d, a as _sfc_main$e, c as _sfc_main$f, d as _sfc_main$g } from "./AlertDescription-CA6uqSiP.js";
+import { _ as _sfc_main$c, b as _sfc_main$d, a as _sfc_main$e, c as _sfc_main$f, d as _sfc_main$g } from "./AlertDescription-DsjVZstT.js";
 import "@vue/server-renderer";
 import "@inertiajs/core";
 import "lodash-es";
@@ -49,9 +50,9 @@ const _sfc_main$8 = /* @__PURE__ */ defineComponent({
     return (_ctx, _push, _parent, _attrs) => {
       ssrRenderTeleport(_push, (_push2) => {
         if (__props.open) {
-          _push2(`<div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">`);
+          _push2(`<div class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"><div class="absolute inset-0 bg-black/50"></div>`);
           if (__props.open) {
-            _push2(`<div class="${ssrRenderClass(unref(cn)("bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl relative", props.class))}"><button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">`);
+            _push2(`<div class="${ssrRenderClass(unref(cn)("relative bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl", props.class))}"><button class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors">`);
             _push2(ssrRenderComponent(unref(X), { class: "h-5 w-5" }, null, _parent));
             _push2(`</button>`);
             ssrRenderSlot(_ctx.$slots, "default", {}, null, _push2, _parent);
@@ -532,104 +533,88 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_sfc_main$9, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<section class="py-12 px-4"${_scopeId}><div class="container mx-auto"${_scopeId}><div class="text-center mb-8"${_scopeId}><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2"${_scopeId}>`);
+            _push2(`<section class="py-12 px-4 overflow-visible"${_scopeId}><div class="container mx-auto overflow-visible"${_scopeId}><div class="text-center mb-8"${_scopeId}><h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2"${_scopeId}>`);
             _push2(ssrRenderComponent(unref(BarChart3), { class: "w-6 h-6 text-indigo-600 dark:text-indigo-400" }, null, _parent2, _scopeId));
-            _push2(` সার্চ পরিসংখ্যান </h2><p class="text-gray-600 dark:text-gray-300"${_scopeId}>রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p></div><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"${_scopeId}>`);
-            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform" }, {
+            _push2(` সার্চ পরিসংখ্যান </h2><p class="text-gray-600 dark:text-gray-300"${_scopeId}>রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-4"${_scopeId}>`);
+            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform text-center" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="flex items-center justify-between mb-4"${_scopeId2}><div class="p-3 bg-blue-500 text-white rounded-xl shadow-lg"${_scopeId2}>`);
-                  _push3(ssrRenderComponent(unref(Clock), { class: "w-6 h-6" }, null, _parent3, _scopeId2));
-                  _push3(`</div><div class="text-right"${_scopeId2}><div class="text-2xl font-bold text-blue-600 dark:text-blue-300"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.lastHour))}</div><div class="text-sm text-blue-500 dark:text-blue-300 font-medium"${_scopeId2}>শেষ ১ ঘন্টায়</div></div></div><p class="text-sm text-gray-600 dark:text-gray-300"${_scopeId2}>সর্বশেষ ৬০ মিনিটের সার্চ</p>`);
+                  _push3(`<div class="inline-flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-xl shadow-lg mb-3"${_scopeId2}>`);
+                  _push3(ssrRenderComponent(unref(Clock), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                  _push3(`</div><div class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-1"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.lastHour))}</div><div class="text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1"${_scopeId2}>শেষ ১ ঘন্টায়</div><p class="text-xs text-gray-500 dark:text-gray-400"${_scopeId2}>সর্বশেষ ৬০ মিনিটের সার্চ</p>`);
                 } else {
                   return [
-                    createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                      createVNode("div", { class: "p-3 bg-blue-500 text-white rounded-xl shadow-lg" }, [
-                        createVNode(unref(Clock), { class: "w-6 h-6" })
-                      ]),
-                      createVNode("div", { class: "text-right" }, [
-                        createVNode("div", { class: "text-2xl font-bold text-blue-600 dark:text-blue-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.lastHour)), 1),
-                        createVNode("div", { class: "text-sm text-blue-500 dark:text-blue-300 font-medium" }, "শেষ ১ ঘন্টায়")
-                      ])
+                    createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-xl shadow-lg mb-3" }, [
+                      createVNode(unref(Clock), { class: "w-5 h-5" })
                     ]),
-                    createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "সর্বশেষ ৬০ মিনিটের সার্চ")
+                    createVNode("div", { class: "text-2xl font-bold text-blue-600 dark:text-blue-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.lastHour)), 1),
+                    createVNode("div", { class: "text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1" }, "শেষ ১ ঘন্টায়"),
+                    createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "সর্বশেষ ৬০ মিনিটের সার্চ")
                   ];
                 }
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform" }, {
+            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform text-center" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="flex items-center justify-between mb-4"${_scopeId2}><div class="p-3 bg-green-500 text-white rounded-xl shadow-lg"${_scopeId2}>`);
-                  _push3(ssrRenderComponent(unref(Calendar), { class: "w-6 h-6" }, null, _parent3, _scopeId2));
-                  _push3(`</div><div class="text-right"${_scopeId2}><div class="text-2xl font-bold text-green-600 dark:text-green-300"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.today))}</div><div class="text-sm text-green-500 dark:text-green-300 font-medium"${_scopeId2}>আজকের সার্চ</div></div></div><p class="text-sm text-gray-600 dark:text-gray-300"${_scopeId2}>আজ রাত ১২টা থেকে এখন পর্যন্ত</p>`);
+                  _push3(`<div class="inline-flex items-center justify-center w-10 h-10 bg-green-500 text-white rounded-xl shadow-lg mb-3"${_scopeId2}>`);
+                  _push3(ssrRenderComponent(unref(Calendar), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                  _push3(`</div><div class="text-2xl font-bold text-green-600 dark:text-green-300 mb-1"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.today))}</div><div class="text-sm text-green-500 dark:text-green-300 font-semibold mb-1"${_scopeId2}>আজকের সার্চ</div><p class="text-xs text-gray-500 dark:text-gray-400"${_scopeId2}>আজ রাত ১২টা থেকে এখন পর্যন্ত</p>`);
                 } else {
                   return [
-                    createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                      createVNode("div", { class: "p-3 bg-green-500 text-white rounded-xl shadow-lg" }, [
-                        createVNode(unref(Calendar), { class: "w-6 h-6" })
-                      ]),
-                      createVNode("div", { class: "text-right" }, [
-                        createVNode("div", { class: "text-2xl font-bold text-green-600 dark:text-green-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.today)), 1),
-                        createVNode("div", { class: "text-sm text-green-500 dark:text-green-300 font-medium" }, "আজকের সার্চ")
-                      ])
+                    createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-green-500 text-white rounded-xl shadow-lg mb-3" }, [
+                      createVNode(unref(Calendar), { class: "w-5 h-5" })
                     ]),
-                    createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "আজ রাত ১২টা থেকে এখন পর্যন্ত")
+                    createVNode("div", { class: "text-2xl font-bold text-green-600 dark:text-green-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.today)), 1),
+                    createVNode("div", { class: "text-sm text-green-500 dark:text-green-300 font-semibold mb-1" }, "আজকের সার্চ"),
+                    createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "আজ রাত ১২টা থেকে এখন পর্যন্ত")
                   ];
                 }
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform" }, {
+            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform text-center" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="flex items-center justify-between mb-4"${_scopeId2}><div class="p-3 bg-purple-500 text-white rounded-xl shadow-lg"${_scopeId2}>`);
-                  _push3(ssrRenderComponent(unref(Infinity), { class: "w-6 h-6" }, null, _parent3, _scopeId2));
-                  _push3(`</div><div class="text-right"${_scopeId2}><div class="text-2xl font-bold text-purple-600 dark:text-purple-300"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.allTime))}</div><div class="text-sm text-purple-500 dark:text-purple-300 font-medium"${_scopeId2}>সর্বমোট সার্চ</div></div></div><p class="text-sm text-gray-600 dark:text-gray-300"${_scopeId2}>সর্বকালের মোট সার্চ সংখ্যা</p>`);
+                  _push3(`<div class="inline-flex items-center justify-center w-10 h-10 bg-purple-500 text-white rounded-xl shadow-lg mb-3"${_scopeId2}>`);
+                  _push3(ssrRenderComponent(unref(Infinity), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                  _push3(`</div><div class="text-2xl font-bold text-purple-600 dark:text-purple-300 mb-1"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.allTime))}</div><div class="text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1"${_scopeId2}>সর্বমোট সার্চ</div><p class="text-xs text-gray-500 dark:text-gray-400"${_scopeId2}>সর্বকালের মোট সার্চ সংখ্যা</p>`);
                 } else {
                   return [
-                    createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                      createVNode("div", { class: "p-3 bg-purple-500 text-white rounded-xl shadow-lg" }, [
-                        createVNode(unref(Infinity), { class: "w-6 h-6" })
-                      ]),
-                      createVNode("div", { class: "text-right" }, [
-                        createVNode("div", { class: "text-2xl font-bold text-purple-600 dark:text-purple-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.allTime)), 1),
-                        createVNode("div", { class: "text-sm text-purple-500 dark:text-purple-300 font-medium" }, "সর্বমোট সার্চ")
-                      ])
+                    createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-purple-500 text-white rounded-xl shadow-lg mb-3" }, [
+                      createVNode(unref(Infinity), { class: "w-5 h-5" })
                     ]),
-                    createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "সর্বকালের মোট সার্চ সংখ্যা")
+                    createVNode("div", { class: "text-2xl font-bold text-purple-600 dark:text-purple-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.allTime)), 1),
+                    createVNode("div", { class: "text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1" }, "সর্বমোট সার্চ"),
+                    createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "সর্বকালের মোট সার্চ সংখ্যা")
                   ];
                 }
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform" }, {
+            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform text-center" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="flex items-center justify-between mb-4"${_scopeId2}><div class="p-3 bg-orange-500 text-white rounded-xl shadow-lg"${_scopeId2}>`);
-                  _push3(ssrRenderComponent(unref(PhoneCall), { class: "w-6 h-6" }, null, _parent3, _scopeId2));
-                  _push3(`</div><div class="text-right"${_scopeId2}><div class="text-2xl font-bold text-orange-600 dark:text-orange-300"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.uniqueNumbers))}</div><div class="text-sm text-orange-500 dark:text-orange-300 font-medium"${_scopeId2}>ইউনিক নাম্বার</div></div></div><p class="text-sm text-gray-600 dark:text-gray-300"${_scopeId2}>চেক করা মোট নাম্বার সংখ্যা</p>`);
+                  _push3(`<div class="inline-flex items-center justify-center w-10 h-10 bg-orange-500 text-white rounded-xl shadow-lg mb-3"${_scopeId2}>`);
+                  _push3(ssrRenderComponent(unref(PhoneCall), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                  _push3(`</div><div class="text-2xl font-bold text-orange-600 dark:text-orange-300 mb-1"${_scopeId2}>${ssrInterpolate(unref(formatBengaliNumber)(stats.value.uniqueNumbers))}</div><div class="text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1"${_scopeId2}>ইউনিক নাম্বার</div><p class="text-xs text-gray-500 dark:text-gray-400"${_scopeId2}>চেক করা মোট নাম্বার সংখ্যা</p>`);
                 } else {
                   return [
-                    createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                      createVNode("div", { class: "p-3 bg-orange-500 text-white rounded-xl shadow-lg" }, [
-                        createVNode(unref(PhoneCall), { class: "w-6 h-6" })
-                      ]),
-                      createVNode("div", { class: "text-right" }, [
-                        createVNode("div", { class: "text-2xl font-bold text-orange-600 dark:text-orange-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.uniqueNumbers)), 1),
-                        createVNode("div", { class: "text-sm text-orange-500 dark:text-orange-300 font-medium" }, "ইউনিক নাম্বার")
-                      ])
+                    createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-orange-500 text-white rounded-xl shadow-lg mb-3" }, [
+                      createVNode(unref(PhoneCall), { class: "w-5 h-5" })
                     ]),
-                    createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "চেক করা মোট নাম্বার সংখ্যা")
+                    createVNode("div", { class: "text-2xl font-bold text-orange-600 dark:text-orange-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.uniqueNumbers)), 1),
+                    createVNode("div", { class: "text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1" }, "ইউনিক নাম্বার"),
+                    createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "চেক করা মোট নাম্বার সংখ্যা")
                   ];
                 }
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</div><div class="text-center mt-6"${_scopeId}><p class="text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1"${_scopeId}>`);
-            _push2(ssrRenderComponent(unref(RefreshCw), { class: "w-4 h-4" }, null, _parent2, _scopeId));
-            _push2(` সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300"${_scopeId}>${ssrInterpolate(lastUpdated.value)}</span></p></div></div></section><section class="container mx-auto px-4 py-8"${_scopeId}>`);
+            _push2(`</div><div class="text-center mt-6"${_scopeId}><p class="text-sm text-gray-500 dark:text-gray-400"${_scopeId}>`);
+            _push2(ssrRenderComponent(unref(RefreshCw), { class: "w-4 h-4 inline-block align-middle mr-1" }, null, _parent2, _scopeId));
+            _push2(`<span class="align-middle"${_scopeId}>সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300"${_scopeId}>${ssrInterpolate(lastUpdated.value)}</span></span></p></div></div></section><section class="container mx-auto px-4 py-8"${_scopeId}>`);
             _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 mb-8 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
@@ -2199,8 +2184,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }, _parent2, _scopeId));
           } else {
             return [
-              createVNode("section", { class: "py-12 px-4" }, [
-                createVNode("div", { class: "container mx-auto" }, [
+              createVNode("section", { class: "py-12 px-4 overflow-visible" }, [
+                createVNode("div", { class: "container mx-auto overflow-visible" }, [
                   createVNode("div", { class: "text-center mb-8" }, [
                     createVNode("h2", { class: "text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2" }, [
                       createVNode(unref(BarChart3), { class: "w-6 h-6 text-indigo-600 dark:text-indigo-400" }),
@@ -2208,73 +2193,59 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     ]),
                     createVNode("p", { class: "text-gray-600 dark:text-gray-300" }, "রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম")
                   ]),
-                  createVNode("div", { class: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" }, [
-                    createVNode(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform" }, {
+                  createVNode("div", { class: "grid grid-cols-2 lg:grid-cols-4 gap-4" }, [
+                    createVNode(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 border-blue-200 dark:border-blue-700 hover:scale-[1.02] transition-transform text-center" }, {
                       default: withCtx(() => [
-                        createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                          createVNode("div", { class: "p-3 bg-blue-500 text-white rounded-xl shadow-lg" }, [
-                            createVNode(unref(Clock), { class: "w-6 h-6" })
-                          ]),
-                          createVNode("div", { class: "text-right" }, [
-                            createVNode("div", { class: "text-2xl font-bold text-blue-600 dark:text-blue-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.lastHour)), 1),
-                            createVNode("div", { class: "text-sm text-blue-500 dark:text-blue-300 font-medium" }, "শেষ ১ ঘন্টায়")
-                          ])
+                        createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-blue-500 text-white rounded-xl shadow-lg mb-3" }, [
+                          createVNode(unref(Clock), { class: "w-5 h-5" })
                         ]),
-                        createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "সর্বশেষ ৬০ মিনিটের সার্চ")
+                        createVNode("div", { class: "text-2xl font-bold text-blue-600 dark:text-blue-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.lastHour)), 1),
+                        createVNode("div", { class: "text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1" }, "শেষ ১ ঘন্টায়"),
+                        createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "সর্বশেষ ৬০ মিনিটের সার্চ")
                       ]),
                       _: 1
                     }),
-                    createVNode(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform" }, {
+                    createVNode(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 border-green-200 dark:border-green-700 hover:scale-[1.02] transition-transform text-center" }, {
                       default: withCtx(() => [
-                        createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                          createVNode("div", { class: "p-3 bg-green-500 text-white rounded-xl shadow-lg" }, [
-                            createVNode(unref(Calendar), { class: "w-6 h-6" })
-                          ]),
-                          createVNode("div", { class: "text-right" }, [
-                            createVNode("div", { class: "text-2xl font-bold text-green-600 dark:text-green-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.today)), 1),
-                            createVNode("div", { class: "text-sm text-green-500 dark:text-green-300 font-medium" }, "আজকের সার্চ")
-                          ])
+                        createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-green-500 text-white rounded-xl shadow-lg mb-3" }, [
+                          createVNode(unref(Calendar), { class: "w-5 h-5" })
                         ]),
-                        createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "আজ রাত ১২টা থেকে এখন পর্যন্ত")
+                        createVNode("div", { class: "text-2xl font-bold text-green-600 dark:text-green-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.today)), 1),
+                        createVNode("div", { class: "text-sm text-green-500 dark:text-green-300 font-semibold mb-1" }, "আজকের সার্চ"),
+                        createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "আজ রাত ১২টা থেকে এখন পর্যন্ত")
                       ]),
                       _: 1
                     }),
-                    createVNode(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform" }, {
+                    createVNode(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 border-purple-200 dark:border-purple-700 hover:scale-[1.02] transition-transform text-center" }, {
                       default: withCtx(() => [
-                        createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                          createVNode("div", { class: "p-3 bg-purple-500 text-white rounded-xl shadow-lg" }, [
-                            createVNode(unref(Infinity), { class: "w-6 h-6" })
-                          ]),
-                          createVNode("div", { class: "text-right" }, [
-                            createVNode("div", { class: "text-2xl font-bold text-purple-600 dark:text-purple-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.allTime)), 1),
-                            createVNode("div", { class: "text-sm text-purple-500 dark:text-purple-300 font-medium" }, "সর্বমোট সার্চ")
-                          ])
+                        createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-purple-500 text-white rounded-xl shadow-lg mb-3" }, [
+                          createVNode(unref(Infinity), { class: "w-5 h-5" })
                         ]),
-                        createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "সর্বকালের মোট সার্চ সংখ্যা")
+                        createVNode("div", { class: "text-2xl font-bold text-purple-600 dark:text-purple-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.allTime)), 1),
+                        createVNode("div", { class: "text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1" }, "সর্বমোট সার্চ"),
+                        createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "সর্বকালের মোট সার্চ সংখ্যা")
                       ]),
                       _: 1
                     }),
-                    createVNode(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform" }, {
+                    createVNode(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/50 dark:to-orange-800/50 border-orange-200 dark:border-orange-700 hover:scale-[1.02] transition-transform text-center" }, {
                       default: withCtx(() => [
-                        createVNode("div", { class: "flex items-center justify-between mb-4" }, [
-                          createVNode("div", { class: "p-3 bg-orange-500 text-white rounded-xl shadow-lg" }, [
-                            createVNode(unref(PhoneCall), { class: "w-6 h-6" })
-                          ]),
-                          createVNode("div", { class: "text-right" }, [
-                            createVNode("div", { class: "text-2xl font-bold text-orange-600 dark:text-orange-300" }, toDisplayString(unref(formatBengaliNumber)(stats.value.uniqueNumbers)), 1),
-                            createVNode("div", { class: "text-sm text-orange-500 dark:text-orange-300 font-medium" }, "ইউনিক নাম্বার")
-                          ])
+                        createVNode("div", { class: "inline-flex items-center justify-center w-10 h-10 bg-orange-500 text-white rounded-xl shadow-lg mb-3" }, [
+                          createVNode(unref(PhoneCall), { class: "w-5 h-5" })
                         ]),
-                        createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-300" }, "চেক করা মোট নাম্বার সংখ্যা")
+                        createVNode("div", { class: "text-2xl font-bold text-orange-600 dark:text-orange-300 mb-1" }, toDisplayString(unref(formatBengaliNumber)(stats.value.uniqueNumbers)), 1),
+                        createVNode("div", { class: "text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1" }, "ইউনিক নাম্বার"),
+                        createVNode("p", { class: "text-xs text-gray-500 dark:text-gray-400" }, "চেক করা মোট নাম্বার সংখ্যা")
                       ]),
                       _: 1
                     })
                   ]),
                   createVNode("div", { class: "text-center mt-6" }, [
-                    createVNode("p", { class: "text-sm text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1" }, [
-                      createVNode(unref(RefreshCw), { class: "w-4 h-4" }),
-                      createTextVNode(" সর্বশেষ আপডেট: "),
-                      createVNode("span", { class: "font-medium text-gray-700 dark:text-gray-300" }, toDisplayString(lastUpdated.value), 1)
+                    createVNode("p", { class: "text-sm text-gray-500 dark:text-gray-400" }, [
+                      createVNode(unref(RefreshCw), { class: "w-4 h-4 inline-block align-middle mr-1" }),
+                      createVNode("span", { class: "align-middle" }, [
+                        createTextVNode("সর্বশেষ আপডেট: "),
+                        createVNode("span", { class: "font-medium text-gray-700 dark:text-gray-300" }, toDisplayString(lastUpdated.value), 1)
+                      ])
                     ])
                   ])
                 ])

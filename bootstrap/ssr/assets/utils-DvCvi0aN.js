@@ -1,5 +1,3 @@
-import { defineComponent, computed, mergeProps, useSSRContext } from "vue";
-import { ssrRenderAttrs, ssrRenderSlot } from "vue/server-renderer";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 function cn(...inputs) {
@@ -10,6 +8,9 @@ function convertToBengaliNumbers(number) {
   return number.toString().replace(/[0-9]/g, (digit) => bengaliDigits[parseInt(digit)]);
 }
 function formatBengaliNumber(number) {
+  if (number === null || number === void 0 || isNaN(number)) {
+    return "০";
+  }
   const formattedNumber = Math.round(number).toLocaleString("en-US");
   return convertToBengaliNumbers(formattedNumber);
 }
@@ -46,35 +47,7 @@ function formatBengaliDate(dateString) {
   const year = convertToBengaliNumbers(date.getFullYear());
   return `${day} ${month} ${year}`;
 }
-const _sfc_main = /* @__PURE__ */ defineComponent({
-  __name: "Card",
-  __ssrInlineRender: true,
-  props: {
-    class: {}
-  },
-  setup(__props) {
-    const props = __props;
-    const classes = computed(
-      () => cn(
-        "rounded-xl border border-border bg-card text-card-foreground shadow-sm",
-        props.class
-      )
-    );
-    return (_ctx, _push, _parent, _attrs) => {
-      _push(`<div${ssrRenderAttrs(mergeProps({ class: classes.value }, _attrs))}>`);
-      ssrRenderSlot(_ctx.$slots, "default", {}, null, _push, _parent);
-      _push(`</div>`);
-    };
-  }
-});
-const _sfc_setup = _sfc_main.setup;
-_sfc_main.setup = (props, ctx) => {
-  const ssrContext = useSSRContext();
-  (ssrContext.modules || (ssrContext.modules = /* @__PURE__ */ new Set())).add("resources/js/components/ui/Card.vue");
-  return _sfc_setup ? _sfc_setup(props, ctx) : void 0;
-};
 export {
-  _sfc_main as _,
   formatBengaliDate as a,
   convertToBengaliNumbers as b,
   cn as c,

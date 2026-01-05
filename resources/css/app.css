@@ -72,6 +72,12 @@
     }
     body {
         @apply bg-background text-foreground;
+        font-family: 'Poppins', 'Hind Siliguri', ui-sans-serif, system-ui, sans-serif;
+        line-height: 1.6;
+    }
+    /* Fix for Bengali text clipping */
+    html {
+        line-height: 1.6;
     }
     button:not(:disabled),
     [role="button"]:not(:disabled) {
@@ -194,4 +200,11 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+}
+
+/* Bengali text fix - prevent clipping of Bengali characters */
+.bengali-text,
+[lang="bn"] {
+    line-height: 1.8;
+    padding-top: 0.1em;
 }

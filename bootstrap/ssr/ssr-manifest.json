@@ -1,6 +1,6 @@
 {
   "\u0000plugin-vue:export-helper": [
-    "/build/assets/Download-BgiuXk4g.js",
+    "/build/assets/Download-WXLyS6YX.js",
     "/build/assets/Download-L9uYd-_F.css"
   ],
   "node_modules/@inertiajs/vue3/dist/index.esm.js": [],
@@ -12,105 +12,111 @@
     "/build/assets/AppLayout-BWjM9ngr.js"
   ],
   "resources/js/Pages/About.vue": [
-    "/build/assets/About-1Z0R8NtQ.js"
+    "/build/assets/About-DPZEQvHG.js"
   ],
   "resources/js/Pages/About.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/About-1Z0R8NtQ.js"
+    "/build/assets/About-DPZEQvHG.js"
   ],
   "resources/js/Pages/Api/Documentation.vue": [
-    "/build/assets/Documentation-C3pxmEYE.js"
+    "/build/assets/Documentation-CLOAp423.js"
   ],
   "resources/js/Pages/Api/Documentation.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Documentation-C3pxmEYE.js"
+    "/build/assets/Documentation-CLOAp423.js"
   ],
   "resources/js/Pages/Auth/Login.vue": [
-    "/build/assets/Login-D1CgSrTC.js"
+    "/build/assets/Login-D9tplw9A.js"
   ],
   "resources/js/Pages/Auth/Login.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Login-D1CgSrTC.js"
+    "/build/assets/Login-D9tplw9A.js"
   ],
   "resources/js/Pages/Auth/Register.vue": [
-    "/build/assets/Register-iPg57RRW.js"
+    "/build/assets/Register-CuDVGZJl.js"
   ],
   "resources/js/Pages/Auth/Register.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Register-iPg57RRW.js"
+    "/build/assets/Register-CuDVGZJl.js"
   ],
   "resources/js/Pages/Dashboard/Index.vue": [
-    "/build/assets/Index-D87cFxuM.js"
+    "/build/assets/Index-divLj9Js.js"
   ],
   "resources/js/Pages/Dashboard/Index.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Index-D87cFxuM.js"
+    "/build/assets/Index-divLj9Js.js"
   ],
   "resources/js/Pages/Download.vue": [
-    "/build/assets/Download-BgiuXk4g.js",
+    "/build/assets/Download-WXLyS6YX.js",
     "/build/assets/Download-L9uYd-_F.css"
   ],
   "resources/js/Pages/Download.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Download-BgiuXk4g.js",
+    "/build/assets/Download-WXLyS6YX.js",
     "/build/assets/Download-L9uYd-_F.css"
   ],
   "resources/js/Pages/Pricing/Index.vue": [
-    "/build/assets/Index-DdRwGvfn.js"
+    "/build/assets/Index-D9t7g3Wp.js"
   ],
   "resources/js/Pages/Pricing/Index.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Index-DdRwGvfn.js"
+    "/build/assets/Index-D9t7g3Wp.js"
+  ],
+  "resources/js/Pages/WebsiteSubscriptions/Index.vue": [
+    "/build/assets/Index-mYeqE4Nu.js"
+  ],
+  "resources/js/Pages/WebsiteSubscriptions/Index.vue?vue&type=script&setup=true&lang.ts": [
+    "/build/assets/Index-mYeqE4Nu.js"
   ],
   "resources/js/Pages/Welcome.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/Pages/Welcome.vue?vue&type=style&index=0&lang.css": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/Badge.vue": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/Badge.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/Button.vue": [
-    "/build/assets/Button-AaQimkH7.js"
+    "/build/assets/Button-Dm3W5gAW.js"
   ],
   "resources/js/components/ui/Button.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Button-AaQimkH7.js"
+    "/build/assets/Button-Dm3W5gAW.js"
   ],
   "resources/js/components/ui/Card.vue": [
-    "/build/assets/Card-BKxb1AUA.js"
+    "/build/assets/Card-DfyUDDxC.js"
   ],
   "resources/js/components/ui/Card.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Card-BKxb1AUA.js"
+    "/build/assets/Card-DfyUDDxC.js"
   ],
   "resources/js/components/ui/Input.vue": [
-    "/build/assets/Label-DkFFRWIJ.js"
+    "/build/assets/Input-DYYSdVaj.js"
   ],
   "resources/js/components/ui/Input.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Label-DkFFRWIJ.js"
+    "/build/assets/Input-DYYSdVaj.js"
   ],
   "resources/js/components/ui/Modal.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/Modal.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/Progress.vue": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/Progress.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/StarRating.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/StarRating.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/Toast.vue": [
@@ -120,79 +126,85 @@
     "/build/assets/AppLayout-BWjM9ngr.js"
   ],
   "resources/js/components/ui/alert/Alert.vue": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/alert/Alert.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/alert/AlertDescription.vue": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/alert/AlertDescription.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/alert/AlertTitle.vue": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
   ],
   "resources/js/components/ui/alert/AlertTitle.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/AlertDescription-CA6uqSiP.js"
+    "/build/assets/AlertDescription-DsjVZstT.js"
+  ],
+  "resources/js/components/ui/input/Input.vue": [
+    "/build/assets/Index-mYeqE4Nu.js"
+  ],
+  "resources/js/components/ui/input/Input.vue?vue&type=script&setup=true&lang.ts": [
+    "/build/assets/Index-mYeqE4Nu.js"
   ],
   "resources/js/components/ui/label/Label.vue": [
-    "/build/assets/Label-DkFFRWIJ.js"
+    "/build/assets/Label-Cl3p6AAe.js"
   ],
   "resources/js/components/ui/label/Label.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Label-DkFFRWIJ.js"
+    "/build/assets/Label-Cl3p6AAe.js"
   ],
   "resources/js/components/ui/table/Table.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/Table.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableBody.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableBody.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableCell.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableCell.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableHead.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableHead.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableHeader.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableHeader.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableRow.vue": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/components/ui/table/TableRow.vue?vue&type=script&setup=true&lang.ts": [
-    "/build/assets/Welcome-gJU7t4v2.js",
+    "/build/assets/Welcome-C3O4VFOg.js",
     "/build/assets/Welcome-BKRXyASz.css"
   ],
   "resources/js/lib/utils.ts": [
-    "/build/assets/Card-BKxb1AUA.js"
+    "/build/assets/utils-DvCvi0aN.js"
   ],
   "resources/js/ssr.ts": []
 }

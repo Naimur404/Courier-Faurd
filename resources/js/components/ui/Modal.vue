@@ -60,9 +60,12 @@ watch(() => props.open, (newValue) => {
         >
             <div
                 v-if="open"
-                class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+                class="modal-backdrop fixed inset-0 z-50 flex items-center justify-center p-4"
                 @click="handleClickOutside"
             >
+                <!-- Backdrop -->
+                <div class="absolute inset-0 bg-black/50"></div>
+                
                 <Transition
                     enter-active-class="transition-all duration-200 ease-out"
                     enter-from-class="opacity-0 scale-95"
@@ -73,7 +76,7 @@ watch(() => props.open, (newValue) => {
                 >
                     <div
                         v-if="open"
-                        :class="cn('bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl relative', props.class)"
+                        :class="cn('relative bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full shadow-2xl', props.class)"
                     >
                         <button
                             @click="close"
