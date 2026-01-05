@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerReview;
+use App\Models\BdCourierToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
@@ -210,103 +211,76 @@ class CourierApiController extends Controller
     }
 
     /**
-     * Get the active token for API calls
-     * Implements token rotation with cooldown
+     * Get the active token for API calls from database
+     * Implements token rotation with cooldown until midnight BDT
      */
     private function getActiveToken()
     {
-        $token1 = env('BDCOURIER_TOKEN_1');
-        $token2 = env('BDCOURIER_TOKEN_2');
-        $cooldownMinutes = (int) env('BDCOURIER_TOKEN_COOLDOWN_MINUTES', 30);
+        $token = BdCourierToken::getAvailableToken();
         
-        // Get token status from cache
-        $token1Cooldown = Cache::get('bdcourier_token1_cooldown');
-        $token2Cooldown = Cache::get('bdcourier_token2_cooldown');
-        
-        // If token 1 is not on cooldown, use it
-        if (!$token1Cooldown && $token1) {
-            return ['token' => $token1, 'key' => 'token1'];
+        if ($token) {
+            return ['token' => $token->token, 'model' => $token];
         }
         
-        // If token 2 is not on cooldown, use it
-        if (!$token2Cooldown && $token2) {
-            return ['token' => $token2, 'key' => 'token2'];
-        }
-        
-        // Both on cooldown - check which one expires first
-        $token1ExpiresAt = Cache::get('bdcourier_token1_cooldown_expires');
-        $token2ExpiresAt = Cache::get('bdcourier_token2_cooldown_expires');
-        
-        if ($token1ExpiresAt && $token2ExpiresAt) {
-            if ($token1ExpiresAt < $token2ExpiresAt) {
-                return ['token' => $token1, 'key' => 'token1'];
-            }
-            return ['token' => $token2, 'key' => 'token2'];
-        }
-        
-        return ['token' => $token1, 'key' => 'token1'];
+        // No tokens available - all on cooldown
+        Log::warning("All BDCourier tokens are on cooldown!");
+        return ['token' => null, 'model' => null];
     }
 
     /**
      * Put a token on cooldown until midnight BDT (Bangladesh Time)
-     * Token will be available again at 12:00 AM BDT
      */
-    private function putTokenOnCooldown($tokenKey)
+    private function putTokenOnCooldown($tokenModel)
     {
-        // Get current time in Bangladesh timezone
-        $nowBDT = now()->timezone('Asia/Dhaka');
-        
-        // Calculate midnight BDT (next day at 00:00:00)
-        $midnightBDT = $nowBDT->copy()->addDay()->startOfDay();
-        
-        // Convert to UTC for cache storage
-        $expiresAt = $midnightBDT->timezone('UTC');
-        
-        Cache::put("bdcourier_{$tokenKey}_cooldown", true, $expiresAt);
-        Cache::put("bdcourier_{$tokenKey}_cooldown_expires", $expiresAt, $expiresAt);
-        
-        Log::info("BDCourier {$tokenKey} put on cooldown until midnight BDT ({$midnightBDT->format('Y-m-d H:i:s')} BDT)");
+        if ($tokenModel instanceof BdCourierToken) {
+            $tokenModel->putOnCooldown();
+        }
     }
 
     /**
-     * Mark token as working (remove from cooldown)
+     * Record successful usage of token
      */
-    private function markTokenAsWorking($tokenKey)
+    private function markTokenAsWorking($tokenModel)
     {
-        Cache::forget("bdcourier_{$tokenKey}_cooldown");
-        Cache::forget("bdcourier_{$tokenKey}_cooldown_expires");
+        if ($tokenModel instanceof BdCourierToken) {
+            $tokenModel->recordUsage();
+        }
     }
 
     /**
      * Call primary courier API with token rotation
+     * Uses database-based token management
      */
     private function callCourierApi($phone)
     {
-        $activeToken = $this->getActiveToken();
-        $result = $this->makeApiCall($phone, $activeToken['token']);
+        // Get all available tokens and try them one by one
+        $maxAttempts = BdCourierToken::where('is_active', true)->count();
+        $attemptedTokenIds = [];
         
-        if ($result !== null) {
-            $this->markTokenAsWorking($activeToken['key']);
-            return $result;
-        }
-        
-        $this->putTokenOnCooldown($activeToken['key']);
-        
-        $token1 = env('BDCOURIER_TOKEN_1');
-        $token2 = env('BDCOURIER_TOKEN_2');
-        $otherToken = $activeToken['key'] === 'token1' 
-            ? ['token' => $token2, 'key' => 'token2']
-            : ['token' => $token1, 'key' => 'token1'];
-        
-        if ($otherToken['token']) {
-            $result = $this->makeApiCall($phone, $otherToken['token']);
+        for ($i = 0; $i < $maxAttempts; $i++) {
+            $activeToken = $this->getActiveToken();
+            
+            if (!$activeToken['token'] || !$activeToken['model']) {
+                Log::warning("No available tokens for API call");
+                break;
+            }
+            
+            // Skip if we already tried this token
+            if (in_array($activeToken['model']->id, $attemptedTokenIds)) {
+                break;
+            }
+            $attemptedTokenIds[] = $activeToken['model']->id;
+            
+            $result = $this->makeApiCall($phone, $activeToken['token']);
             
             if ($result !== null) {
-                $this->markTokenAsWorking($otherToken['key']);
+                // Success - record usage
+                $this->markTokenAsWorking($activeToken['model']);
                 return $result;
             }
             
-            $this->putTokenOnCooldown($otherToken['key']);
+            // Token failed - put on cooldown and try next
+            $this->putTokenOnCooldown($activeToken['model']);
         }
         
         return null;
