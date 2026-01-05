@@ -466,11 +466,11 @@ onUnmounted(() => {
         <section class="py-12 px-4 overflow-visible">
             <div class="container mx-auto overflow-visible">
                 <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2">
+                    <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-2 flex items-center justify-center gap-2 heading-bengali">
                         <BarChart3 class="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
                         সার্চ পরিসংখ্যান
                     </h2>
-                    <p class="text-gray-600 dark:text-gray-300">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
+                    <p class="text-gray-600 dark:text-gray-300 text-bengali-body">রিয়েল-টাইম সার্চ ডেটা এবং ব্যবহারকারীর কার্যক্রম</p>
                 </div>
                 
                 <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -482,8 +482,8 @@ onUnmounted(() => {
                         <div class="text-2xl font-bold text-blue-600 dark:text-blue-300 mb-1">
                             {{ formatBengaliNumber(stats.lastHour) }}
                         </div>
-                        <div class="text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1">শেষ ১ ঘন্টায়</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">সর্বশেষ ৬০ মিনিটের সার্চ</p>
+                        <div class="text-sm text-blue-500 dark:text-blue-300 font-semibold mb-1 font-bengali">শেষ ১ ঘন্টায়</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-bengali-body">সর্বশেষ ৬০ মিনিটের সার্চ</p>
                     </Card>
                     
                     <!-- Today -->
@@ -494,8 +494,8 @@ onUnmounted(() => {
                         <div class="text-2xl font-bold text-green-600 dark:text-green-300 mb-1">
                             {{ formatBengaliNumber(stats.today) }}
                         </div>
-                        <div class="text-sm text-green-500 dark:text-green-300 font-semibold mb-1">আজকের সার্চ</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">আজ রাত ১২টা থেকে এখন পর্যন্ত</p>
+                        <div class="text-sm text-green-500 dark:text-green-300 font-semibold mb-1 font-bengali">আজকের সার্চ</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-bengali-body">আজ রাত ১২টা থেকে এখন পর্যন্ত</p>
                     </Card>
                     
                     <!-- All Time -->
@@ -506,8 +506,8 @@ onUnmounted(() => {
                         <div class="text-2xl font-bold text-purple-600 dark:text-purple-300 mb-1">
                             {{ formatBengaliNumber(stats.allTime) }}
                         </div>
-                        <div class="text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1">সর্বমোট সার্চ</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">সর্বকালের মোট সার্চ সংখ্যা</p>
+                        <div class="text-sm text-purple-500 dark:text-purple-300 font-semibold mb-1 font-bengali">সর্বমোট সার্চ</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-bengali-body">সর্বকালের মোট সার্চ সংখ্যা</p>
                     </Card>
                     
                     <!-- Unique Numbers -->
@@ -518,8 +518,8 @@ onUnmounted(() => {
                         <div class="text-2xl font-bold text-orange-600 dark:text-orange-300 mb-1">
                             {{ formatBengaliNumber(stats.uniqueNumbers) }}
                         </div>
-                        <div class="text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1">ইউনিক নাম্বার</div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">চেক করা মোট নাম্বার সংখ্যা</p>
+                        <div class="text-sm text-orange-500 dark:text-orange-300 font-semibold mb-1 font-bengali">ইউনিক নাম্বার</div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-bengali-body">চেক করা মোট নাম্বার সংখ্যা</p>
                     </Card>
                 </div>
                 
@@ -538,10 +538,10 @@ onUnmounted(() => {
             <!-- Search Bar -->
             <Card class="p-4 mb-4 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800">
                 <div class="text-center mb-3">
-                    <h1 class="text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1">
+                    <h1 class="text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1 heading-bengali">
                         কুরিয়ার ফ্রড চেক করুন
                     </h1>
-                    <p class="text-sm text-gray-600 dark:text-gray-400">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 text-bengali-body">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p>
                 </div>
                 <div class="flex flex-col md:flex-row gap-3 max-w-xl mx-auto">
                     <div class="relative flex-1">

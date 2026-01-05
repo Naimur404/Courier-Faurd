@@ -148,7 +148,7 @@ const closeMoreMenu = () => {
                             :key="link.href"
                             :href="link.href"
                             :class="[
-                                'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all font-bengali',
                                 isActiveRoute(link.href)
                                     ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
                                     : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'

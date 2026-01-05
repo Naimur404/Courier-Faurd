@@ -11,8 +11,9 @@
 @source "../**/*.vue";
 
 @theme {
-    --font-sans: 'Poppins', 'Hind Siliguri', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Noto Sans Bengali', 'Hind Siliguri', 'Mukti', 'SutonnyMJ', 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-bengali: 'Noto Sans Bengali', 'Hind Siliguri', 'Mukti', 'SolaimanLipi', sans-serif;
+    --font-english: 'Inter', 'Poppins', ui-sans-serif, system-ui, sans-serif;
     
     --color-primary: #4f46e5;
     --color-secondary: #f97316;
@@ -75,7 +76,7 @@
     }
     body {
         @apply bg-background text-foreground;
-        font-family: 'Poppins', 'Hind Siliguri', ui-sans-serif, system-ui, sans-serif;
+        font-family: var(--font-sans);
         line-height: 1.6;
     }
     /* Fix for Bengali text clipping */
@@ -210,4 +211,70 @@
 [lang="bn"] {
     line-height: 1.8;
     padding-top: 0.1em;
+}
+
+/* Enhanced Bengali Typography */
+@layer utilities {
+    /* Bengali Font Classes */
+    .font-bengali {
+        font-family: var(--font-bengali);
+    }
+    
+    .font-english {
+        font-family: var(--font-english);
+    }
+    
+    .font-noto-bengali {
+        font-family: 'Noto Sans Bengali', sans-serif;
+    }
+    
+    .font-hind-siliguri {
+        font-family: 'Hind Siliguri', sans-serif;
+    }
+    
+    .font-mukti {
+        font-family: 'Mukti', sans-serif;
+    }
+    
+    .font-solaimanlpi {
+        font-family: 'SolaimanLipi', sans-serif;
+    }
+    
+    /* Bengali Text Styling */
+    .text-bengali {
+        line-height: 1.7;
+        letter-spacing: 0.02em;
+        word-spacing: 0.1em;
+    }
+    
+    .text-bengali-title {
+        line-height: 1.4;
+        letter-spacing: 0.01em;
+        font-weight: 600;
+    }
+    
+    .text-bengali-body {
+        line-height: 1.8;
+        letter-spacing: 0.025em;
+        word-spacing: 0.05em;
+    }
+    
+    /* Responsive Bengali Text */
+    .text-bengali-responsive {
+        @apply text-sm md:text-base lg:text-lg;
+        line-height: 1.8;
+    }
+    
+    /* Bengali heading styles */
+    .heading-bengali {
+        font-family: 'Noto Sans Bengali', 'Hind Siliguri', sans-serif;
+        line-height: 1.3;
+        letter-spacing: 0.01em;
+    }
+    
+    /* Mixed language support */
+    .text-mixed-lang {
+        font-family: 'Noto Sans Bengali', 'Inter', sans-serif;
+        line-height: 1.7;
+    }
 }

@@ -43,7 +43,27 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bengali Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=Kalpurush&family=SolaimanLipi&display=swap" rel="stylesheet">
+    <!-- English Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bengali Web Fonts from local CDN -->
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/banglafont.css');
+        
+        /* Custom Bengali font loading */
+        @font-face {
+            font-family: 'Mukti';
+            src: url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/fonts/Mukti.woff2') format('woff2');
+            font-display: swap;
+        }
+        
+        @font-face {
+            font-family: 'SutonnyMJ';
+            src: url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/fonts/SutonnyMJ.woff2') format('woff2');
+            font-display: swap;
+        }
+    </style>
     
     <!-- Scripts -->
     @vite(['resources/js/app.ts'])
