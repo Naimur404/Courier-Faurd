@@ -7,6 +7,10 @@ import Card from '@/components/ui/Card.vue';
 import Input from '@/components/ui/Input.vue';
 import Modal from '@/components/ui/Modal.vue';
 import StarRating from '@/components/ui/StarRating.vue';
+import Badge from '@/components/ui/Badge.vue';
+import Progress from '@/components/ui/Progress.vue';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/components/ui/table';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { 
     Search, Phone, Clock, Calendar, Infinity, PhoneCall,
     Shield, TrendingUp, History, ChevronDown, ChevronUp,
@@ -393,25 +397,31 @@ onUnmounted(() => {
         <!-- Search Section -->
         <section class="container mx-auto px-4 py-8">
             <!-- Search Bar -->
-            <Card class="p-6 mb-6">
-                <div class="flex flex-col md:flex-row gap-4">
+            <Card class="p-6 mb-8 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        কুরিয়ার ফ্রড চেক করুন
+                    </h1>
+                    <p class="text-gray-600 dark:text-gray-400">মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p>
+                </div>
+                <div class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto">
                     <div class="relative flex-1">
                         <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <Phone class="h-5 w-5 text-gray-400" />
+                            <Phone class="h-5 w-5 text-indigo-500" />
                         </div>
                         <input
                             v-model="phoneInput"
                             type="text"
-                            placeholder="Enter Mobile Number (e.g., 01600000000)"
-                            class="w-full pl-12 p-4 border border-gray-300 dark:border-gray-600 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white transition duration-300"
+                            placeholder="মোবাইল নাম্বার লিখুন (যেমন: 01600000000)"
+                            class="w-full pl-12 p-4 border-2 border-indigo-200 dark:border-indigo-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-lg"
                             @keypress.enter="performSearch"
                         />
                     </div>
                     <Button 
-                        size="lg" 
+                        size="xl" 
                         :loading="isSearching"
                         @click="performSearch"
-                        class="min-w-[180px]"
+                        class="min-w-[200px] shadow-lg shadow-indigo-500/25"
                     >
                         <Search class="w-5 h-5 mr-2" />
                         রিপোর্ট দেখুন
@@ -420,226 +430,288 @@ onUnmounted(() => {
             </Card>
             
             <!-- Loading State -->
-            <div v-if="isSearching" class="text-center py-12">
-                <div class="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent mx-auto mb-4"></div>
-                <p class="text-gray-600 dark:text-gray-400">Analyzing delivery history...</p>
+            <div v-if="isSearching" class="text-center py-16">
+                <div class="relative w-20 h-20 mx-auto mb-6">
+                    <div class="absolute inset-0 rounded-full border-4 border-indigo-200 dark:border-indigo-800"></div>
+                    <div class="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+                    <Shield class="absolute inset-0 m-auto w-8 h-8 text-indigo-600" />
+                </div>
+                <p class="text-gray-600 dark:text-gray-400 text-lg">ডেলিভারি ইতিহাস বিশ্লেষণ করা হচ্ছে...</p>
             </div>
             
-            <!-- Results Grid -->
-            <div v-else-if="searchResults" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Left Panel - Delivery Success Ratio -->
-                <Card class="p-6">
-                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2">
-                        <PieChart class="w-5 h-5 text-indigo-600" />
+            <!-- Main Content Grid - Always Show -->
+            <div v-else class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Left Panel - Delivery Success Ratio (Always Visible) -->
+                <Card class="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700">
+                    <h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                        <div class="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg">
+                            <PieChart class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                        </div>
                         Delivery Success Ratio
                     </h2>
                     
                     <!-- Progress Ring -->
                     <div class="flex justify-center mb-6">
-                        <div class="relative w-40 h-40">
-                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                        <div class="relative w-44 h-44">
+                            <!-- Decorative rings -->
+                            <div class="absolute inset-0 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-700 animate-spin" style="animation-duration: 20s;"></div>
+                            <div class="absolute inset-2 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner"></div>
+                            
+                            <svg class="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transform -rotate-90" viewBox="0 0 100 100">
                                 <circle
                                     class="text-gray-200 dark:text-gray-700 stroke-current"
-                                    stroke-width="8"
+                                    stroke-width="10"
                                     fill="transparent"
-                                    r="42"
+                                    r="40"
                                     cx="50"
                                     cy="50"
                                 />
                                 <circle
                                     class="stroke-current transition-all duration-1000 ease-out"
-                                    :style="{ color: getColorForRatio(successRatio) }"
-                                    stroke-width="8"
+                                    :style="{ color: searchResults ? getColorForRatio(successRatio) : '#6366f1' }"
+                                    stroke-width="10"
                                     stroke-linecap="round"
                                     fill="transparent"
-                                    r="42"
+                                    r="40"
                                     cx="50"
                                     cy="50"
-                                    :stroke-dasharray="264"
-                                    :stroke-dashoffset="264 - (264 * successRatio / 100)"
+                                    :stroke-dasharray="251"
+                                    :stroke-dashoffset="searchResults ? 251 - (251 * successRatio / 100) : 251"
                                 />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                <span class="text-3xl font-bold">{{ successRatio.toFixed(1) }}%</span>
-                                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">{{ ratingText }}</span>
+                                <span class="text-4xl font-bold" :class="searchResults ? '' : 'text-gray-400 dark:text-gray-500'">
+                                    {{ searchResults ? successRatio.toFixed(1) : '0' }}%
+                                </span>
+                                <span class="text-sm font-medium px-3 py-1 rounded-full mt-1" :class="{
+                                    'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300': searchResults && ratingText === 'Excellent',
+                                    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300': searchResults && ratingText === 'Good',
+                                    'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300': searchResults && ratingText === 'Poor',
+                                    'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400': !searchResults || ratingText === 'New',
+                                }">
+                                    {{ searchResults ? ratingText : 'N/A' }}
+                                </span>
                             </div>
                         </div>
                     </div>
                     
+                    <!-- Status Message -->
+                    <div class="text-center mb-6 p-4 rounded-xl" :class="{
+                        'bg-gray-100 dark:bg-gray-800': !searchResults,
+                        'bg-green-50 dark:bg-green-900/30': searchResults && riskLevel.level === 'low',
+                        'bg-yellow-50 dark:bg-yellow-900/30': searchResults && riskLevel.level === 'medium',
+                        'bg-red-50 dark:bg-red-900/30': searchResults && riskLevel.level === 'high',
+                    }">
+                        <p class="text-gray-600 dark:text-gray-400" v-if="!searchResults">
+                            <Phone class="w-5 h-5 inline-block mr-1 -mt-1" />
+                            মোবাইল নাম্বার দিয়ে সার্চ করুন
+                        </p>
+                        <p v-else class="font-medium" :class="{
+                            'text-green-700 dark:text-green-300': riskLevel.level === 'low',
+                            'text-yellow-700 dark:text-yellow-300': riskLevel.level === 'medium',
+                            'text-red-700 dark:text-red-300': riskLevel.level === 'high',
+                            'text-gray-600 dark:text-gray-400': riskLevel.level === 'unknown',
+                        }">
+                            {{ riskLevel.level === 'low' ? 'এই গ্রাহক বিশ্বস্ত!' : 
+                               riskLevel.level === 'medium' ? 'সতর্কতার সাথে এগিয়ে যান' :
+                               riskLevel.level === 'high' ? 'উচ্চ ঝুঁকিপূর্ণ গ্রাহক!' : 'ডেলিভারি ইতিহাস নেই' }}
+                        </p>
+                    </div>
+                    
                     <!-- Risk Indicator -->
                     <div 
-                        class="text-center py-3 px-4 rounded-xl text-white flex items-center justify-center gap-2 font-medium"
+                        class="text-center py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all duration-300"
                         :class="{
-                            'bg-green-500': riskLevel.level === 'low',
-                            'bg-yellow-500': riskLevel.level === 'medium',
-                            'bg-red-500': riskLevel.level === 'high',
-                            'bg-gray-500': riskLevel.level === 'unknown',
+                            'bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30': searchResults && riskLevel.level === 'low',
+                            'bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30': searchResults && riskLevel.level === 'medium',
+                            'bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/30': searchResults && riskLevel.level === 'high',
+                            'bg-gradient-to-r from-gray-400 to-gray-500 text-white': !searchResults || riskLevel.level === 'unknown',
                         }"
                     >
-                        <component :is="riskLevel.icon" class="w-5 h-5" />
-                        {{ riskLevel.label }}
+                        <component :is="searchResults ? riskLevel.icon : HelpCircle" class="w-5 h-5" />
+                        {{ searchResults ? riskLevel.label : 'Waiting for Search' }}
                     </div>
                     
                     <!-- Quote Box -->
-                    <div class="mt-6 p-4 bg-gray-50 dark:bg-gray-700 border-l-4 border-indigo-500 rounded-r-lg italic text-gray-600 dark:text-gray-300">
-                        <template v-if="riskLevel.level === 'low'">
-                            "Reliability is the foundation of trust. This customer's excellent record speaks volumes."
-                        </template>
-                        <template v-else-if="riskLevel.level === 'medium'">
-                            "Trust but verify. While the history is mostly good, occasional issues suggest caution."
-                        </template>
-                        <template v-else-if="riskLevel.level === 'high'">
-                            "Past behavior predicts future actions. The high cancellation rate signals significant risk."
-                        </template>
-                        <template v-else>
-                            "Enter a phone number to analyze the delivery history."
-                        </template>
+                    <div class="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-l-4 border-indigo-500 rounded-r-xl">
+                        <p class="italic text-gray-600 dark:text-gray-300 text-sm">
+                            <template v-if="!searchResults">
+                                "ফোন নম্বর দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।"
+                            </template>
+                            <template v-else-if="riskLevel.level === 'low'">
+                                "বিশ্বাসই সম্পর্কের ভিত্তি। এই গ্রাহকের চমৎকার রেকর্ড অনেক কিছু বলে।"
+                            </template>
+                            <template v-else-if="riskLevel.level === 'medium'">
+                                "বিশ্বাস করুন কিন্তু যাচাই করুন। মাঝে মাঝে সমস্যা সতর্কতার পরামর্শ দেয়।"
+                            </template>
+                            <template v-else-if="riskLevel.level === 'high'">
+                                "অতীত আচরণ ভবিষ্যৎ ক্রিয়াকলাপের পূর্বাভাস দেয়। উচ্চ বাতিল হার উল্লেখযোগ্য ঝুঁকি নির্দেশ করে।"
+                            </template>
+                            <template v-else>
+                                "এই নম্বরের জন্য কোন ডেলিভারি রেকর্ড পাওয়া যায়নি।"
+                            </template>
+                        </p>
                     </div>
                     
                     <!-- Fraud Risk Factors -->
-                    <div class="mt-6">
-                        <h3 class="font-semibold mb-3 flex items-center gap-2">
-                            <Shield class="w-4 h-4 text-indigo-600" />
+                    <div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <h3 class="font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
+                            <Shield class="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                             Fraud Risk Factors
                         </h3>
-                        <ul class="space-y-2">
-                            <li class="flex items-center text-sm gap-2">
-                                <CheckCircle class="w-4 h-4 text-green-500" />
-                                <span>High delivery success rate</span>
+                        <ul class="space-y-3">
+                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg" :class="searchResults && successRatio >= 90 ? 'bg-green-50 dark:bg-green-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
+                                <div class="p-1.5 rounded-full" :class="searchResults && successRatio >= 90 ? 'bg-green-500' : 'bg-gray-300 dark:bg-gray-600'">
+                                    <CheckCircle class="w-3.5 h-3.5 text-white" />
+                                </div>
+                                <span :class="searchResults && successRatio >= 90 ? 'text-green-700 dark:text-green-300 font-medium' : 'text-gray-600 dark:text-gray-400'">
+                                    High delivery success rate
+                                </span>
                             </li>
-                            <li class="flex items-center text-sm gap-2">
-                                <XCircle class="w-4 h-4 text-red-500" />
-                                <span>Multiple cancelled orders</span>
+                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-50 dark:bg-red-900/20' : 'bg-gray-50 dark:bg-gray-700/50'">
+                                <div class="p-1.5 rounded-full" :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'bg-red-500' : 'bg-gray-300 dark:bg-gray-600'">
+                                    <XCircle class="w-3.5 h-3.5 text-white" />
+                                </div>
+                                <span :class="searchResults && searchResults.courierData?.summary?.cancelled_parcel > 3 ? 'text-red-700 dark:text-red-300 font-medium' : 'text-gray-600 dark:text-gray-400'">
+                                    Multiple cancelled orders
+                                </span>
                             </li>
-                            <li class="flex items-center text-sm gap-2">
-                                <AlertCircle class="w-4 h-4 text-yellow-500" />
-                                <span>Inconsistent delivery patterns</span>
+                            <li class="flex items-center text-sm gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                <div class="p-1.5 rounded-full bg-gray-300 dark:bg-gray-600">
+                                    <AlertCircle class="w-3.5 h-3.5 text-white" />
+                                </div>
+                                <span class="text-gray-600 dark:text-gray-400">Inconsistent delivery patterns</span>
                             </li>
                         </ul>
                     </div>
                 </Card>
                 
-                <!-- Right Panel - Results -->
+                <!-- Right Panel -->
                 <div class="lg:col-span-2 space-y-6">
-                    <!-- Message Box -->
-                    <div 
-                        class="p-4 rounded-xl flex items-center gap-4 border-l-4"
-                        :class="{
-                            'bg-green-50 dark:bg-green-900/30 border-green-500': riskLevel.level === 'low',
-                            'bg-yellow-50 dark:bg-yellow-900/30 border-yellow-500': riskLevel.level === 'medium',
-                            'bg-red-50 dark:bg-red-900/30 border-red-500': riskLevel.level === 'high',
-                            'bg-gray-50 dark:bg-gray-900/30 border-gray-500': riskLevel.level === 'unknown',
-                        }"
-                    >
-                        <component 
-                            :is="riskLevel.icon" 
-                            class="w-8 h-8"
-                            :class="{
-                                'text-green-500': riskLevel.level === 'low',
-                                'text-yellow-500': riskLevel.level === 'medium',
-                                'text-red-500': riskLevel.level === 'high',
-                                'text-gray-500': riskLevel.level === 'unknown',
-                            }"
-                        />
-                        <div>
-                            <template v-if="riskLevel.level === 'low'">
-                                <strong>Trusted Customer:</strong> This customer has an excellent delivery history with a {{ successRatio.toFixed(1) }}% success rate.
-                            </template>
-                            <template v-else-if="riskLevel.level === 'medium'">
-                                <strong>Proceed with Caution:</strong> This customer has a generally good history, but with a {{ successRatio.toFixed(1) }}% success rate, some verification is advised.
-                            </template>
-                            <template v-else-if="riskLevel.level === 'high'">
-                                <strong>High Risk Alert:</strong> This customer has a concerning history with only a {{ successRatio.toFixed(1) }}% success rate. Additional verification strongly recommended.
-                            </template>
-                            <template v-else>
-                                <strong>New Customer:</strong> No delivery history available for this number.
-                            </template>
+                    <!-- Show Results if Available -->
+                    <template v-if="searchResults">
+                        <!-- Alert Message Box -->
+                        <Alert 
+                            :variant="riskLevel.level === 'low' ? 'success' : riskLevel.level === 'medium' ? 'warning' : riskLevel.level === 'high' ? 'destructive' : 'default'"
+                            class="border-l-4"
+                        >
+                            <component :is="riskLevel.icon" class="h-5 w-5" />
+                            <AlertTitle class="text-lg">
+                                {{ riskLevel.level === 'low' ? 'বিশ্বস্ত গ্রাহক' : 
+                                   riskLevel.level === 'medium' ? 'সতর্কতার সাথে এগিয়ে যান' :
+                                   riskLevel.level === 'high' ? 'উচ্চ ঝুঁকি সতর্কতা' : 'নতুন গ্রাহক' }}
+                            </AlertTitle>
+                            <AlertDescription>
+                                <template v-if="riskLevel.level === 'low'">
+                                    এই গ্রাহকের {{ successRatio.toFixed(1) }}% সাফল্যের হার সহ চমৎকার ডেলিভারি ইতিহাস রয়েছে।
+                                </template>
+                                <template v-else-if="riskLevel.level === 'medium'">
+                                    {{ successRatio.toFixed(1) }}% সাফল্যের হার সহ সাধারণত ভালো ইতিহাস, তবে কিছু যাচাই করা উচিত।
+                                </template>
+                                <template v-else-if="riskLevel.level === 'high'">
+                                    মাত্র {{ successRatio.toFixed(1) }}% সাফল্যের হার। অতিরিক্ত যাচাই দৃঢ়ভাবে সুপারিশ করা হয়।
+                                </template>
+                                <template v-else>
+                                    এই নম্বরের জন্য কোন ডেলিভারি ইতিহাস পাওয়া যায়নি।
+                                </template>
+                            </AlertDescription>
+                        </Alert>
+                        
+                        <!-- Stats Cards with Progress -->
+                        <div class="grid grid-cols-3 gap-4">
+                            <Card class="p-5 text-center hover:shadow-lg transition-all">
+                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট অর্ডার</div>
+                                <div class="text-4xl font-bold text-primary mb-2">
+                                    {{ searchResults.courierData?.summary?.total_parcel || 0 }}
+                                </div>
+                                <Badge variant="outline" class="text-xs">Total Orders</Badge>
+                            </Card>
+                            
+                            <Card class="p-5 text-center hover:shadow-lg transition-all">
+                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট ডেলিভারি</div>
+                                <div class="text-4xl font-bold text-green-600 dark:text-green-400 mb-2">
+                                    {{ searchResults.courierData?.summary?.success_parcel || 0 }}
+                                </div>
+                                <Badge variant="success" class="text-xs">Delivered</Badge>
+                            </Card>
+                            
+                            <Card class="p-5 text-center hover:shadow-lg transition-all">
+                                <div class="text-sm text-muted-foreground mb-2 font-medium">মোট বাতিল</div>
+                                <div class="text-4xl font-bold text-red-600 dark:text-red-400 mb-2">
+                                    {{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}
+                                </div>
+                                <Badge variant="destructive" class="text-xs">Cancelled</Badge>
+                            </Card>
                         </div>
-                    </div>
-                    
-                    <!-- Stats Cards -->
-                    <div class="grid grid-cols-3 gap-4">
-                        <Card class="p-4 text-center hover:scale-105 transition-transform">
-                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">মোট অর্ডার</div>
-                            <div class="text-3xl font-bold text-indigo-600">
-                                {{ searchResults.courierData?.summary?.total_parcel || 0 }}
-                            </div>
-                            <span class="inline-flex items-center text-xs px-2 py-1 rounded-full bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 mt-2">
-                                Total
-                            </span>
-                        </Card>
                         
-                        <Card class="p-4 text-center hover:scale-105 transition-transform">
-                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">মোট ডেলিভারি</div>
-                            <div class="text-3xl font-bold text-green-500">
-                                {{ searchResults.courierData?.summary?.success_parcel || 0 }}
+                        <!-- Success Rate Progress Bar -->
+                        <Card class="p-5">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-sm font-medium text-muted-foreground">সাফল্যের হার</span>
+                                <Badge :variant="successRatio >= 90 ? 'success' : successRatio >= 70 ? 'warning' : 'destructive'">
+                                    {{ successRatio.toFixed(1) }}%
+                                </Badge>
                             </div>
-                            <span class="inline-flex items-center text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200 mt-2">
-                                Delivered
-                            </span>
+                            <Progress 
+                                :model-value="successRatio" 
+                                class="h-3"
+                                :indicator-class="successRatio >= 90 ? 'bg-green-500' : successRatio >= 70 ? 'bg-yellow-500' : 'bg-red-500'"
+                            />
                         </Card>
-                        
-                        <Card class="p-4 text-center hover:scale-105 transition-transform">
-                            <div class="text-sm text-gray-600 dark:text-gray-400 mb-1">মোট বাতিল</div>
-                            <div class="text-3xl font-bold text-red-500">
-                                {{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}
-                            </div>
-                            <span class="inline-flex items-center text-xs px-2 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200 mt-2">
-                                Cancelled
-                            </span>
-                        </Card>
-                    </div>
                     
                     <!-- Courier Table -->
                     <Card class="p-6">
                         <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-                            <BarChart3 class="w-5 h-5 text-indigo-600" />
+                            <BarChart3 class="w-5 h-5 text-primary" />
                             কুরিয়ার ডিটেইলস
                         </h3>
                         
-                        <div class="overflow-x-auto rounded-lg">
-                            <table class="min-w-full">
-                                <thead>
-                                    <tr class="bg-gray-100 dark:bg-gray-700">
-                                        <th class="py-3 px-4 text-left font-semibold rounded-tl-lg">Courier</th>
-                                        <th class="py-3 px-4 text-left font-semibold">Orders</th>
-                                        <th class="py-3 px-4 text-left font-semibold">Delivered</th>
-                                        <th class="py-3 px-4 text-left font-semibold">Cancelled</th>
-                                        <th class="py-3 px-4 text-left font-semibold rounded-tr-lg">Success Rate</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-200 dark:divide-gray-600">
-                                    <tr 
-                                        v-for="courier in courierList" 
-                                        :key="courier.name"
-                                        class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
-                                    >
-                                        <td class="py-3 px-4">
-                                            <div class="flex items-center gap-2">
-                                                <img 
-                                                    v-if="courier.logo" 
-                                                    :src="courier.logo" 
-                                                    :alt="courier.name"
-                                                    class="w-6 h-6 object-contain rounded"
-                                                />
-                                                <span>{{ courier.name }}</span>
-                                            </div>
-                                        </td>
-                                        <td class="py-3 px-4">{{ courier.totalParcel }}</td>
-                                        <td class="py-3 px-4">{{ courier.successParcel }}</td>
-                                        <td class="py-3 px-4">{{ courier.cancelledParcel }}</td>
-                                        <td class="py-3 px-4">
-                                            <span 
-                                                class="px-2 py-1 text-xs rounded-full text-white"
-                                                :style="{ backgroundColor: getColorForRatio(courier.successRatio) }"
-                                            >
-                                                {{ courier.successRatio.toFixed(1) }}%
-                                            </span>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead class="w-[180px]">Courier</TableHead>
+                                    <TableHead>Orders</TableHead>
+                                    <TableHead>Delivered</TableHead>
+                                    <TableHead>Cancelled</TableHead>
+                                    <TableHead class="text-right">Success Rate</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                <TableRow 
+                                    v-for="courier in courierList" 
+                                    :key="courier.name"
+                                >
+                                    <TableCell class="font-medium">
+                                        <div class="flex items-center gap-2">
+                                            <img 
+                                                v-if="courier.logo" 
+                                                :src="courier.logo" 
+                                                :alt="courier.name"
+                                                class="w-6 h-6 object-contain rounded"
+                                            />
+                                            <span>{{ courier.name }}</span>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="outline">{{ courier.totalParcel }}</Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="success">{{ courier.successParcel }}</Badge>
+                                    </TableCell>
+                                    <TableCell>
+                                        <Badge variant="destructive">{{ courier.cancelledParcel }}</Badge>
+                                    </TableCell>
+                                    <TableCell class="text-right">
+                                        <Badge 
+                                            :class="courier.successRatio >= 90 ? 'bg-green-500 hover:bg-green-600' : courier.successRatio >= 70 ? 'bg-yellow-500 hover:bg-yellow-600' : 'bg-red-500 hover:bg-red-600'"
+                                            class="text-white"
+                                        >
+                                            {{ courier.successRatio.toFixed(1) }}%
+                                        </Badge>
+                                    </TableCell>
+                                </TableRow>
+                            </TableBody>
+                        </Table>
                     </Card>
                     
                     <!-- Customer Reviews Section -->
@@ -685,36 +757,37 @@ onUnmounted(() => {
                             </div>
                         </div>
                     </Card>
+                    </template>
+                    
+                    <!-- Empty State when no search results -->
+                    <template v-else>
+                        <Card class="h-full p-10 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center">
+                            <img 
+                                src="https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060" 
+                                alt="Search illustration" 
+                                class="mx-auto mb-6 rounded-xl shadow-lg w-64 sm:w-72 md:w-80 lg:w-96"
+                            />
+                            <h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100">কুরিয়ার ফ্রড চেক করুন</h3>
+                            <p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg">
+                                বাম পাশে মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস ও ঝুঁকি মূল্যায়ন দেখুন।
+                            </p>
+                            <div class="flex flex-wrap justify-center gap-4">
+                                <div class="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 px-5 py-3 rounded-full">
+                                    <div class="w-4 h-4 rounded-full bg-green-500"></div>
+                                    <span class="text-sm text-green-700 dark:text-green-300 font-medium">Low Risk</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-5 py-3 rounded-full">
+                                    <div class="w-4 h-4 rounded-full bg-yellow-500"></div>
+                                    <span class="text-sm text-yellow-700 dark:text-yellow-300 font-medium">Medium Risk</span>
+                                </div>
+                                <div class="flex items-center gap-2 bg-red-50 dark:bg-red-900/30 px-5 py-3 rounded-full">
+                                    <div class="w-4 h-4 rounded-full bg-red-500"></div>
+                                    <span class="text-sm text-red-700 dark:text-red-300 font-medium">High Risk</span>
+                                </div>
+                            </div>
+                        </Card>
+                    </template>
                 </div>
-            </div>
-            
-            <!-- Empty State -->
-            <div v-else-if="showEmptyState">
-                <Card class="p-10 text-center">
-                    <img 
-                        src="https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060" 
-                        alt="Search illustration" 
-                        class="mx-auto mb-6 rounded-lg max-w-md"
-                    />
-                    <h3 class="text-xl font-bold mb-2">Check Courier Fraud</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6 max-w-lg mx-auto">
-                        Enter a mobile number and click "রিপোর্ট দেখুন" to check the courier delivery history and fraud risk assessment.
-                    </p>
-                    <div class="flex justify-center gap-4">
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
-                            <span class="text-sm">Low Risk</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
-                            <span class="text-sm">Medium Risk</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
-                            <span class="text-sm">High Risk</span>
-                        </div>
-                    </div>
-                </Card>
             </div>
         </section>
         

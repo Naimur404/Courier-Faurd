@@ -40,6 +40,7 @@ interface Props {
     class?: string;
     disabled?: boolean;
     loading?: boolean;
+    asChild?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -47,6 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
     size: 'default',
     disabled: false,
     loading: false,
+    asChild: false,
 });
 
 const classes = computed(() => cn(buttonVariants({ variant: props.variant, size: props.size }), props.class));
