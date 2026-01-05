@@ -49,7 +49,17 @@ class PricingController extends Controller
                            ->with('error', 'You already have an active subscription.');
         }
 
-        return view('pricing.subscribe', compact('plan'));
+        return Inertia::render('Pricing/Subscribe', [
+            'plan' => [
+                'id' => $plan->id,
+                'name' => $plan->name,
+                'description' => $plan->description,
+                'price' => $plan->price,
+                'formatted_price' => $plan->formatted_price,
+                'duration_text' => $plan->duration_text,
+                'features' => $plan->features ?? [],
+            ],
+        ]);
     }
 
     /**

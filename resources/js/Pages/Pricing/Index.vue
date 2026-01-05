@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3'
+import AppLayout from '@/Layouts/AppLayout.vue'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import { ref, computed } from 'vue'
@@ -102,8 +103,9 @@ const getPlanIcon = (index: number) => {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
   </Head>
 
-  <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 py-12 sm:py-16">
-    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+  <AppLayout>
+    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 py-12 sm:py-16">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="text-center mb-16">
         <div class="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-6">
@@ -122,10 +124,7 @@ const getPlanIcon = (index: number) => {
         <Card
           v-for="(plan, index) in plans"
           :key="plan.id"
-          :class="[
-            'relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2',
-            index === 1 ? 'ring-4 ring-blue-500 transform scale-105 lg:scale-110' : ''
-          ]"
+          :class="`relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${index === 1 ? 'ring-4 ring-blue-500 transform scale-105 lg:scale-110' : ''}`"
         >
           <div v-if="index === 1" class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white text-center py-3">
             <span class="text-sm font-semibold">
@@ -135,7 +134,7 @@ const getPlanIcon = (index: number) => {
           
           <div class="p-8">
             <div class="text-center">
-              <div :class="['inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6', getPlanIconGradient(index)]">
+              <div :class="`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6 ${getPlanIconGradient(index)}`">
                 <i :class="['fas text-white text-2xl', getPlanIcon(index)]"></i>
               </div>
               <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ plan.name }}</h3>
@@ -312,4 +311,5 @@ const getPlanIcon = (index: number) => {
       </div>
     </div>
   </div>
+  </AppLayout>
 </template>

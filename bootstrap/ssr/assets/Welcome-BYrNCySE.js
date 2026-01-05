@@ -614,26 +614,26 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }, _parent2, _scopeId));
             _push2(`</div><div class="text-center mt-6"${_scopeId}><p class="text-sm text-gray-500 dark:text-gray-400"${_scopeId}>`);
             _push2(ssrRenderComponent(unref(RefreshCw), { class: "w-4 h-4 inline-block align-middle mr-1" }, null, _parent2, _scopeId));
-            _push2(`<span class="align-middle"${_scopeId}>সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300"${_scopeId}>${ssrInterpolate(lastUpdated.value)}</span></span></p></div></div></section><section class="container mx-auto px-4 py-8"${_scopeId}>`);
-            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 mb-8 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800" }, {
+            _push2(`<span class="align-middle"${_scopeId}>সর্বশেষ আপডেট: <span class="font-medium text-gray-700 dark:text-gray-300"${_scopeId}>${ssrInterpolate(lastUpdated.value)}</span></span></p></div></div></section><section class="container mx-auto px-4 py-4"${_scopeId}>`);
+            _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 mb-4 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="text-center mb-6"${_scopeId2}><h1 class="text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2"${_scopeId2}> কুরিয়ার ফ্রড চেক করুন </h1><p class="text-gray-600 dark:text-gray-400"${_scopeId2}>মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p></div><div class="flex flex-col md:flex-row gap-4 max-w-2xl mx-auto"${_scopeId2}><div class="relative flex-1"${_scopeId2}><div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"${_scopeId2}>`);
-                  _push3(ssrRenderComponent(unref(Phone), { class: "h-5 w-5 text-indigo-500" }, null, _parent3, _scopeId2));
-                  _push3(`</div><input${ssrRenderAttr("value", phoneInput.value)} type="text" placeholder="মোবাইল নাম্বার লিখুন (যেমন: 01600000000)" class="w-full pl-12 p-4 border-2 border-indigo-200 dark:border-indigo-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-lg"${_scopeId2}></div>`);
+                  _push3(`<div class="text-center mb-3"${_scopeId2}><h1 class="text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1"${_scopeId2}> কুরিয়ার ফ্রড চেক করুন </h1><p class="text-sm text-gray-600 dark:text-gray-400"${_scopeId2}>মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন</p></div><div class="flex flex-col md:flex-row gap-3 max-w-xl mx-auto"${_scopeId2}><div class="relative flex-1"${_scopeId2}><div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"${_scopeId2}>`);
+                  _push3(ssrRenderComponent(unref(Phone), { class: "h-4 w-4 text-indigo-500" }, null, _parent3, _scopeId2));
+                  _push3(`</div><input${ssrRenderAttr("value", phoneInput.value)} type="text" placeholder="মোবাইল নাম্বার লিখুন (যেমন: 01600000000)" class="w-full pl-10 p-3 border border-indigo-200 dark:border-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-sm"${_scopeId2}></div>`);
                   _push3(ssrRenderComponent(_sfc_main$b, {
-                    size: "xl",
+                    size: "default",
                     loading: isSearching.value,
                     onClick: performSearch,
-                    class: "min-w-[200px] shadow-lg shadow-indigo-500/25"
+                    class: "min-w-[140px] shadow-md"
                   }, {
                     default: withCtx((_3, _push4, _parent4, _scopeId3) => {
                       if (_push4) {
-                        _push4(ssrRenderComponent(unref(Search), { class: "w-5 h-5 mr-2" }, null, _parent4, _scopeId3));
+                        _push4(ssrRenderComponent(unref(Search), { class: "w-4 h-4 mr-1" }, null, _parent4, _scopeId3));
                         _push4(` রিপোর্ট দেখুন `);
                       } else {
                         return [
-                          createVNode(unref(Search), { class: "w-5 h-5 mr-2" }),
+                          createVNode(unref(Search), { class: "w-4 h-4 mr-1" }),
                           createTextVNode(" রিপোর্ট দেখুন ")
                         ];
                       }
@@ -643,33 +643,33 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _push3(`</div>`);
                 } else {
                   return [
-                    createVNode("div", { class: "text-center mb-6" }, [
-                      createVNode("h1", { class: "text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2" }, " কুরিয়ার ফ্রড চেক করুন "),
-                      createVNode("p", { class: "text-gray-600 dark:text-gray-400" }, "মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন")
+                    createVNode("div", { class: "text-center mb-3" }, [
+                      createVNode("h1", { class: "text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1" }, " কুরিয়ার ফ্রড চেক করুন "),
+                      createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-400" }, "মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন")
                     ]),
-                    createVNode("div", { class: "flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" }, [
+                    createVNode("div", { class: "flex flex-col md:flex-row gap-3 max-w-xl mx-auto" }, [
                       createVNode("div", { class: "relative flex-1" }, [
-                        createVNode("div", { class: "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" }, [
-                          createVNode(unref(Phone), { class: "h-5 w-5 text-indigo-500" })
+                        createVNode("div", { class: "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" }, [
+                          createVNode(unref(Phone), { class: "h-4 w-4 text-indigo-500" })
                         ]),
                         withDirectives(createVNode("input", {
                           "onUpdate:modelValue": ($event) => phoneInput.value = $event,
                           type: "text",
                           placeholder: "মোবাইল নাম্বার লিখুন (যেমন: 01600000000)",
-                          class: "w-full pl-12 p-4 border-2 border-indigo-200 dark:border-indigo-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-lg",
+                          class: "w-full pl-10 p-3 border border-indigo-200 dark:border-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-sm",
                           onKeypress: withKeys(performSearch, ["enter"])
                         }, null, 40, ["onUpdate:modelValue"]), [
                           [vModelText, phoneInput.value]
                         ])
                       ]),
                       createVNode(_sfc_main$b, {
-                        size: "xl",
+                        size: "default",
                         loading: isSearching.value,
                         onClick: performSearch,
-                        class: "min-w-[200px] shadow-lg shadow-indigo-500/25"
+                        class: "min-w-[140px] shadow-md"
                       }, {
                         default: withCtx(() => [
-                          createVNode(unref(Search), { class: "w-5 h-5 mr-2" }),
+                          createVNode(unref(Search), { class: "w-4 h-4 mr-1" }),
                           createTextVNode(" রিপোর্ট দেখুন ")
                         ]),
                         _: 1
@@ -685,27 +685,27 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               _push2(ssrRenderComponent(unref(Shield), { class: "absolute inset-0 m-auto w-8 h-8 text-indigo-600" }, null, _parent2, _scopeId));
               _push2(`</div><p class="text-gray-600 dark:text-gray-400 text-lg"${_scopeId}>ডেলিভারি ইতিহাস বিশ্লেষণ করা হচ্ছে...</p></div>`);
             } else {
-              _push2(`<div class="grid grid-cols-1 lg:grid-cols-3 gap-6"${_scopeId}>`);
-              _push2(ssrRenderComponent(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700" }, {
+              _push2(`<div class="grid grid-cols-1 lg:grid-cols-3 gap-4"${_scopeId}>`);
+              _push2(ssrRenderComponent(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700" }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l;
                   if (_push3) {
-                    _push3(`<h2 class="text-xl font-bold mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100"${_scopeId2}><div class="p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg"${_scopeId2}>`);
-                    _push3(ssrRenderComponent(unref(PieChart), { class: "w-5 h-5 text-indigo-600 dark:text-indigo-400" }, null, _parent3, _scopeId2));
-                    _push3(`</div> Delivery Success Ratio </h2><div class="flex justify-center mb-6"${_scopeId2}><div class="relative w-44 h-44"${_scopeId2}><div class="absolute inset-0 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-700 animate-spin" style="${ssrRenderStyle({ "animation-duration": "20s" })}"${_scopeId2}></div><div class="absolute inset-2 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner"${_scopeId2}></div><svg class="absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transform -rotate-90" viewBox="0 0 100 100"${_scopeId2}><circle class="text-gray-200 dark:text-gray-700 stroke-current" stroke-width="10" fill="transparent" r="40" cx="50" cy="50"${_scopeId2}></circle><circle class="stroke-current transition-all duration-1000 ease-out" style="${ssrRenderStyle({ color: searchResults.value ? unref(getColorForRatio)(successRatio.value) : "#6366f1" })}" stroke-width="10" stroke-linecap="round" fill="transparent" r="40" cx="50" cy="50"${ssrRenderAttr("stroke-dasharray", 251)}${ssrRenderAttr("stroke-dashoffset", searchResults.value ? 251 - 251 * successRatio.value / 100 : 251)}${_scopeId2}></circle></svg><div class="absolute inset-0 flex items-center justify-center flex-col"${_scopeId2}><span class="${ssrRenderClass([searchResults.value ? "" : "text-gray-400 dark:text-gray-500", "text-4xl font-bold"])}"${_scopeId2}>${ssrInterpolate(searchResults.value ? successRatio.value.toFixed(1) : "0")}% </span><span class="${ssrRenderClass([{
+                    _push3(`<h2 class="text-base font-bold mb-3 flex items-center gap-2 text-gray-800 dark:text-gray-100"${_scopeId2}><div class="p-1.5 bg-indigo-100 dark:bg-indigo-900 rounded-lg"${_scopeId2}>`);
+                    _push3(ssrRenderComponent(unref(PieChart), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" }, null, _parent3, _scopeId2));
+                    _push3(`</div> Delivery Success Ratio </h2><div class="flex justify-center mb-3"${_scopeId2}><div class="relative w-28 h-28"${_scopeId2}><div class="absolute inset-0 rounded-full border-2 border-dashed border-gray-200 dark:border-gray-700 animate-spin" style="${ssrRenderStyle({ "animation-duration": "20s" })}"${_scopeId2}></div><div class="absolute inset-1 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner"${_scopeId2}></div><svg class="absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] transform -rotate-90" viewBox="0 0 100 100"${_scopeId2}><circle class="text-gray-200 dark:text-gray-700 stroke-current" stroke-width="10" fill="transparent" r="40" cx="50" cy="50"${_scopeId2}></circle><circle class="stroke-current transition-all duration-1000 ease-out" style="${ssrRenderStyle({ color: searchResults.value ? unref(getColorForRatio)(successRatio.value) : "#6366f1" })}" stroke-width="10" stroke-linecap="round" fill="transparent" r="40" cx="50" cy="50"${ssrRenderAttr("stroke-dasharray", 251)}${ssrRenderAttr("stroke-dashoffset", searchResults.value ? 251 - 251 * successRatio.value / 100 : 251)}${_scopeId2}></circle></svg><div class="absolute inset-0 flex items-center justify-center flex-col"${_scopeId2}><span class="${ssrRenderClass([searchResults.value ? "" : "text-gray-400 dark:text-gray-500", "text-xl font-bold"])}"${_scopeId2}>${ssrInterpolate(searchResults.value ? successRatio.value.toFixed(0) : "0")}% </span><span class="${ssrRenderClass([{
                       "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300": searchResults.value && ratingText.value === "Excellent",
                       "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300": searchResults.value && ratingText.value === "Good",
                       "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300": searchResults.value && ratingText.value === "Poor",
                       "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400": !searchResults.value || ratingText.value === "New"
-                    }, "text-sm font-medium px-3 py-1 rounded-full mt-1"])}"${_scopeId2}>${ssrInterpolate(searchResults.value ? ratingText.value : "N/A")}</span></div></div></div><div class="${ssrRenderClass([{
+                    }, "text-xs font-medium px-2 py-0.5 rounded-full"])}"${_scopeId2}>${ssrInterpolate(searchResults.value ? ratingText.value : "N/A")}</span></div></div></div><div class="${ssrRenderClass([{
                       "bg-gray-100 dark:bg-gray-800": !searchResults.value,
                       "bg-green-50 dark:bg-green-900/30": searchResults.value && riskLevel.value.level === "low",
                       "bg-yellow-50 dark:bg-yellow-900/30": searchResults.value && riskLevel.value.level === "medium",
                       "bg-red-50 dark:bg-red-900/30": searchResults.value && riskLevel.value.level === "high"
-                    }, "text-center mb-6 p-4 rounded-xl"])}"${_scopeId2}>`);
+                    }, "text-center mb-3 p-2 rounded-lg text-sm"])}"${_scopeId2}>`);
                     if (!searchResults.value) {
-                      _push3(`<p class="text-gray-600 dark:text-gray-400"${_scopeId2}>`);
-                      _push3(ssrRenderComponent(unref(Phone), { class: "w-5 h-5 inline-block mr-1 -mt-1" }, null, _parent3, _scopeId2));
+                      _push3(`<p class="text-gray-600 dark:text-gray-400 text-xs"${_scopeId2}>`);
+                      _push3(ssrRenderComponent(unref(Phone), { class: "w-3 h-3 inline-block mr-1 -mt-0.5" }, null, _parent3, _scopeId2));
                       _push3(` মোবাইল নাম্বার দিয়ে সার্চ করুন </p>`);
                     } else {
                       _push3(`<p class="${ssrRenderClass([{
@@ -713,53 +713,41 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         "text-yellow-700 dark:text-yellow-300": riskLevel.value.level === "medium",
                         "text-red-700 dark:text-red-300": riskLevel.value.level === "high",
                         "text-gray-600 dark:text-gray-400": riskLevel.value.level === "unknown"
-                      }, "font-medium"])}"${_scopeId2}>${ssrInterpolate(riskLevel.value.level === "low" ? "এই গ্রাহক বিশ্বস্ত!" : riskLevel.value.level === "medium" ? "সতর্কতার সাথে এগিয়ে যান" : riskLevel.value.level === "high" ? "উচ্চ ঝুঁকিপূর্ণ গ্রাহক!" : "ডেলিভারি ইতিহাস নেই")}</p>`);
+                      }, "font-medium text-xs"])}"${_scopeId2}>${ssrInterpolate(riskLevel.value.level === "low" ? "এই গ্রাহক বিশ্বস্ত!" : riskLevel.value.level === "medium" ? "সতর্কতার সাথে এগিয়ে যান" : riskLevel.value.level === "high" ? "উচ্চ ঝুঁকিপূর্ণ গ্রাহক!" : "ডেলিভারি ইতিহাস নেই")}</p>`);
                     }
                     _push3(`</div><div class="${ssrRenderClass([{
-                      "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30": searchResults.value && riskLevel.value.level === "low",
-                      "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30": searchResults.value && riskLevel.value.level === "medium",
-                      "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/30": searchResults.value && riskLevel.value.level === "high",
+                      "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "low",
+                      "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "medium",
+                      "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "high",
                       "bg-gradient-to-r from-gray-400 to-gray-500 text-white": !searchResults.value || riskLevel.value.level === "unknown"
-                    }, "text-center py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all duration-300"])}"${_scopeId2}>`);
-                    ssrRenderVNode(_push3, createVNode(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-5 h-5" }, null), _parent3, _scopeId2);
-                    _push3(` ${ssrInterpolate(searchResults.value ? riskLevel.value.label : "Waiting for Search")}</div><div class="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-l-4 border-indigo-500 rounded-r-xl"${_scopeId2}><p class="italic text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>`);
-                    if (!searchResults.value) {
-                      _push3(`<!--[--> &quot;ফোন নম্বর দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।&quot; <!--]-->`);
-                    } else if (riskLevel.value.level === "low") {
-                      _push3(`<!--[--> &quot;বিশ্বাসই সম্পর্কের ভিত্তি। এই গ্রাহকের চমৎকার রেকর্ড অনেক কিছু বলে।&quot; <!--]-->`);
-                    } else if (riskLevel.value.level === "medium") {
-                      _push3(`<!--[--> &quot;বিশ্বাস করুন কিন্তু যাচাই করুন। মাঝে মাঝে সমস্যা সতর্কতার পরামর্শ দেয়।&quot; <!--]-->`);
-                    } else if (riskLevel.value.level === "high") {
-                      _push3(`<!--[--> &quot;অতীত আচরণ ভবিষ্যৎ ক্রিয়াকলাপের পূর্বাভাস দেয়। উচ্চ বাতিল হার উল্লেখযোগ্য ঝুঁকি নির্দেশ করে।&quot; <!--]-->`);
-                    } else {
-                      _push3(`<!--[--> &quot;এই নম্বরের জন্য কোন ডেলিভারি রেকর্ড পাওয়া যায়নি।&quot; <!--]-->`);
-                    }
-                    _push3(`</p></div><div class="mt-6 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"${_scopeId2}><h3 class="font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100"${_scopeId2}>`);
-                    _push3(ssrRenderComponent(unref(Shield), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" }, null, _parent3, _scopeId2));
-                    _push3(` Fraud Risk Factors </h3><ul class="space-y-3"${_scopeId2}><li class="${ssrRenderClass([searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50", "flex items-center text-sm gap-3 p-2 rounded-lg"])}"${_scopeId2}><div class="${ssrRenderClass([searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600", "p-1.5 rounded-full"])}"${_scopeId2}>`);
-                    _push3(ssrRenderComponent(unref(CheckCircle), { class: "w-3.5 h-3.5 text-white" }, null, _parent3, _scopeId2));
-                    _push3(`</div><span class="${ssrRenderClass(searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300 font-medium" : "text-gray-600 dark:text-gray-400")}"${_scopeId2}> High delivery success rate </span></li><li class="${ssrRenderClass([searchResults.value && ((_b = (_a = searchResults.value.courierData) == null ? void 0 : _a.summary) == null ? void 0 : _b.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50", "flex items-center text-sm gap-3 p-2 rounded-lg"])}"${_scopeId2}><div class="${ssrRenderClass([searchResults.value && ((_d = (_c = searchResults.value.courierData) == null ? void 0 : _c.summary) == null ? void 0 : _d.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600", "p-1.5 rounded-full"])}"${_scopeId2}>`);
-                    _push3(ssrRenderComponent(unref(XCircle), { class: "w-3.5 h-3.5 text-white" }, null, _parent3, _scopeId2));
-                    _push3(`</div><span class="${ssrRenderClass(searchResults.value && ((_f = (_e = searchResults.value.courierData) == null ? void 0 : _e.summary) == null ? void 0 : _f.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300 font-medium" : "text-gray-600 dark:text-gray-400")}"${_scopeId2}> Multiple cancelled orders </span></li><li class="flex items-center text-sm gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50"${_scopeId2}><div class="p-1.5 rounded-full bg-gray-300 dark:bg-gray-600"${_scopeId2}>`);
-                    _push3(ssrRenderComponent(unref(AlertCircle), { class: "w-3.5 h-3.5 text-white" }, null, _parent3, _scopeId2));
-                    _push3(`</div><span class="text-gray-600 dark:text-gray-400"${_scopeId2}>Inconsistent delivery patterns</span></li></ul></div>`);
+                    }, "text-center py-2 px-3 rounded-lg flex items-center justify-center gap-2 font-medium text-sm transition-all duration-300"])}"${_scopeId2}>`);
+                    ssrRenderVNode(_push3, createVNode(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-4 h-4" }, null), _parent3, _scopeId2);
+                    _push3(` ${ssrInterpolate(searchResults.value ? riskLevel.value.label : "Waiting")}</div><div class="mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700"${_scopeId2}><h3 class="font-medium text-xs mb-2 flex items-center gap-1.5 text-gray-800 dark:text-gray-100"${_scopeId2}>`);
+                    _push3(ssrRenderComponent(unref(Shield), { class: "w-3 h-3 text-indigo-600 dark:text-indigo-400" }, null, _parent3, _scopeId2));
+                    _push3(` Risk Factors </h3><ul class="space-y-1.5"${_scopeId2}><li class="${ssrRenderClass([searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50", "flex items-center text-xs gap-2 p-1.5 rounded"])}"${_scopeId2}><div class="${ssrRenderClass([searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600", "p-1 rounded-full"])}"${_scopeId2}>`);
+                    _push3(ssrRenderComponent(unref(CheckCircle), { class: "w-2.5 h-2.5 text-white" }, null, _parent3, _scopeId2));
+                    _push3(`</div><span class="${ssrRenderClass(searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300" : "text-gray-500 dark:text-gray-400")}"${_scopeId2}> High success rate </span></li><li class="${ssrRenderClass([searchResults.value && ((_b = (_a = searchResults.value.courierData) == null ? void 0 : _a.summary) == null ? void 0 : _b.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50", "flex items-center text-xs gap-2 p-1.5 rounded"])}"${_scopeId2}><div class="${ssrRenderClass([searchResults.value && ((_d = (_c = searchResults.value.courierData) == null ? void 0 : _c.summary) == null ? void 0 : _d.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600", "p-1 rounded-full"])}"${_scopeId2}>`);
+                    _push3(ssrRenderComponent(unref(XCircle), { class: "w-2.5 h-2.5 text-white" }, null, _parent3, _scopeId2));
+                    _push3(`</div><span class="${ssrRenderClass(searchResults.value && ((_f = (_e = searchResults.value.courierData) == null ? void 0 : _e.summary) == null ? void 0 : _f.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300" : "text-gray-500 dark:text-gray-400")}"${_scopeId2}> Multiple cancellations </span></li><li class="flex items-center text-xs gap-2 p-1.5 rounded bg-gray-50 dark:bg-gray-700/50"${_scopeId2}><div class="p-1 rounded-full bg-gray-300 dark:bg-gray-600"${_scopeId2}>`);
+                    _push3(ssrRenderComponent(unref(AlertCircle), { class: "w-2.5 h-2.5 text-white" }, null, _parent3, _scopeId2));
+                    _push3(`</div><span class="text-gray-500 dark:text-gray-400"${_scopeId2}>Inconsistent patterns</span></li></ul></div>`);
                   } else {
                     return [
-                      createVNode("h2", { class: "text-xl font-bold mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
-                        createVNode("div", { class: "p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg" }, [
-                          createVNode(unref(PieChart), { class: "w-5 h-5 text-indigo-600 dark:text-indigo-400" })
+                      createVNode("h2", { class: "text-base font-bold mb-3 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
+                        createVNode("div", { class: "p-1.5 bg-indigo-100 dark:bg-indigo-900 rounded-lg" }, [
+                          createVNode(unref(PieChart), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" })
                         ]),
                         createTextVNode(" Delivery Success Ratio ")
                       ]),
-                      createVNode("div", { class: "flex justify-center mb-6" }, [
-                        createVNode("div", { class: "relative w-44 h-44" }, [
+                      createVNode("div", { class: "flex justify-center mb-3" }, [
+                        createVNode("div", { class: "relative w-28 h-28" }, [
                           createVNode("div", {
-                            class: "absolute inset-0 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-700 animate-spin",
+                            class: "absolute inset-0 rounded-full border-2 border-dashed border-gray-200 dark:border-gray-700 animate-spin",
                             style: { "animation-duration": "20s" }
                           }),
-                          createVNode("div", { class: "absolute inset-2 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner" }),
+                          createVNode("div", { class: "absolute inset-1 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner" }),
                           (openBlock(), createBlock("svg", {
-                            class: "absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transform -rotate-90",
+                            class: "absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] transform -rotate-90",
                             viewBox: "0 0 100 100"
                           }, [
                             createVNode("circle", {
@@ -785,10 +773,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           ])),
                           createVNode("div", { class: "absolute inset-0 flex items-center justify-center flex-col" }, [
                             createVNode("span", {
-                              class: ["text-4xl font-bold", searchResults.value ? "" : "text-gray-400 dark:text-gray-500"]
-                            }, toDisplayString(searchResults.value ? successRatio.value.toFixed(1) : "0") + "% ", 3),
+                              class: ["text-xl font-bold", searchResults.value ? "" : "text-gray-400 dark:text-gray-500"]
+                            }, toDisplayString(searchResults.value ? successRatio.value.toFixed(0) : "0") + "% ", 3),
                             createVNode("span", {
-                              class: ["text-sm font-medium px-3 py-1 rounded-full mt-1", {
+                              class: ["text-xs font-medium px-2 py-0.5 rounded-full", {
                                 "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300": searchResults.value && ratingText.value === "Excellent",
                                 "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300": searchResults.value && ratingText.value === "Good",
                                 "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300": searchResults.value && ratingText.value === "Poor",
@@ -799,7 +787,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         ])
                       ]),
                       createVNode("div", {
-                        class: ["text-center mb-6 p-4 rounded-xl", {
+                        class: ["text-center mb-3 p-2 rounded-lg text-sm", {
                           "bg-gray-100 dark:bg-gray-800": !searchResults.value,
                           "bg-green-50 dark:bg-green-900/30": searchResults.value && riskLevel.value.level === "low",
                           "bg-yellow-50 dark:bg-yellow-900/30": searchResults.value && riskLevel.value.level === "medium",
@@ -808,13 +796,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       }, [
                         !searchResults.value ? (openBlock(), createBlock("p", {
                           key: 0,
-                          class: "text-gray-600 dark:text-gray-400"
+                          class: "text-gray-600 dark:text-gray-400 text-xs"
                         }, [
-                          createVNode(unref(Phone), { class: "w-5 h-5 inline-block mr-1 -mt-1" }),
+                          createVNode(unref(Phone), { class: "w-3 h-3 inline-block mr-1 -mt-0.5" }),
                           createTextVNode(" মোবাইল নাম্বার দিয়ে সার্চ করুন ")
                         ])) : (openBlock(), createBlock("p", {
                           key: 1,
-                          class: ["font-medium", {
+                          class: ["font-medium text-xs", {
                             "text-green-700 dark:text-green-300": riskLevel.value.level === "low",
                             "text-yellow-700 dark:text-yellow-300": riskLevel.value.level === "medium",
                             "text-red-700 dark:text-red-300": riskLevel.value.level === "high",
@@ -823,66 +811,51 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, toDisplayString(riskLevel.value.level === "low" ? "এই গ্রাহক বিশ্বস্ত!" : riskLevel.value.level === "medium" ? "সতর্কতার সাথে এগিয়ে যান" : riskLevel.value.level === "high" ? "উচ্চ ঝুঁকিপূর্ণ গ্রাহক!" : "ডেলিভারি ইতিহাস নেই"), 3))
                       ], 2),
                       createVNode("div", {
-                        class: ["text-center py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all duration-300", {
-                          "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30": searchResults.value && riskLevel.value.level === "low",
-                          "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30": searchResults.value && riskLevel.value.level === "medium",
-                          "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/30": searchResults.value && riskLevel.value.level === "high",
+                        class: ["text-center py-2 px-3 rounded-lg flex items-center justify-center gap-2 font-medium text-sm transition-all duration-300", {
+                          "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "low",
+                          "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "medium",
+                          "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "high",
                           "bg-gradient-to-r from-gray-400 to-gray-500 text-white": !searchResults.value || riskLevel.value.level === "unknown"
                         }]
                       }, [
-                        (openBlock(), createBlock(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-5 h-5" })),
-                        createTextVNode(" " + toDisplayString(searchResults.value ? riskLevel.value.label : "Waiting for Search"), 1)
+                        (openBlock(), createBlock(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-4 h-4" })),
+                        createTextVNode(" " + toDisplayString(searchResults.value ? riskLevel.value.label : "Waiting"), 1)
                       ], 2),
-                      createVNode("div", { class: "mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-l-4 border-indigo-500 rounded-r-xl" }, [
-                        createVNode("p", { class: "italic text-gray-600 dark:text-gray-300 text-sm" }, [
-                          !searchResults.value ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                            createTextVNode(' "ফোন নম্বর দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।" ')
-                          ], 64)) : riskLevel.value.level === "low" ? (openBlock(), createBlock(Fragment, { key: 1 }, [
-                            createTextVNode(' "বিশ্বাসই সম্পর্কের ভিত্তি। এই গ্রাহকের চমৎকার রেকর্ড অনেক কিছু বলে।" ')
-                          ], 64)) : riskLevel.value.level === "medium" ? (openBlock(), createBlock(Fragment, { key: 2 }, [
-                            createTextVNode(' "বিশ্বাস করুন কিন্তু যাচাই করুন। মাঝে মাঝে সমস্যা সতর্কতার পরামর্শ দেয়।" ')
-                          ], 64)) : riskLevel.value.level === "high" ? (openBlock(), createBlock(Fragment, { key: 3 }, [
-                            createTextVNode(' "অতীত আচরণ ভবিষ্যৎ ক্রিয়াকলাপের পূর্বাভাস দেয়। উচ্চ বাতিল হার উল্লেখযোগ্য ঝুঁকি নির্দেশ করে।" ')
-                          ], 64)) : (openBlock(), createBlock(Fragment, { key: 4 }, [
-                            createTextVNode(' "এই নম্বরের জন্য কোন ডেলিভারি রেকর্ড পাওয়া যায়নি।" ')
-                          ], 64))
-                        ])
-                      ]),
-                      createVNode("div", { class: "mt-6 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700" }, [
-                        createVNode("h3", { class: "font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
-                          createVNode(unref(Shield), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" }),
-                          createTextVNode(" Fraud Risk Factors ")
+                      createVNode("div", { class: "mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700" }, [
+                        createVNode("h3", { class: "font-medium text-xs mb-2 flex items-center gap-1.5 text-gray-800 dark:text-gray-100" }, [
+                          createVNode(unref(Shield), { class: "w-3 h-3 text-indigo-600 dark:text-indigo-400" }),
+                          createTextVNode(" Risk Factors ")
                         ]),
-                        createVNode("ul", { class: "space-y-3" }, [
+                        createVNode("ul", { class: "space-y-1.5" }, [
                           createVNode("li", {
-                            class: ["flex items-center text-sm gap-3 p-2 rounded-lg", searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
+                            class: ["flex items-center text-xs gap-2 p-1.5 rounded", searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
                           }, [
                             createVNode("div", {
-                              class: ["p-1.5 rounded-full", searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600"]
+                              class: ["p-1 rounded-full", searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600"]
                             }, [
-                              createVNode(unref(CheckCircle), { class: "w-3.5 h-3.5 text-white" })
+                              createVNode(unref(CheckCircle), { class: "w-2.5 h-2.5 text-white" })
                             ], 2),
                             createVNode("span", {
-                              class: searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300 font-medium" : "text-gray-600 dark:text-gray-400"
-                            }, " High delivery success rate ", 2)
+                              class: searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300" : "text-gray-500 dark:text-gray-400"
+                            }, " High success rate ", 2)
                           ], 2),
                           createVNode("li", {
-                            class: ["flex items-center text-sm gap-3 p-2 rounded-lg", searchResults.value && ((_h = (_g = searchResults.value.courierData) == null ? void 0 : _g.summary) == null ? void 0 : _h.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
+                            class: ["flex items-center text-xs gap-2 p-1.5 rounded", searchResults.value && ((_h = (_g = searchResults.value.courierData) == null ? void 0 : _g.summary) == null ? void 0 : _h.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
                           }, [
                             createVNode("div", {
-                              class: ["p-1.5 rounded-full", searchResults.value && ((_j = (_i = searchResults.value.courierData) == null ? void 0 : _i.summary) == null ? void 0 : _j.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600"]
+                              class: ["p-1 rounded-full", searchResults.value && ((_j = (_i = searchResults.value.courierData) == null ? void 0 : _i.summary) == null ? void 0 : _j.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600"]
                             }, [
-                              createVNode(unref(XCircle), { class: "w-3.5 h-3.5 text-white" })
+                              createVNode(unref(XCircle), { class: "w-2.5 h-2.5 text-white" })
                             ], 2),
                             createVNode("span", {
-                              class: searchResults.value && ((_l = (_k = searchResults.value.courierData) == null ? void 0 : _k.summary) == null ? void 0 : _l.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300 font-medium" : "text-gray-600 dark:text-gray-400"
-                            }, " Multiple cancelled orders ", 2)
+                              class: searchResults.value && ((_l = (_k = searchResults.value.courierData) == null ? void 0 : _k.summary) == null ? void 0 : _l.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300" : "text-gray-500 dark:text-gray-400"
+                            }, " Multiple cancellations ", 2)
                           ], 2),
-                          createVNode("li", { class: "flex items-center text-sm gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50" }, [
-                            createVNode("div", { class: "p-1.5 rounded-full bg-gray-300 dark:bg-gray-600" }, [
-                              createVNode(unref(AlertCircle), { class: "w-3.5 h-3.5 text-white" })
+                          createVNode("li", { class: "flex items-center text-xs gap-2 p-1.5 rounded bg-gray-50 dark:bg-gray-700/50" }, [
+                            createVNode("div", { class: "p-1 rounded-full bg-gray-300 dark:bg-gray-600" }, [
+                              createVNode(unref(AlertCircle), { class: "w-2.5 h-2.5 text-white" })
                             ]),
-                            createVNode("span", { class: "text-gray-600 dark:text-gray-400" }, "Inconsistent delivery patterns")
+                            createVNode("span", { class: "text-gray-500 dark:text-gray-400" }, "Inconsistent patterns")
                           ])
                         ])
                       ])
@@ -1933,31 +1906,31 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 }, _parent2, _scopeId));
                 _push2(`<!--]-->`);
               } else {
-                _push2(ssrRenderComponent(_sfc_main$a, { class: "h-full p-10 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center" }, {
+                _push2(ssrRenderComponent(_sfc_main$a, { class: "h-full p-6 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center" }, {
                   default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                     if (_push3) {
-                      _push3(`<img src="https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060" alt="Search illustration" class="mx-auto mb-6 rounded-xl shadow-lg w-64 sm:w-72 md:w-80 lg:w-96"${_scopeId2}><h3 class="text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100"${_scopeId2}>কুরিয়ার ফ্রড চেক করুন</h3><p class="text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg"${_scopeId2}> বাম পাশে মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস ও ঝুঁকি মূল্যায়ন দেখুন। </p><div class="flex flex-wrap justify-center gap-4"${_scopeId2}><div class="flex items-center gap-2 bg-green-50 dark:bg-green-900/30 px-5 py-3 rounded-full"${_scopeId2}><div class="w-4 h-4 rounded-full bg-green-500"${_scopeId2}></div><span class="text-sm text-green-700 dark:text-green-300 font-medium"${_scopeId2}>Low Risk</span></div><div class="flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-5 py-3 rounded-full"${_scopeId2}><div class="w-4 h-4 rounded-full bg-yellow-500"${_scopeId2}></div><span class="text-sm text-yellow-700 dark:text-yellow-300 font-medium"${_scopeId2}>Medium Risk</span></div><div class="flex items-center gap-2 bg-red-50 dark:bg-red-900/30 px-5 py-3 rounded-full"${_scopeId2}><div class="w-4 h-4 rounded-full bg-red-500"${_scopeId2}></div><span class="text-sm text-red-700 dark:text-red-300 font-medium"${_scopeId2}>High Risk</span></div></div>`);
+                      _push3(`<img src="https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060" alt="Search illustration" class="mx-auto mb-4 rounded-lg shadow-md w-48 sm:w-56 md:w-64"${_scopeId2}><h3 class="text-lg font-bold mb-2 text-gray-800 dark:text-gray-100"${_scopeId2}>কুরিয়ার ফ্রড চেক করুন</h3><p class="text-gray-600 dark:text-gray-400 mb-4 max-w-sm mx-auto text-sm"${_scopeId2}> মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন। </p><div class="flex flex-wrap justify-center gap-2"${_scopeId2}><div class="flex items-center gap-1.5 bg-green-50 dark:bg-green-900/30 px-3 py-1.5 rounded-full"${_scopeId2}><div class="w-2.5 h-2.5 rounded-full bg-green-500"${_scopeId2}></div><span class="text-xs text-green-700 dark:text-green-300 font-medium"${_scopeId2}>Low Risk</span></div><div class="flex items-center gap-1.5 bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1.5 rounded-full"${_scopeId2}><div class="w-2.5 h-2.5 rounded-full bg-yellow-500"${_scopeId2}></div><span class="text-xs text-yellow-700 dark:text-yellow-300 font-medium"${_scopeId2}>Medium Risk</span></div><div class="flex items-center gap-1.5 bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded-full"${_scopeId2}><div class="w-2.5 h-2.5 rounded-full bg-red-500"${_scopeId2}></div><span class="text-xs text-red-700 dark:text-red-300 font-medium"${_scopeId2}>High Risk</span></div></div>`);
                     } else {
                       return [
                         createVNode("img", {
                           src: "https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060",
                           alt: "Search illustration",
-                          class: "mx-auto mb-6 rounded-xl shadow-lg w-64 sm:w-72 md:w-80 lg:w-96"
+                          class: "mx-auto mb-4 rounded-lg shadow-md w-48 sm:w-56 md:w-64"
                         }),
-                        createVNode("h3", { class: "text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100" }, "কুরিয়ার ফ্রড চেক করুন"),
-                        createVNode("p", { class: "text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg" }, " বাম পাশে মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস ও ঝুঁকি মূল্যায়ন দেখুন। "),
-                        createVNode("div", { class: "flex flex-wrap justify-center gap-4" }, [
-                          createVNode("div", { class: "flex items-center gap-2 bg-green-50 dark:bg-green-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-green-500" }),
-                            createVNode("span", { class: "text-sm text-green-700 dark:text-green-300 font-medium" }, "Low Risk")
+                        createVNode("h3", { class: "text-lg font-bold mb-2 text-gray-800 dark:text-gray-100" }, "কুরিয়ার ফ্রড চেক করুন"),
+                        createVNode("p", { class: "text-gray-600 dark:text-gray-400 mb-4 max-w-sm mx-auto text-sm" }, " মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন। "),
+                        createVNode("div", { class: "flex flex-wrap justify-center gap-2" }, [
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-green-50 dark:bg-green-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-green-500" }),
+                            createVNode("span", { class: "text-xs text-green-700 dark:text-green-300 font-medium" }, "Low Risk")
                           ]),
-                          createVNode("div", { class: "flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-yellow-500" }),
-                            createVNode("span", { class: "text-sm text-yellow-700 dark:text-yellow-300 font-medium" }, "Medium Risk")
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-yellow-500" }),
+                            createVNode("span", { class: "text-xs text-yellow-700 dark:text-yellow-300 font-medium" }, "Medium Risk")
                           ]),
-                          createVNode("div", { class: "flex items-center gap-2 bg-red-50 dark:bg-red-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-red-500" }),
-                            createVNode("span", { class: "text-sm text-red-700 dark:text-red-300 font-medium" }, "High Risk")
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-red-500" }),
+                            createVNode("span", { class: "text-xs text-red-700 dark:text-red-300 font-medium" }, "High Risk")
                           ])
                         ])
                       ];
@@ -2250,36 +2223,36 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   ])
                 ])
               ]),
-              createVNode("section", { class: "container mx-auto px-4 py-8" }, [
-                createVNode(_sfc_main$a, { class: "p-6 mb-8 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800" }, {
+              createVNode("section", { class: "container mx-auto px-4 py-4" }, [
+                createVNode(_sfc_main$a, { class: "p-4 mb-4 bg-gradient-to-r from-indigo-500/5 to-purple-500/5 dark:from-indigo-500/10 dark:to-purple-500/10 border-indigo-200 dark:border-indigo-800" }, {
                   default: withCtx(() => [
-                    createVNode("div", { class: "text-center mb-6" }, [
-                      createVNode("h1", { class: "text-2xl md:text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2" }, " কুরিয়ার ফ্রড চেক করুন "),
-                      createVNode("p", { class: "text-gray-600 dark:text-gray-400" }, "মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন")
+                    createVNode("div", { class: "text-center mb-3" }, [
+                      createVNode("h1", { class: "text-lg md:text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-1" }, " কুরিয়ার ফ্রড চেক করুন "),
+                      createVNode("p", { class: "text-sm text-gray-600 dark:text-gray-400" }, "মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস যাচাই করুন")
                     ]),
-                    createVNode("div", { class: "flex flex-col md:flex-row gap-4 max-w-2xl mx-auto" }, [
+                    createVNode("div", { class: "flex flex-col md:flex-row gap-3 max-w-xl mx-auto" }, [
                       createVNode("div", { class: "relative flex-1" }, [
-                        createVNode("div", { class: "absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none" }, [
-                          createVNode(unref(Phone), { class: "h-5 w-5 text-indigo-500" })
+                        createVNode("div", { class: "absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none" }, [
+                          createVNode(unref(Phone), { class: "h-4 w-4 text-indigo-500" })
                         ]),
                         withDirectives(createVNode("input", {
                           "onUpdate:modelValue": ($event) => phoneInput.value = $event,
                           type: "text",
                           placeholder: "মোবাইল নাম্বার লিখুন (যেমন: 01600000000)",
-                          class: "w-full pl-12 p-4 border-2 border-indigo-200 dark:border-indigo-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-lg",
+                          class: "w-full pl-10 p-3 border border-indigo-200 dark:border-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent dark:bg-gray-800 dark:text-white transition duration-300 text-sm",
                           onKeypress: withKeys(performSearch, ["enter"])
                         }, null, 40, ["onUpdate:modelValue"]), [
                           [vModelText, phoneInput.value]
                         ])
                       ]),
                       createVNode(_sfc_main$b, {
-                        size: "xl",
+                        size: "default",
                         loading: isSearching.value,
                         onClick: performSearch,
-                        class: "min-w-[200px] shadow-lg shadow-indigo-500/25"
+                        class: "min-w-[140px] shadow-md"
                       }, {
                         default: withCtx(() => [
-                          createVNode(unref(Search), { class: "w-5 h-5 mr-2" }),
+                          createVNode(unref(Search), { class: "w-4 h-4 mr-1" }),
                           createTextVNode(" রিপোর্ট দেখুন ")
                         ]),
                         _: 1
@@ -2300,27 +2273,27 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   createVNode("p", { class: "text-gray-600 dark:text-gray-400 text-lg" }, "ডেলিভারি ইতিহাস বিশ্লেষণ করা হচ্ছে...")
                 ])) : (openBlock(), createBlock("div", {
                   key: 1,
-                  class: "grid grid-cols-1 lg:grid-cols-3 gap-6"
+                  class: "grid grid-cols-1 lg:grid-cols-3 gap-4"
                 }, [
-                  createVNode(_sfc_main$a, { class: "p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border-2 border-gray-100 dark:border-gray-700" }, {
+                  createVNode(_sfc_main$a, { class: "p-4 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 border border-gray-100 dark:border-gray-700" }, {
                     default: withCtx(() => {
                       var _a, _b, _c, _d, _e, _f;
                       return [
-                        createVNode("h2", { class: "text-xl font-bold mb-6 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
-                          createVNode("div", { class: "p-2 bg-indigo-100 dark:bg-indigo-900 rounded-lg" }, [
-                            createVNode(unref(PieChart), { class: "w-5 h-5 text-indigo-600 dark:text-indigo-400" })
+                        createVNode("h2", { class: "text-base font-bold mb-3 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
+                          createVNode("div", { class: "p-1.5 bg-indigo-100 dark:bg-indigo-900 rounded-lg" }, [
+                            createVNode(unref(PieChart), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" })
                           ]),
                           createTextVNode(" Delivery Success Ratio ")
                         ]),
-                        createVNode("div", { class: "flex justify-center mb-6" }, [
-                          createVNode("div", { class: "relative w-44 h-44" }, [
+                        createVNode("div", { class: "flex justify-center mb-3" }, [
+                          createVNode("div", { class: "relative w-28 h-28" }, [
                             createVNode("div", {
-                              class: "absolute inset-0 rounded-full border-4 border-dashed border-gray-200 dark:border-gray-700 animate-spin",
+                              class: "absolute inset-0 rounded-full border-2 border-dashed border-gray-200 dark:border-gray-700 animate-spin",
                               style: { "animation-duration": "20s" }
                             }),
-                            createVNode("div", { class: "absolute inset-2 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner" }),
+                            createVNode("div", { class: "absolute inset-1 rounded-full bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 shadow-inner" }),
                             (openBlock(), createBlock("svg", {
-                              class: "absolute inset-2 w-[calc(100%-16px)] h-[calc(100%-16px)] transform -rotate-90",
+                              class: "absolute inset-1 w-[calc(100%-8px)] h-[calc(100%-8px)] transform -rotate-90",
                               viewBox: "0 0 100 100"
                             }, [
                               createVNode("circle", {
@@ -2346,10 +2319,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             ])),
                             createVNode("div", { class: "absolute inset-0 flex items-center justify-center flex-col" }, [
                               createVNode("span", {
-                                class: ["text-4xl font-bold", searchResults.value ? "" : "text-gray-400 dark:text-gray-500"]
-                              }, toDisplayString(searchResults.value ? successRatio.value.toFixed(1) : "0") + "% ", 3),
+                                class: ["text-xl font-bold", searchResults.value ? "" : "text-gray-400 dark:text-gray-500"]
+                              }, toDisplayString(searchResults.value ? successRatio.value.toFixed(0) : "0") + "% ", 3),
                               createVNode("span", {
-                                class: ["text-sm font-medium px-3 py-1 rounded-full mt-1", {
+                                class: ["text-xs font-medium px-2 py-0.5 rounded-full", {
                                   "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300": searchResults.value && ratingText.value === "Excellent",
                                   "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300": searchResults.value && ratingText.value === "Good",
                                   "bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300": searchResults.value && ratingText.value === "Poor",
@@ -2360,7 +2333,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           ])
                         ]),
                         createVNode("div", {
-                          class: ["text-center mb-6 p-4 rounded-xl", {
+                          class: ["text-center mb-3 p-2 rounded-lg text-sm", {
                             "bg-gray-100 dark:bg-gray-800": !searchResults.value,
                             "bg-green-50 dark:bg-green-900/30": searchResults.value && riskLevel.value.level === "low",
                             "bg-yellow-50 dark:bg-yellow-900/30": searchResults.value && riskLevel.value.level === "medium",
@@ -2369,13 +2342,13 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         }, [
                           !searchResults.value ? (openBlock(), createBlock("p", {
                             key: 0,
-                            class: "text-gray-600 dark:text-gray-400"
+                            class: "text-gray-600 dark:text-gray-400 text-xs"
                           }, [
-                            createVNode(unref(Phone), { class: "w-5 h-5 inline-block mr-1 -mt-1" }),
+                            createVNode(unref(Phone), { class: "w-3 h-3 inline-block mr-1 -mt-0.5" }),
                             createTextVNode(" মোবাইল নাম্বার দিয়ে সার্চ করুন ")
                           ])) : (openBlock(), createBlock("p", {
                             key: 1,
-                            class: ["font-medium", {
+                            class: ["font-medium text-xs", {
                               "text-green-700 dark:text-green-300": riskLevel.value.level === "low",
                               "text-yellow-700 dark:text-yellow-300": riskLevel.value.level === "medium",
                               "text-red-700 dark:text-red-300": riskLevel.value.level === "high",
@@ -2384,66 +2357,51 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           }, toDisplayString(riskLevel.value.level === "low" ? "এই গ্রাহক বিশ্বস্ত!" : riskLevel.value.level === "medium" ? "সতর্কতার সাথে এগিয়ে যান" : riskLevel.value.level === "high" ? "উচ্চ ঝুঁকিপূর্ণ গ্রাহক!" : "ডেলিভারি ইতিহাস নেই"), 3))
                         ], 2),
                         createVNode("div", {
-                          class: ["text-center py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-semibold transition-all duration-300", {
-                            "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-lg shadow-green-500/30": searchResults.value && riskLevel.value.level === "low",
-                            "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-lg shadow-yellow-500/30": searchResults.value && riskLevel.value.level === "medium",
-                            "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-lg shadow-red-500/30": searchResults.value && riskLevel.value.level === "high",
+                          class: ["text-center py-2 px-3 rounded-lg flex items-center justify-center gap-2 font-medium text-sm transition-all duration-300", {
+                            "bg-gradient-to-r from-green-500 to-emerald-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "low",
+                            "bg-gradient-to-r from-yellow-500 to-orange-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "medium",
+                            "bg-gradient-to-r from-red-500 to-rose-500 text-white shadow-md": searchResults.value && riskLevel.value.level === "high",
                             "bg-gradient-to-r from-gray-400 to-gray-500 text-white": !searchResults.value || riskLevel.value.level === "unknown"
                           }]
                         }, [
-                          (openBlock(), createBlock(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-5 h-5" })),
-                          createTextVNode(" " + toDisplayString(searchResults.value ? riskLevel.value.label : "Waiting for Search"), 1)
+                          (openBlock(), createBlock(resolveDynamicComponent(searchResults.value ? riskLevel.value.icon : unref(HelpCircle)), { class: "w-4 h-4" })),
+                          createTextVNode(" " + toDisplayString(searchResults.value ? riskLevel.value.label : "Waiting"), 1)
                         ], 2),
-                        createVNode("div", { class: "mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 border-l-4 border-indigo-500 rounded-r-xl" }, [
-                          createVNode("p", { class: "italic text-gray-600 dark:text-gray-300 text-sm" }, [
-                            !searchResults.value ? (openBlock(), createBlock(Fragment, { key: 0 }, [
-                              createTextVNode(' "ফোন নম্বর দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন।" ')
-                            ], 64)) : riskLevel.value.level === "low" ? (openBlock(), createBlock(Fragment, { key: 1 }, [
-                              createTextVNode(' "বিশ্বাসই সম্পর্কের ভিত্তি। এই গ্রাহকের চমৎকার রেকর্ড অনেক কিছু বলে।" ')
-                            ], 64)) : riskLevel.value.level === "medium" ? (openBlock(), createBlock(Fragment, { key: 2 }, [
-                              createTextVNode(' "বিশ্বাস করুন কিন্তু যাচাই করুন। মাঝে মাঝে সমস্যা সতর্কতার পরামর্শ দেয়।" ')
-                            ], 64)) : riskLevel.value.level === "high" ? (openBlock(), createBlock(Fragment, { key: 3 }, [
-                              createTextVNode(' "অতীত আচরণ ভবিষ্যৎ ক্রিয়াকলাপের পূর্বাভাস দেয়। উচ্চ বাতিল হার উল্লেখযোগ্য ঝুঁকি নির্দেশ করে।" ')
-                            ], 64)) : (openBlock(), createBlock(Fragment, { key: 4 }, [
-                              createTextVNode(' "এই নম্বরের জন্য কোন ডেলিভারি রেকর্ড পাওয়া যায়নি।" ')
-                            ], 64))
-                          ])
-                        ]),
-                        createVNode("div", { class: "mt-6 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700" }, [
-                          createVNode("h3", { class: "font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100" }, [
-                            createVNode(unref(Shield), { class: "w-4 h-4 text-indigo-600 dark:text-indigo-400" }),
-                            createTextVNode(" Fraud Risk Factors ")
+                        createVNode("div", { class: "mt-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700" }, [
+                          createVNode("h3", { class: "font-medium text-xs mb-2 flex items-center gap-1.5 text-gray-800 dark:text-gray-100" }, [
+                            createVNode(unref(Shield), { class: "w-3 h-3 text-indigo-600 dark:text-indigo-400" }),
+                            createTextVNode(" Risk Factors ")
                           ]),
-                          createVNode("ul", { class: "space-y-3" }, [
+                          createVNode("ul", { class: "space-y-1.5" }, [
                             createVNode("li", {
-                              class: ["flex items-center text-sm gap-3 p-2 rounded-lg", searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
+                              class: ["flex items-center text-xs gap-2 p-1.5 rounded", searchResults.value && successRatio.value >= 90 ? "bg-green-50 dark:bg-green-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
                             }, [
                               createVNode("div", {
-                                class: ["p-1.5 rounded-full", searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600"]
+                                class: ["p-1 rounded-full", searchResults.value && successRatio.value >= 90 ? "bg-green-500" : "bg-gray-300 dark:bg-gray-600"]
                               }, [
-                                createVNode(unref(CheckCircle), { class: "w-3.5 h-3.5 text-white" })
+                                createVNode(unref(CheckCircle), { class: "w-2.5 h-2.5 text-white" })
                               ], 2),
                               createVNode("span", {
-                                class: searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300 font-medium" : "text-gray-600 dark:text-gray-400"
-                              }, " High delivery success rate ", 2)
+                                class: searchResults.value && successRatio.value >= 90 ? "text-green-700 dark:text-green-300" : "text-gray-500 dark:text-gray-400"
+                              }, " High success rate ", 2)
                             ], 2),
                             createVNode("li", {
-                              class: ["flex items-center text-sm gap-3 p-2 rounded-lg", searchResults.value && ((_b = (_a = searchResults.value.courierData) == null ? void 0 : _a.summary) == null ? void 0 : _b.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
+                              class: ["flex items-center text-xs gap-2 p-1.5 rounded", searchResults.value && ((_b = (_a = searchResults.value.courierData) == null ? void 0 : _a.summary) == null ? void 0 : _b.cancelled_parcel) > 3 ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-700/50"]
                             }, [
                               createVNode("div", {
-                                class: ["p-1.5 rounded-full", searchResults.value && ((_d = (_c = searchResults.value.courierData) == null ? void 0 : _c.summary) == null ? void 0 : _d.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600"]
+                                class: ["p-1 rounded-full", searchResults.value && ((_d = (_c = searchResults.value.courierData) == null ? void 0 : _c.summary) == null ? void 0 : _d.cancelled_parcel) > 3 ? "bg-red-500" : "bg-gray-300 dark:bg-gray-600"]
                               }, [
-                                createVNode(unref(XCircle), { class: "w-3.5 h-3.5 text-white" })
+                                createVNode(unref(XCircle), { class: "w-2.5 h-2.5 text-white" })
                               ], 2),
                               createVNode("span", {
-                                class: searchResults.value && ((_f = (_e = searchResults.value.courierData) == null ? void 0 : _e.summary) == null ? void 0 : _f.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300 font-medium" : "text-gray-600 dark:text-gray-400"
-                              }, " Multiple cancelled orders ", 2)
+                                class: searchResults.value && ((_f = (_e = searchResults.value.courierData) == null ? void 0 : _e.summary) == null ? void 0 : _f.cancelled_parcel) > 3 ? "text-red-700 dark:text-red-300" : "text-gray-500 dark:text-gray-400"
+                              }, " Multiple cancellations ", 2)
                             ], 2),
-                            createVNode("li", { class: "flex items-center text-sm gap-3 p-2 rounded-lg bg-gray-50 dark:bg-gray-700/50" }, [
-                              createVNode("div", { class: "p-1.5 rounded-full bg-gray-300 dark:bg-gray-600" }, [
-                                createVNode(unref(AlertCircle), { class: "w-3.5 h-3.5 text-white" })
+                            createVNode("li", { class: "flex items-center text-xs gap-2 p-1.5 rounded bg-gray-50 dark:bg-gray-700/50" }, [
+                              createVNode("div", { class: "p-1 rounded-full bg-gray-300 dark:bg-gray-600" }, [
+                                createVNode(unref(AlertCircle), { class: "w-2.5 h-2.5 text-white" })
                               ]),
-                              createVNode("span", { class: "text-gray-600 dark:text-gray-400" }, "Inconsistent delivery patterns")
+                              createVNode("span", { class: "text-gray-500 dark:text-gray-400" }, "Inconsistent patterns")
                             ])
                           ])
                         ])
@@ -2745,28 +2703,28 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       })
                     ], 64)) : (openBlock(), createBlock(_sfc_main$a, {
                       key: 1,
-                      class: "h-full p-10 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center"
+                      class: "h-full p-6 text-center bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 flex flex-col items-center justify-center"
                     }, {
                       default: withCtx(() => [
                         createVNode("img", {
                           src: "https://img.freepik.com/free-vector/work-office-computer-man-woman-business-character-marketing-online-employee-technology-business-man-cartoon-co-working-flat-design-freelance_1150-41790.jpg?w=1060",
                           alt: "Search illustration",
-                          class: "mx-auto mb-6 rounded-xl shadow-lg w-64 sm:w-72 md:w-80 lg:w-96"
+                          class: "mx-auto mb-4 rounded-lg shadow-md w-48 sm:w-56 md:w-64"
                         }),
-                        createVNode("h3", { class: "text-2xl font-bold mb-4 text-gray-800 dark:text-gray-100" }, "কুরিয়ার ফ্রড চেক করুন"),
-                        createVNode("p", { class: "text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto text-lg" }, " বাম পাশে মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস ও ঝুঁকি মূল্যায়ন দেখুন। "),
-                        createVNode("div", { class: "flex flex-wrap justify-center gap-4" }, [
-                          createVNode("div", { class: "flex items-center gap-2 bg-green-50 dark:bg-green-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-green-500" }),
-                            createVNode("span", { class: "text-sm text-green-700 dark:text-green-300 font-medium" }, "Low Risk")
+                        createVNode("h3", { class: "text-lg font-bold mb-2 text-gray-800 dark:text-gray-100" }, "কুরিয়ার ফ্রড চেক করুন"),
+                        createVNode("p", { class: "text-gray-600 dark:text-gray-400 mb-4 max-w-sm mx-auto text-sm" }, " মোবাইল নাম্বার দিয়ে সার্চ করুন এবং গ্রাহকের ডেলিভারি ইতিহাস দেখুন। "),
+                        createVNode("div", { class: "flex flex-wrap justify-center gap-2" }, [
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-green-50 dark:bg-green-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-green-500" }),
+                            createVNode("span", { class: "text-xs text-green-700 dark:text-green-300 font-medium" }, "Low Risk")
                           ]),
-                          createVNode("div", { class: "flex items-center gap-2 bg-yellow-50 dark:bg-yellow-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-yellow-500" }),
-                            createVNode("span", { class: "text-sm text-yellow-700 dark:text-yellow-300 font-medium" }, "Medium Risk")
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-yellow-50 dark:bg-yellow-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-yellow-500" }),
+                            createVNode("span", { class: "text-xs text-yellow-700 dark:text-yellow-300 font-medium" }, "Medium Risk")
                           ]),
-                          createVNode("div", { class: "flex items-center gap-2 bg-red-50 dark:bg-red-900/30 px-5 py-3 rounded-full" }, [
-                            createVNode("div", { class: "w-4 h-4 rounded-full bg-red-500" }),
-                            createVNode("span", { class: "text-sm text-red-700 dark:text-red-300 font-medium" }, "High Risk")
+                          createVNode("div", { class: "flex items-center gap-1.5 bg-red-50 dark:bg-red-900/30 px-3 py-1.5 rounded-full" }, [
+                            createVNode("div", { class: "w-2.5 h-2.5 rounded-full bg-red-500" }),
+                            createVNode("span", { class: "text-xs text-red-700 dark:text-red-300 font-medium" }, "High Risk")
                           ])
                         ])
                       ]),
