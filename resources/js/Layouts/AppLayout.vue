@@ -155,14 +155,14 @@ const closeMoreMenu = () => {
                         
                         <!-- Auth Section -->
                         <template v-if="user">
-                            <Link
+                            <a
                                 v-if="isAdmin"
                                 href="/admin"
                                 class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
                             >
                                 <Settings class="w-4 h-4" />
                                 Admin
-                            </Link>
+                            </a>
                             <Link
                                 v-else
                                 href="/dashboard"
@@ -195,7 +195,16 @@ const closeMoreMenu = () => {
                                         v-if="isUserDropdownOpen"
                                         class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-xl shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700"
                                     >
+                                        <a
+                                            v-if="isAdmin"
+                                            href="/admin"
+                                            class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                                        >
+                                            <Settings class="w-4 h-4" />
+                                            Admin Panel
+                                        </a>
                                         <Link
+                                            v-else
                                             href="/dashboard"
                                             class="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                         >
@@ -344,8 +353,23 @@ const closeMoreMenu = () => {
                         <!-- Auth Section in More Menu -->
                         <div class="border-t border-gray-200 dark:border-gray-700 p-2">
                             <template v-if="user">
+                                <a
+                                    v-if="isAdmin"
+                                    href="/admin"
+                                    @click="closeMoreMenu"
+                                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center">
+                                        <Settings class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <span class="font-medium block">{{ user.name }}</span>
+                                        <span class="text-xs text-gray-500">Admin Panel</span>
+                                    </div>
+                                </a>
                                 <Link
-                                    :href="isAdmin ? '/admin' : '/dashboard'"
+                                    v-else
+                                    href="/dashboard"
                                     @click="closeMoreMenu"
                                     class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                 >
@@ -354,7 +378,7 @@ const closeMoreMenu = () => {
                                     </div>
                                     <div>
                                         <span class="font-medium block">{{ user.name }}</span>
-                                        <span class="text-xs text-gray-500">{{ isAdmin ? 'Admin' : 'Dashboard' }}</span>
+                                        <span class="text-xs text-gray-500">Dashboard</span>
                                     </div>
                                 </Link>
                                 <Link

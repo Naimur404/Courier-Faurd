@@ -45,7 +45,8 @@ class AuthController extends Controller
             
             // Redirect based on user role
             if ($user->role === 'admin') {
-                return redirect()->intended('/admin');
+                // Use Inertia location for full page redirect to Filament admin
+                return Inertia::location('/admin');
             } else {
                 return redirect()->intended('/dashboard');
             }
