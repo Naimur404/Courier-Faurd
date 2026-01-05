@@ -9,20 +9,20 @@
 @section('structured_data')
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
+  "@@context": "https://schema.org",
+  "@@type": "WebApplication",
   "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
   "url": "https://fraudshieldbd.site",
   "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "All",
   "offers": {
-    "@type": "Offer",
+    "@@type": "Offer",
     "price": "0",
     "priceCurrency": "BDT"
   },
   "author": {
-    "@type": "Organization",
+    "@@type": "Organization",
     "name": "Tyrodevs",
     "url": "https://tyrodevs.com"
   }
