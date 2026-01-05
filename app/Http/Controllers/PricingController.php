@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class PricingController extends Controller
 {
@@ -14,9 +15,20 @@ class PricingController extends Controller
      */
     public function index()
     {
-        $plans = Plan::active()->ordered()->get();
+        $plans = Plan::active()->ordered()->get()->map(function ($plan) {
+            return [
+                'id' => $plan->id,
+                'name' => $plan->name,
+                'description' => $plan->description,
+                'formatted_price' => $plan->formatted_price,
+                'duration_text' => $plan->duration_text,
+                'features' => $plan->features ?? [],
+            ];
+        });
         
-        return view('pricing.index', compact('plans'));
+        return Inertia::render('Pricing/Index', [
+            'plans' => $plans,
+        ]);
     }
 
     /**

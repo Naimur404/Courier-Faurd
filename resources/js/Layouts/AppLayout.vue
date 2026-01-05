@@ -7,8 +7,9 @@ import {
     User, Settings, LayoutDashboard, ChevronDown 
 } from 'lucide-vue-next';
 import Toast from '@/components/ui/Toast.vue';
+import type { PageProps } from '@/types/inertia';
 
-const page = usePage();
+const page = usePage<PageProps>();
 const isDark = ref(false);
 const isMobileMenuOpen = ref(false);
 const isUserDropdownOpen = ref(false);

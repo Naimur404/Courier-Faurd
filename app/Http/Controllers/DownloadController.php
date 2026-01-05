@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use App\Models\DownloadTracker;
+use Inertia\Inertia;
 
 class DownloadController extends Controller
 {
@@ -23,7 +24,12 @@ class DownloadController extends Controller
 
         $lastDownloadTime = $lastDownload ? $lastDownload->created_at->diffForHumans() : null;
 
-        return view('download', compact('downloadCount', 'lastDownloadTime'));
+        return Inertia::render('Download', [
+            'downloadCount' => $downloadCount,
+            'lastDownloadTime' => $lastDownloadTime,
+            'downloadUrl' => route('download.apk2'),
+            'qrCodeUrl' => 'https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=' . urlencode(route('download.apk2')),
+        ]);
     }
 
     public function trackIntent()

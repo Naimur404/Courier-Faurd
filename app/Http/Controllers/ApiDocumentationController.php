@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ApiDocumentationController extends Controller
 {
@@ -11,6 +12,6 @@ class ApiDocumentationController extends Controller
      */
     public function index()
     {
-        return view('api.documentation');
+        return Inertia::render('Api/Documentation');
     }
 }
