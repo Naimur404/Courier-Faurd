@@ -1,9 +1,8 @@
 import { defineComponent, computed, unref, withCtx, createVNode, createTextVNode, createBlock, createCommentVNode, openBlock, toDisplayString, Fragment, renderList, useSSRContext } from "vue";
 import { ssrRenderComponent, ssrRenderList, ssrRenderClass, ssrInterpolate } from "vue/server-renderer";
 import { a as usePage, h as head_default, l as link_default } from "../ssr.js";
-import { _ as _sfc_main$1 } from "./AppLayout-BWjM9ngr.js";
-import { _ as _sfc_main$2 } from "./Card-DfyUDDxC.js";
-import { _ as _sfc_main$3 } from "./Button-Dm3W5gAW.js";
+import { _ as _sfc_main$1 } from "./AppLayout-B7Gogr1C.js";
+import { a as _sfc_main$2, _ as _sfc_main$3 } from "./Button-WwCvZvLI.js";
 import "@vue/server-renderer";
 import "@inertiajs/core";
 import "lodash-es";
@@ -118,14 +117,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       _push(ssrRenderComponent(_sfc_main$1, null, {
         default: withCtx((_, _push2, _parent2, _scopeId) => {
           if (_push2) {
-            _push2(`<div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 py-12 sm:py-16"${_scopeId}><div class="container mx-auto px-4 sm:px-6 lg:px-8"${_scopeId}><div class="text-center mb-16"${_scopeId}><div class="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-6"${_scopeId}><i class="fas fa-crown text-blue-600 text-2xl"${_scopeId}></i></div><h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6"${_scopeId}> Choose Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600"${_scopeId}>Plan</span></h1><p class="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed"${_scopeId}> Select the perfect plan for your business needs. All plans include our comprehensive courier tracking API with real-time updates and 24/7 support. </p></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16"${_scopeId}><!--[-->`);
+            _push2(`<div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 sm:py-16"${_scopeId}><div class="container mx-auto px-4 sm:px-6 lg:px-8"${_scopeId}><div class="text-center mb-16"${_scopeId}><div class="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-6"${_scopeId}><i class="fas fa-crown text-blue-600 dark:text-blue-400 text-2xl"${_scopeId}></i></div><h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6"${_scopeId}> Choose Your <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400"${_scopeId}>Plan</span></h1><p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"${_scopeId}> Select the perfect plan for your business needs. All plans include our comprehensive courier tracking API with real-time updates and 24/7 support. </p></div><div class="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16"${_scopeId}><!--[-->`);
             ssrRenderList(__props.plans, (plan, index) => {
               _push2(ssrRenderComponent(_sfc_main$2, {
                 key: plan.id,
-                class: [
-                  "relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2",
-                  index === 1 ? "ring-4 ring-blue-500 transform scale-105 lg:scale-110" : ""
-                ]
+                class: `relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${index === 1 ? "ring-4 ring-blue-500 transform scale-105 lg:scale-110" : ""}`
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
@@ -134,15 +130,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     } else {
                       _push3(`<!---->`);
                     }
-                    _push3(`<div class="p-8"${_scopeId2}><div class="text-center"${_scopeId2}><div class="${ssrRenderClass(["inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6", getPlanIconGradient(index)])}"${_scopeId2}><i class="${ssrRenderClass(["fas text-white text-2xl", getPlanIcon(index)])}"${_scopeId2}></i></div><h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2"${_scopeId2}>${ssrInterpolate(plan.name)}</h3><p class="text-gray-600 dark:text-gray-300 mb-6"${_scopeId2}>${ssrInterpolate(plan.description)}</p><div class="mb-8"${_scopeId2}><span class="text-5xl font-bold text-gray-900 dark:text-white"${_scopeId2}>${ssrInterpolate(plan.formatted_price)}</span><span class="text-gray-500 text-lg"${_scopeId2}>/ ${ssrInterpolate(plan.duration_text)}</span></div></div><ul class="space-y-4 mb-8"${_scopeId2}><!--[-->`);
+                    _push3(`<div class="p-8"${_scopeId2}><div class="text-center"${_scopeId2}><div class="${ssrRenderClass(`inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6 ${getPlanIconGradient(index)}`)}"${_scopeId2}><i class="${ssrRenderClass(["fas text-white text-2xl", getPlanIcon(index)])}"${_scopeId2}></i></div><h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2"${_scopeId2}>${ssrInterpolate(plan.name)}</h3><p class="text-gray-600 dark:text-gray-300 mb-6"${_scopeId2}>${ssrInterpolate(plan.description)}</p><div class="mb-8"${_scopeId2}><span class="text-5xl font-bold text-gray-900 dark:text-white"${_scopeId2}>${ssrInterpolate(plan.formatted_price)}</span><span class="text-gray-500 text-lg"${_scopeId2}>/ ${ssrInterpolate(plan.duration_text)}</span></div></div><ul class="space-y-4 mb-8"${_scopeId2}><!--[-->`);
                     ssrRenderList(plan.features, (feature) => {
-                      _push3(`<li class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-0.5"${_scopeId2}><i class="fas fa-check text-green-600 text-sm"${_scopeId2}></i></div><span class="text-gray-700 dark:text-gray-300 leading-relaxed"${_scopeId2}>${ssrInterpolate(feature)}</span></li>`);
+                      _push3(`<li class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-3 mt-0.5"${_scopeId2}><i class="fas fa-check text-green-600 dark:text-green-400 text-sm"${_scopeId2}></i></div><span class="text-gray-700 dark:text-gray-300 leading-relaxed"${_scopeId2}>${ssrInterpolate(feature)}</span></li>`);
                     });
                     _push3(`<!--]--></ul><div class="pt-4"${_scopeId2}>`);
                     if (user.value) {
                       _push3(`<!--[-->`);
                       if (hasActiveSubscription.value) {
-                        _push3(`<button disabled class="w-full bg-gray-100 text-gray-500 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200"${_scopeId2}><i class="fas fa-check-circle mr-2"${_scopeId2}></i>Already Subscribed </button>`);
+                        _push3(`<button disabled class="w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200 dark:border-gray-600"${_scopeId2}><i class="fas fa-check-circle mr-2"${_scopeId2}></i>Already Subscribed </button>`);
                       } else {
                         _push3(ssrRenderComponent(unref(link_default), {
                           href: `/pricing/subscribe/${plan.id}`,
@@ -195,7 +191,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode("div", { class: "p-8" }, [
                         createVNode("div", { class: "text-center" }, [
                           createVNode("div", {
-                            class: ["inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6", getPlanIconGradient(index)]
+                            class: `inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6 ${getPlanIconGradient(index)}`
                           }, [
                             createVNode("i", {
                               class: ["fas text-white text-2xl", getPlanIcon(index)]
@@ -214,8 +210,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                               key: feature,
                               class: "flex items-start"
                             }, [
-                              createVNode("div", { class: "flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-0.5" }, [
-                                createVNode("i", { class: "fas fa-check text-green-600 text-sm" })
+                              createVNode("div", { class: "flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-3 mt-0.5" }, [
+                                createVNode("i", { class: "fas fa-check text-green-600 dark:text-green-400 text-sm" })
                               ]),
                               createVNode("span", { class: "text-gray-700 dark:text-gray-300 leading-relaxed" }, toDisplayString(feature), 1)
                             ]);
@@ -226,7 +222,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                             hasActiveSubscription.value ? (openBlock(), createBlock("button", {
                               key: 0,
                               disabled: "",
-                              class: "w-full bg-gray-100 text-gray-500 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200"
+                              class: "w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200 dark:border-gray-600"
                             }, [
                               createVNode("i", { class: "fas fa-check-circle mr-2" }),
                               createTextVNode("Already Subscribed ")
@@ -264,7 +260,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(ssrRenderComponent(_sfc_main$2, { class: "p-8 sm:p-12 max-w-6xl mx-auto mb-16" }, {
               default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                 if (_push3) {
-                  _push3(`<div class="text-center mb-12"${_scopeId2}><div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl mb-4"${_scopeId2}><i class="fas fa-credit-card text-white text-2xl"${_scopeId2}></i></div><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4"${_scopeId2}>Payment Information</h2><p class="text-gray-600 dark:text-gray-300"${_scopeId2}>Simple and secure payment process with instant activation</p></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12"${_scopeId2}><div${_scopeId2}><h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center"${_scopeId2}><div class="w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3"${_scopeId2}><i class="fas fa-mobile-alt text-pink-600"${_scopeId2}></i></div> Bkash Payment </h3><div class="bg-gradient-to-r from-pink-50 to-rose-50 border-2 border-pink-200 rounded-xl p-6"${_scopeId2}><div class="text-center"${_scopeId2}><p class="text-gray-700 mb-3 font-medium"${_scopeId2}>Send money to:</p><div class="bg-white rounded-lg p-4 mb-4 shadow-sm"${_scopeId2}><p class="text-3xl font-bold text-pink-600 mb-2"${_scopeId2}>01309092748</p><button class="text-sm text-pink-600 hover:text-pink-700 font-medium"${_scopeId2}><i class="fas fa-copy mr-1"${_scopeId2}></i>Copy Number </button></div><div class="bg-pink-100 rounded-lg p-4"${_scopeId2}><p class="text-sm text-pink-800 font-medium"${_scopeId2}><i class="fas fa-info-circle mr-2"${_scopeId2}></i> Send money and provide the transaction ID during subscription. </p></div></div></div></div><div${_scopeId2}><h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center"${_scopeId2}><div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3"${_scopeId2}><i class="fas fa-clock text-blue-600"${_scopeId2}></i></div> Process Timeline </h3><div class="space-y-4"${_scopeId2}><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 1 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Choose Plan &amp; Payment</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Select your plan and complete Bkash payment</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 2 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Submit Transaction ID</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Provide your Bkash transaction ID</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 3 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Payment Verification</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>We verify within 2-24 hours</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}><i class="fas fa-check text-sm"${_scopeId2}></i></div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Subscription Active</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Start using API immediately</p></div></div></div></div></div>`);
+                  _push3(`<div class="text-center mb-12"${_scopeId2}><div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-xl mb-4"${_scopeId2}><i class="fas fa-credit-card text-white text-2xl"${_scopeId2}></i></div><h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4"${_scopeId2}>Payment Information</h2><p class="text-gray-600 dark:text-gray-300"${_scopeId2}>Simple and secure payment process with instant activation</p></div><div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12"${_scopeId2}><div${_scopeId2}><h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center"${_scopeId2}><div class="w-10 h-10 bg-pink-100 dark:bg-pink-900/50 rounded-lg flex items-center justify-center mr-3"${_scopeId2}><i class="fas fa-mobile-alt text-pink-600 dark:text-pink-400"${_scopeId2}></i></div> Bkash Payment </h3><div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6"${_scopeId2}><div class="text-center"${_scopeId2}><p class="text-gray-700 dark:text-gray-300 mb-3 font-medium"${_scopeId2}>Send money to:</p><div class="bg-white dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-sm"${_scopeId2}><p class="text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2"${_scopeId2}>01309092748</p><button class="text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium"${_scopeId2}><i class="fas fa-copy mr-1"${_scopeId2}></i>Copy Number </button></div><div class="bg-pink-100 dark:bg-pink-900/30 rounded-lg p-4"${_scopeId2}><p class="text-sm text-pink-800 dark:text-pink-300 font-medium"${_scopeId2}><i class="fas fa-info-circle mr-2"${_scopeId2}></i> Send money and provide the transaction ID during subscription. </p></div></div></div></div><div${_scopeId2}><h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center"${_scopeId2}><div class="w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mr-3"${_scopeId2}><i class="fas fa-clock text-blue-600 dark:text-blue-400"${_scopeId2}></i></div> Process Timeline </h3><div class="space-y-4"${_scopeId2}><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 1 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Choose Plan &amp; Payment</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Select your plan and complete Bkash payment</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 2 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Submit Transaction ID</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Provide your Bkash transaction ID</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}> 3 </div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Payment Verification</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>We verify within 2-24 hours</p></div></div><div class="flex items-start"${_scopeId2}><div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-4"${_scopeId2}><i class="fas fa-check text-sm"${_scopeId2}></i></div><div class="pt-1"${_scopeId2}><p class="text-gray-900 dark:text-white font-medium"${_scopeId2}>Subscription Active</p><p class="text-gray-600 dark:text-gray-300 text-sm"${_scopeId2}>Start using API immediately</p></div></div></div></div></div>`);
                 } else {
                   return [
                     createVNode("div", { class: "text-center mb-12" }, [
@@ -277,26 +273,26 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     createVNode("div", { class: "grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12" }, [
                       createVNode("div", null, [
                         createVNode("h3", { class: "text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center" }, [
-                          createVNode("div", { class: "w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3" }, [
-                            createVNode("i", { class: "fas fa-mobile-alt text-pink-600" })
+                          createVNode("div", { class: "w-10 h-10 bg-pink-100 dark:bg-pink-900/50 rounded-lg flex items-center justify-center mr-3" }, [
+                            createVNode("i", { class: "fas fa-mobile-alt text-pink-600 dark:text-pink-400" })
                           ]),
                           createTextVNode(" Bkash Payment ")
                         ]),
-                        createVNode("div", { class: "bg-gradient-to-r from-pink-50 to-rose-50 border-2 border-pink-200 rounded-xl p-6" }, [
+                        createVNode("div", { class: "bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6" }, [
                           createVNode("div", { class: "text-center" }, [
-                            createVNode("p", { class: "text-gray-700 mb-3 font-medium" }, "Send money to:"),
-                            createVNode("div", { class: "bg-white rounded-lg p-4 mb-4 shadow-sm" }, [
-                              createVNode("p", { class: "text-3xl font-bold text-pink-600 mb-2" }, "01309092748"),
+                            createVNode("p", { class: "text-gray-700 dark:text-gray-300 mb-3 font-medium" }, "Send money to:"),
+                            createVNode("div", { class: "bg-white dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-sm" }, [
+                              createVNode("p", { class: "text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2" }, "01309092748"),
                               createVNode("button", {
                                 onClick: ($event) => copyToClipboard("01309092748"),
-                                class: "text-sm text-pink-600 hover:text-pink-700 font-medium"
+                                class: "text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium"
                               }, [
                                 createVNode("i", { class: "fas fa-copy mr-1" }),
                                 createTextVNode("Copy Number ")
                               ], 8, ["onClick"])
                             ]),
-                            createVNode("div", { class: "bg-pink-100 rounded-lg p-4" }, [
-                              createVNode("p", { class: "text-sm text-pink-800 font-medium" }, [
+                            createVNode("div", { class: "bg-pink-100 dark:bg-pink-900/30 rounded-lg p-4" }, [
+                              createVNode("p", { class: "text-sm text-pink-800 dark:text-pink-300 font-medium" }, [
                                 createVNode("i", { class: "fas fa-info-circle mr-2" }),
                                 createTextVNode(" Send money and provide the transaction ID during subscription. ")
                               ])
@@ -306,8 +302,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       ]),
                       createVNode("div", null, [
                         createVNode("h3", { class: "text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center" }, [
-                          createVNode("div", { class: "w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3" }, [
-                            createVNode("i", { class: "fas fa-clock text-blue-600" })
+                          createVNode("div", { class: "w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mr-3" }, [
+                            createVNode("i", { class: "fas fa-clock text-blue-600 dark:text-blue-400" })
                           ]),
                           createTextVNode(" Process Timeline ")
                         ]),
@@ -420,26 +416,23 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             _push2(`</div></div></div>`);
           } else {
             return [
-              createVNode("div", { class: "min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 py-12 sm:py-16" }, [
+              createVNode("div", { class: "min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-12 sm:py-16" }, [
                 createVNode("div", { class: "container mx-auto px-4 sm:px-6 lg:px-8" }, [
                   createVNode("div", { class: "text-center mb-16" }, [
-                    createVNode("div", { class: "inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-6" }, [
-                      createVNode("i", { class: "fas fa-crown text-blue-600 text-2xl" })
+                    createVNode("div", { class: "inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/50 rounded-full mb-6" }, [
+                      createVNode("i", { class: "fas fa-crown text-blue-600 dark:text-blue-400 text-2xl" })
                     ]),
-                    createVNode("h1", { class: "text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6" }, [
+                    createVNode("h1", { class: "text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6" }, [
                       createTextVNode(" Choose Your "),
-                      createVNode("span", { class: "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600" }, "Plan")
+                      createVNode("span", { class: "text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400" }, "Plan")
                     ]),
-                    createVNode("p", { class: "text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed" }, " Select the perfect plan for your business needs. All plans include our comprehensive courier tracking API with real-time updates and 24/7 support. ")
+                    createVNode("p", { class: "text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed" }, " Select the perfect plan for your business needs. All plans include our comprehensive courier tracking API with real-time updates and 24/7 support. ")
                   ]),
                   createVNode("div", { class: "grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-7xl mx-auto mb-16" }, [
                     (openBlock(true), createBlock(Fragment, null, renderList(__props.plans, (plan, index) => {
                       return openBlock(), createBlock(_sfc_main$2, {
                         key: plan.id,
-                        class: [
-                          "relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2",
-                          index === 1 ? "ring-4 ring-blue-500 transform scale-105 lg:scale-110" : ""
-                        ]
+                        class: `relative overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 ${index === 1 ? "ring-4 ring-blue-500 transform scale-105 lg:scale-110" : ""}`
                       }, {
                         default: withCtx(() => [
                           index === 1 ? (openBlock(), createBlock("div", {
@@ -454,7 +447,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           createVNode("div", { class: "p-8" }, [
                             createVNode("div", { class: "text-center" }, [
                               createVNode("div", {
-                                class: ["inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6", getPlanIconGradient(index)]
+                                class: `inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r rounded-xl mb-6 ${getPlanIconGradient(index)}`
                               }, [
                                 createVNode("i", {
                                   class: ["fas text-white text-2xl", getPlanIcon(index)]
@@ -473,8 +466,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                   key: feature,
                                   class: "flex items-start"
                                 }, [
-                                  createVNode("div", { class: "flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center mr-3 mt-0.5" }, [
-                                    createVNode("i", { class: "fas fa-check text-green-600 text-sm" })
+                                  createVNode("div", { class: "flex-shrink-0 w-6 h-6 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center mr-3 mt-0.5" }, [
+                                    createVNode("i", { class: "fas fa-check text-green-600 dark:text-green-400 text-sm" })
                                   ]),
                                   createVNode("span", { class: "text-gray-700 dark:text-gray-300 leading-relaxed" }, toDisplayString(feature), 1)
                                 ]);
@@ -485,7 +478,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                                 hasActiveSubscription.value ? (openBlock(), createBlock("button", {
                                   key: 0,
                                   disabled: "",
-                                  class: "w-full bg-gray-100 text-gray-500 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200"
+                                  class: "w-full bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 py-4 px-6 rounded-xl font-semibold cursor-not-allowed border border-gray-200 dark:border-gray-600"
                                 }, [
                                   createVNode("i", { class: "fas fa-check-circle mr-2" }),
                                   createTextVNode("Already Subscribed ")
@@ -530,26 +523,26 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       createVNode("div", { class: "grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12" }, [
                         createVNode("div", null, [
                           createVNode("h3", { class: "text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center" }, [
-                            createVNode("div", { class: "w-10 h-10 bg-pink-100 rounded-lg flex items-center justify-center mr-3" }, [
-                              createVNode("i", { class: "fas fa-mobile-alt text-pink-600" })
+                            createVNode("div", { class: "w-10 h-10 bg-pink-100 dark:bg-pink-900/50 rounded-lg flex items-center justify-center mr-3" }, [
+                              createVNode("i", { class: "fas fa-mobile-alt text-pink-600 dark:text-pink-400" })
                             ]),
                             createTextVNode(" Bkash Payment ")
                           ]),
-                          createVNode("div", { class: "bg-gradient-to-r from-pink-50 to-rose-50 border-2 border-pink-200 rounded-xl p-6" }, [
+                          createVNode("div", { class: "bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-2 border-pink-200 dark:border-pink-800 rounded-xl p-6" }, [
                             createVNode("div", { class: "text-center" }, [
-                              createVNode("p", { class: "text-gray-700 mb-3 font-medium" }, "Send money to:"),
-                              createVNode("div", { class: "bg-white rounded-lg p-4 mb-4 shadow-sm" }, [
-                                createVNode("p", { class: "text-3xl font-bold text-pink-600 mb-2" }, "01309092748"),
+                              createVNode("p", { class: "text-gray-700 dark:text-gray-300 mb-3 font-medium" }, "Send money to:"),
+                              createVNode("div", { class: "bg-white dark:bg-gray-800 rounded-lg p-4 mb-4 shadow-sm" }, [
+                                createVNode("p", { class: "text-3xl font-bold text-pink-600 dark:text-pink-400 mb-2" }, "01309092748"),
                                 createVNode("button", {
                                   onClick: ($event) => copyToClipboard("01309092748"),
-                                  class: "text-sm text-pink-600 hover:text-pink-700 font-medium"
+                                  class: "text-sm text-pink-600 dark:text-pink-400 hover:text-pink-700 dark:hover:text-pink-300 font-medium"
                                 }, [
                                   createVNode("i", { class: "fas fa-copy mr-1" }),
                                   createTextVNode("Copy Number ")
                                 ], 8, ["onClick"])
                               ]),
-                              createVNode("div", { class: "bg-pink-100 rounded-lg p-4" }, [
-                                createVNode("p", { class: "text-sm text-pink-800 font-medium" }, [
+                              createVNode("div", { class: "bg-pink-100 dark:bg-pink-900/30 rounded-lg p-4" }, [
+                                createVNode("p", { class: "text-sm text-pink-800 dark:text-pink-300 font-medium" }, [
                                   createVNode("i", { class: "fas fa-info-circle mr-2" }),
                                   createTextVNode(" Send money and provide the transaction ID during subscription. ")
                                 ])
@@ -559,8 +552,8 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         ]),
                         createVNode("div", null, [
                           createVNode("h3", { class: "text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center" }, [
-                            createVNode("div", { class: "w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mr-3" }, [
-                              createVNode("i", { class: "fas fa-clock text-blue-600" })
+                            createVNode("div", { class: "w-10 h-10 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center mr-3" }, [
+                              createVNode("i", { class: "fas fa-clock text-blue-600 dark:text-blue-400" })
                             ]),
                             createTextVNode(" Process Timeline ")
                           ]),

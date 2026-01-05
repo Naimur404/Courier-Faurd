@@ -1,9 +1,8 @@
 import { defineComponent, onMounted, onUnmounted, watch, unref, useSSRContext, ref, mergeProps, computed, withCtx, createVNode, toDisplayString, createTextVNode, withDirectives, withKeys, vModelText, resolveDynamicComponent, createBlock, openBlock, Fragment, createCommentVNode, renderList, Transition, withModifiers } from "vue";
 import { ssrRenderTeleport, ssrRenderClass, ssrRenderComponent, ssrRenderSlot, ssrRenderAttrs, ssrRenderList, ssrIncludeBooleanAttr, ssrInterpolate, ssrRenderAttr, ssrRenderStyle, ssrRenderVNode } from "vue/server-renderer";
 import { h as head_default } from "../ssr.js";
-import { _ as _sfc_main$9 } from "./AppLayout-BWjM9ngr.js";
-import { _ as _sfc_main$b } from "./Button-Dm3W5gAW.js";
-import { _ as _sfc_main$a } from "./Card-DfyUDDxC.js";
+import { _ as _sfc_main$9 } from "./AppLayout-B7Gogr1C.js";
+import { a as _sfc_main$a, _ as _sfc_main$b } from "./Button-WwCvZvLI.js";
 import { c as cn, f as formatBengaliNumber, g as getColorForRatio, m as maskPhoneNumber, a as formatBengaliDate, b as convertToBengaliNumbers } from "./utils-DvCvi0aN.js";
 import { X, Star, HelpCircle, CheckCircle, AlertCircle, XCircle, BarChart3, Clock, Calendar, Infinity, PhoneCall, RefreshCw, Phone, Search, Shield, PieChart, MessageSquare, Plus, TrendingUp, History, ChevronUp, ChevronDown, Download, Send } from "lucide-vue-next";
 import { _ as _sfc_main$c, b as _sfc_main$d, a as _sfc_main$e, c as _sfc_main$f, d as _sfc_main$g } from "./AlertDescription-DsjVZstT.js";
@@ -1989,7 +1988,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               }),
               _: 1
             }, _parent2, _scopeId));
-            _push2(`</section><section class="container mx-auto px-4 py-12"${_scopeId}><div class="text-center mb-8"${_scopeId}><h2 class="text-2xl font-bold mb-2"${_scopeId}>সাধারণ জিজ্ঞাসা (FAQ)</h2><p class="text-gray-600 dark:text-gray-400"${_scopeId}>আপনার FraudShield সম্পর্কিত সব প্রশ্নের উত্তর এখানে পাবেন</p></div><div class="max-w-3xl mx-auto space-y-4"${_scopeId}><!--[-->`);
+            _push2(`</section><section class="container mx-auto px-4 py-8 md:py-12"${_scopeId}><div class="text-center mb-8"${_scopeId}><h2 class="text-2xl font-bold mb-2"${_scopeId}>সাধারণ জিজ্ঞাসা (FAQ)</h2><p class="text-gray-600 dark:text-gray-400"${_scopeId}>আপনার FraudShield সম্পর্কিত সব প্রশ্নের উত্তর এখানে পাবেন</p></div><div class="max-w-3xl mx-auto space-y-3"${_scopeId}><!--[-->`);
             ssrRenderList(faqs, (faq, index) => {
               _push2(ssrRenderComponent(_sfc_main$a, {
                 key: index,
@@ -1997,15 +1996,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
               }, {
                 default: withCtx((_2, _push3, _parent3, _scopeId2) => {
                   if (_push3) {
-                    _push3(`<button class="w-full p-5 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"${_scopeId2}><span${_scopeId2}>${ssrInterpolate(faq.question)}</span><div class="p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400"${_scopeId2}>`);
+                    _push3(`<button class="w-full p-4 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"${_scopeId2}><span class="text-sm md:text-base"${_scopeId2}>${ssrInterpolate(faq.question)}</span><div class="p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2"${_scopeId2}>`);
                     if (activeFaq.value === index) {
-                      _push3(ssrRenderComponent(unref(ChevronUp), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                      _push3(ssrRenderComponent(unref(ChevronUp), { class: "w-4 h-4 md:w-5 md:h-5" }, null, _parent3, _scopeId2));
                     } else {
-                      _push3(ssrRenderComponent(unref(ChevronDown), { class: "w-5 h-5" }, null, _parent3, _scopeId2));
+                      _push3(ssrRenderComponent(unref(ChevronDown), { class: "w-4 h-4 md:w-5 md:h-5" }, null, _parent3, _scopeId2));
                     }
                     _push3(`</div></button>`);
                     if (activeFaq.value === index) {
-                      _push3(`<div class="px-5 pb-5 text-gray-600 dark:text-gray-300 overflow-hidden"${_scopeId2}>${ssrInterpolate(faq.answer)}</div>`);
+                      _push3(`<div class="px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 overflow-hidden"${_scopeId2}>${ssrInterpolate(faq.answer)}</div>`);
                     } else {
                       _push3(`<!---->`);
                     }
@@ -2013,16 +2012,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                     return [
                       createVNode("button", {
                         onClick: ($event) => toggleFaq(index),
-                        class: "w-full p-5 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                        class: "w-full p-4 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
                       }, [
-                        createVNode("span", null, toDisplayString(faq.question), 1),
-                        createVNode("div", { class: "p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400" }, [
+                        createVNode("span", { class: "text-sm md:text-base" }, toDisplayString(faq.question), 1),
+                        createVNode("div", { class: "p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2" }, [
                           activeFaq.value === index ? (openBlock(), createBlock(unref(ChevronUp), {
                             key: 0,
-                            class: "w-5 h-5"
+                            class: "w-4 h-4 md:w-5 md:h-5"
                           })) : (openBlock(), createBlock(unref(ChevronDown), {
                             key: 1,
-                            class: "w-5 h-5"
+                            class: "w-4 h-4 md:w-5 md:h-5"
                           }))
                         ])
                       ], 8, ["onClick"]),
@@ -2037,7 +2036,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                         default: withCtx(() => [
                           activeFaq.value === index ? (openBlock(), createBlock("div", {
                             key: 0,
-                            class: "px-5 pb-5 text-gray-600 dark:text-gray-300 overflow-hidden"
+                            class: "px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 overflow-hidden"
                           }, toDisplayString(faq.answer), 1)) : createCommentVNode("", true)
                         ]),
                         _: 2
@@ -2048,7 +2047,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                 _: 2
               }, _parent2, _scopeId));
             });
-            _push2(`<!--]--></div></section><div class="fixed bottom-8 right-8 z-40"${_scopeId}><a href="/download" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl animate-pulse"${_scopeId}>`);
+            _push2(`<!--]--></div></section><div class="fixed bottom-8 right-8 z-40 hidden md:block"${_scopeId}><a href="/download" class="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl animate-pulse"${_scopeId}>`);
             _push2(ssrRenderComponent(unref(Download), { class: "w-5 h-5" }, null, _parent2, _scopeId));
             _push2(`<span${_scopeId}>অ্যাপ ডাউনলোড করুন</span></a></div>`);
             _push2(ssrRenderComponent(_sfc_main$8, {
@@ -2770,12 +2769,12 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   _: 1
                 })
               ]),
-              createVNode("section", { class: "container mx-auto px-4 py-12" }, [
+              createVNode("section", { class: "container mx-auto px-4 py-8 md:py-12" }, [
                 createVNode("div", { class: "text-center mb-8" }, [
                   createVNode("h2", { class: "text-2xl font-bold mb-2" }, "সাধারণ জিজ্ঞাসা (FAQ)"),
                   createVNode("p", { class: "text-gray-600 dark:text-gray-400" }, "আপনার FraudShield সম্পর্কিত সব প্রশ্নের উত্তর এখানে পাবেন")
                 ]),
-                createVNode("div", { class: "max-w-3xl mx-auto space-y-4" }, [
+                createVNode("div", { class: "max-w-3xl mx-auto space-y-3" }, [
                   (openBlock(), createBlock(Fragment, null, renderList(faqs, (faq, index) => {
                     return createVNode(_sfc_main$a, {
                       key: index,
@@ -2784,16 +2783,16 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                       default: withCtx(() => [
                         createVNode("button", {
                           onClick: ($event) => toggleFaq(index),
-                          class: "w-full p-5 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
+                          class: "w-full p-4 flex justify-between items-center text-left font-semibold text-gray-800 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition"
                         }, [
-                          createVNode("span", null, toDisplayString(faq.question), 1),
-                          createVNode("div", { class: "p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400" }, [
+                          createVNode("span", { class: "text-sm md:text-base" }, toDisplayString(faq.question), 1),
+                          createVNode("div", { class: "p-1 bg-indigo-100 dark:bg-indigo-900 rounded-full text-indigo-600 dark:text-indigo-400 flex-shrink-0 ml-2" }, [
                             activeFaq.value === index ? (openBlock(), createBlock(unref(ChevronUp), {
                               key: 0,
-                              class: "w-5 h-5"
+                              class: "w-4 h-4 md:w-5 md:h-5"
                             })) : (openBlock(), createBlock(unref(ChevronDown), {
                               key: 1,
-                              class: "w-5 h-5"
+                              class: "w-4 h-4 md:w-5 md:h-5"
                             }))
                           ])
                         ], 8, ["onClick"]),
@@ -2808,7 +2807,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                           default: withCtx(() => [
                             activeFaq.value === index ? (openBlock(), createBlock("div", {
                               key: 0,
-                              class: "px-5 pb-5 text-gray-600 dark:text-gray-300 overflow-hidden"
+                              class: "px-4 pb-4 text-sm text-gray-600 dark:text-gray-300 overflow-hidden"
                             }, toDisplayString(faq.answer), 1)) : createCommentVNode("", true)
                           ]),
                           _: 2
@@ -2819,7 +2818,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
                   }), 64))
                 ])
               ]),
-              createVNode("div", { class: "fixed bottom-8 right-8 z-40" }, [
+              createVNode("div", { class: "fixed bottom-8 right-8 z-40 hidden md:block" }, [
                 createVNode("a", {
                   href: "/download",
                   class: "flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:shadow-2xl hover:scale-105 transition-all duration-300 shadow-xl animate-pulse"
