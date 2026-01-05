@@ -147,7 +147,12 @@ const closeMoreMenu = () => {
                             v-for="link in navLinks"
                             :key="link.href"
                             :href="link.href"
-                            class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                            :class="[
+                                'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                isActiveRoute(link.href)
+                                    ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                                    : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                            ]"
                         >
                             <component :is="link.icon" class="w-4 h-4" />
                             {{ link.name }}
@@ -158,7 +163,12 @@ const closeMoreMenu = () => {
                             <a
                                 v-if="isAdmin"
                                 href="/admin"
-                                class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                                :class="[
+                                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                    isActiveRoute('/admin')
+                                        ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                                        : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                                ]"
                             >
                                 <Settings class="w-4 h-4" />
                                 Admin
@@ -166,7 +176,12 @@ const closeMoreMenu = () => {
                             <Link
                                 v-else
                                 href="/dashboard"
-                                class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                                :class="[
+                                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                    isActiveRoute('/dashboard')
+                                        ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                                        : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                                ]"
                             >
                                 <LayoutDashboard class="w-4 h-4" />
                                 Dashboard
@@ -229,14 +244,24 @@ const closeMoreMenu = () => {
                         <template v-else>
                             <Link
                                 href="/login"
-                                class="flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-all"
+                                :class="[
+                                    'flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all',
+                                    isActiveRoute('/login')
+                                        ? 'text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30'
+                                        : 'text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700/50'
+                                ]"
                             >
                                 <LogIn class="w-4 h-4" />
                                 Login
                             </Link>
                             <Link
                                 href="/register"
-                                class="flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:opacity-90 transition-opacity"
+                                :class="[
+                                    'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-opacity',
+                                    isActiveRoute('/register')
+                                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white opacity-100'
+                                        : 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white hover:opacity-90'
+                                ]"
                             >
                                 <UserPlus class="w-4 h-4" />
                                 Register
