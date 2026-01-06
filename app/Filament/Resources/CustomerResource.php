@@ -226,7 +226,8 @@ class CustomerResource extends Resource
             ])
             ->defaultSort('last_searched_at', 'desc')
             ->striped()
-            ->paginated([10, 25, 50, 100]);
+            ->paginated([10, 25, 50, 100])
+            ->poll('30s'); // Auto-refresh every 30 seconds
     }
 
     public static function getRelations(): array
