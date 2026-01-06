@@ -67,17 +67,44 @@ class ApiKeysRelationManager extends RelationManager
                     ])
                     ->columns(3),
                 Section::make('Generated Keys')
+                    ->description('Click on the key/secret to copy to clipboard')
                     ->schema([
                         TextInput::make('key')
                             ->label('API Key')
                             ->disabled()
                             ->dehydrated(false)
-                            ->placeholder('Will be generated upon creation'),
+                            ->default(fn ($record) => $record?->key)
+                            ->extraAttributes(['class' => 'font-mono text-sm'])
+                            ->suffixAction(
+                                \Filament\Forms\Components\Actions\Action::make('copyKey')
+                                    ->icon('heroicon-o-clipboard-document')
+                                    ->action(function ($state, $livewire) {
+                                        $livewire->dispatch('copy-to-clipboard', text: $state);
+                                        Notification::make()
+                                            ->title('API Key copied!')
+                                            ->success()
+                                            ->duration(2000)
+                                            ->send();
+                                    })
+                            ),
                         TextInput::make('secret')
                             ->label('API Secret')
                             ->disabled()
                             ->dehydrated(false)
-                            ->placeholder('Will be generated upon creation'),
+                            ->default(fn ($record) => $record?->secret)
+                            ->extraAttributes(['class' => 'font-mono text-sm'])
+                            ->suffixAction(
+                                \Filament\Forms\Components\Actions\Action::make('copySecret')
+                                    ->icon('heroicon-o-clipboard-document')
+                                    ->action(function ($state, $livewire) {
+                                        $livewire->dispatch('copy-to-clipboard', text: $state);
+                                        Notification::make()
+                                            ->title('API Secret copied!')
+                                            ->success()
+                                            ->duration(2000)
+                                            ->send();
+                                    })
+                            ),
                     ])
                     ->columns(2)
                     ->hiddenOn('create'),

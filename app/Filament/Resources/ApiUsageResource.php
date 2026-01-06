@@ -79,13 +79,25 @@ class ApiUsageResource extends Resource
                         Textarea::make('request_data')
                             ->label('Request Data (JSON)')
                             ->columnSpanFull()
-                            ->rows(3),
+                            ->rows(6)
+                            ->formatStateUsing(function ($state) {
+                                if (is_array($state) || is_object($state)) {
+                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                }
+                                if (is_string($state)) {
+                                    $decoded = json_decode($state, true);
+                                    if ($decoded !== null) {
+                                        return json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                    }
+                                }
+                                return $state;
+                            }),
                     ])
                     ->columns(2),
                     
                 Section::make('Response Information')
                     ->schema([
-                        TextInput::make('response_status')
+                        TextInput::make('response_code')
                             ->label('Response Status')
                             ->numeric()
                             ->required(),
@@ -96,7 +108,19 @@ class ApiUsageResource extends Resource
                         Textarea::make('response_data')
                             ->label('Response Data (JSON)')
                             ->columnSpanFull()
-                            ->rows(3),
+                            ->rows(10)
+                            ->formatStateUsing(function ($state) {
+                                if (is_array($state) || is_object($state)) {
+                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                }
+                                if (is_string($state)) {
+                                    $decoded = json_decode($state, true);
+                                    if ($decoded !== null) {
+                                        return json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                    }
+                                }
+                                return $state;
+                            }),
                     ])
                     ->columns(2),
             ]);
@@ -131,7 +155,7 @@ class ApiUsageResource extends Resource
                             default => 'gray',
                         };
                     }),
-                TextColumn::make('response_status')
+                TextColumn::make('response_code')
                     ->label('Status')
                     ->badge()
                     ->color(static function ($state): string {
@@ -182,7 +206,7 @@ class ApiUsageResource extends Resource
                         'PATCH' => 'PATCH',
                         'DELETE' => 'DELETE',
                     ]),
-                SelectFilter::make('response_status')
+                SelectFilter::make('response_code')
                     ->label('Response Status')
                     ->options([
                         '200' => '200 - OK',
@@ -197,10 +221,10 @@ class ApiUsageResource extends Resource
                     ]),
                 Filter::make('successful_requests')
                     ->label('Successful Requests')
-                    ->query(fn (Builder $query): Builder => $query->whereBetween('response_status', [200, 299])),
+                    ->query(fn (Builder $query): Builder => $query->whereBetween('response_code', [200, 299])),
                 Filter::make('failed_requests')
                     ->label('Failed Requests')
-                    ->query(fn (Builder $query): Builder => $query->where('response_status', '>=', 400)),
+                    ->query(fn (Builder $query): Builder => $query->where('response_code', '>=', 400)),
                 Filter::make('slow_requests')
                     ->label('Slow Requests (>1s)')
                     ->query(fn (Builder $query): Builder => $query->where('response_time', '>', 1000)),
