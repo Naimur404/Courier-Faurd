@@ -62,7 +62,7 @@ class CustomerReviewResource extends Resource
                             ->required()
                             ->placeholder('Name of the reviewer')
                             ->helperText('Full name of the person leaving the review'),
-                    ])->columns(3),
+                    ])->columns(3)->columnSpanFull(),
                 
                 Section::make('Review Content')
                     ->schema([
@@ -84,7 +84,7 @@ class CustomerReviewResource extends Resource
                             ->columnSpanFull()
                             ->placeholder('Detailed review description or report details')
                             ->helperText('Optional: Additional details about the experience'),
-                    ])->columns(1),
+                    ])->columns(1)->columnSpanFull(),
                 
                 Section::make('System Information')
                     ->schema([
@@ -109,7 +109,7 @@ class CustomerReviewResource extends Resource
                                 
                                 return $record->review_type . ($record->isReport() ? ' 🚨' : ' ✅');
                             }),
-                    ])->columns(3)->hiddenOn('create'),
+                    ])->columns(3)->columnSpanFull()->hiddenOn('create'),
             ]);
     }
 

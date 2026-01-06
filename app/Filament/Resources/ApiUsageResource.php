@@ -66,7 +66,8 @@ class ApiUsageResource extends Resource
                             ])
                             ->required(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
                     
                 Section::make('Request Details')
                     ->schema([
@@ -93,7 +94,8 @@ class ApiUsageResource extends Resource
                                 return $state;
                             }),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
                     
                 Section::make('Response Information')
                     ->schema([
@@ -122,7 +124,8 @@ class ApiUsageResource extends Resource
                                 return $state;
                             }),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 

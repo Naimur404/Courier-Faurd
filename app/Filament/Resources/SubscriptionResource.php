@@ -81,7 +81,8 @@ class SubscriptionResource extends Resource
                                 }
                             }),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 
                 Section::make('Payment Information')
                     ->schema([
@@ -106,7 +107,8 @@ class SubscriptionResource extends Resource
                             ->prefix('৳')
                             ->step(0.01),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 
                 Section::make('Timeline')
                     ->schema([
@@ -120,7 +122,8 @@ class SubscriptionResource extends Resource
                             ->label('Activated Date')
                             ->seconds(false),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 
                 Section::make('Additional Information')
                     ->schema([
@@ -128,7 +131,7 @@ class SubscriptionResource extends Resource
                             ->label('Admin Notes')
                             ->rows(3)
                             ->columnSpanFull(),
-                    ]),
+                    ])->columnSpanFull(),
             ]);
     }
 

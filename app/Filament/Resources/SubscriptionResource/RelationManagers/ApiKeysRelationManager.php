@@ -66,7 +66,8 @@ class ApiKeysRelationManager extends RelationManager
                             ->maxValue(1000)
                             ->helperText('Maximum number of requests per minute'),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
                 Section::make('Generated Keys')
                     ->description('Copy the key/secret values below')
                     ->schema([
@@ -74,22 +75,19 @@ class ApiKeysRelationManager extends RelationManager
                             ->label('API Key')
                             ->disabled()
                             ->dehydrated(false)
-                            ->default(fn ($record) => $record?->key)
+                            ->afterStateHydrated(fn ($component, $record) => $component->state($record?->key))
                             ->extraAttributes(['class' => 'font-mono text-sm'])
-                            ->copyable()
-                            ->copyMessage('API Key copied!')
-                            ->copyMessageDuration(2000),
+                            ->copyable(),
                         TextInput::make('secret')
                             ->label('API Secret')
                             ->disabled()
                             ->dehydrated(false)
-                            ->default(fn ($record) => $record?->secret)
+                            ->afterStateHydrated(fn ($component, $record) => $component->state($record?->secret))
                             ->extraAttributes(['class' => 'font-mono text-sm'])
-                            ->copyable()
-                            ->copyMessage('API Secret copied!')
-                            ->copyMessageDuration(2000),
+                            ->copyable(),
                     ])
-                    ->columns(2)
+                    ->columns(1)
+                    ->columnSpanFull()
                     ->hiddenOn('create'),
                 Section::make('Usage Statistics')
                     ->schema([
@@ -123,6 +121,7 @@ class ApiKeysRelationManager extends RelationManager
                             }),
                     ])
                     ->columns(4)
+                    ->columnSpanFull()
                     ->hiddenOn('create'),
             ]);
     }
@@ -219,9 +218,11 @@ class ApiKeysRelationManager extends RelationManager
             ])
             ->recordActions([
                 ViewAction::make()
-                    ->modalHeading('View API Key Details'),
+                    ->modalHeading('View API Key Details')
+                    ->modalWidth('2xl'),
                 EditAction::make()
-                    ->modalHeading('Edit API Key'),
+                    ->modalHeading('Edit API Key')
+                    ->modalWidth('2xl'),
                 Action::make('toggle_status')
                     ->label(fn (ApiKey $record) => $record->is_active ? 'Deactivate' : 'Activate')
                     ->icon(fn (ApiKey $record) => $record->is_active ? 'heroicon-o-x-circle' : 'heroicon-o-check-circle')
