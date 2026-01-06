@@ -1,2 +1,14 @@
 User-agent: *
-Disallow:
+Allow: /
+
+# Sitemap
+Sitemap: https://fraudshieldbd.site/sitemap.xml
+
+# Disallow admin and API routes
+Disallow: /admin
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /filament
+
+# Allow specific public API routes
+Allow: /api/documentation

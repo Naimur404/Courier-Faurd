@@ -28,8 +28,10 @@ const submit = () => {
 
 <template>
   <Head>
-    <title>Register - FraudShield BD</title>
-    <meta name="description" content="Create your FraudShield BD account" />
+    <title>Register - FraudShield BD | রেজিস্ট্রেশন</title>
+    <meta name="description" content="FraudShield BD এ অ্যাকাউন্ট তৈরি করুন। কুরিয়ার ফ্রড ডিটেকশন সিস্টেমে যোগ দিন। Create your account." />
+    <link rel="canonical" href="https://fraudshieldbd.site/register" />
+    <meta name="robots" content="noindex, follow" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
   </Head>
 

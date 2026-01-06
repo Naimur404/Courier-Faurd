@@ -123,8 +123,22 @@ onUnmounted(() => {
 <template>
   <Head>
     <title>Download FraudShield App - কুরিয়ার ফ্রড ডিটেকশন অ্যাপ</title>
-    <meta name="description" content="Download FraudShield app for Android - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। ডেলিভারি ইতিহাস দেখুন এবং বিশ্বসযোগ্যতা যাচাই করুন।" />
-    <meta name="keywords" content="FraudShield, courier fraud, delivery check, android app, কুরিয়ার, ফ্রড" />
+    <meta name="description" content="FraudShield Android অ্যাপ ডাউনলোড করুন - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল থেকে ডেলিভারি ইতিহাস দেখুন। Download courier fraud detection app for Android." />
+    <meta name="keywords" content="FraudShield app, Android app, কুরিয়ার অ্যাপ, courier fraud app, download, ডাউনলোড, APK" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://fraudshieldbd.site/download" />
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="Download FraudShield App" />
+    <meta property="og:description" content="FraudShield Android অ্যাপ ডাউনলোড করুন - কুরিয়ার ফ্রড ডিটেকশন।" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fraudshieldbd.site/download" />
+    <meta property="og:site_name" content="FraudShield" />
+    <meta property="og:image" content="https://fraudshieldbd.site/assets/og-image.png" />
+    
+    <meta name="robots" content="index, follow" />
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
   </Head>
 

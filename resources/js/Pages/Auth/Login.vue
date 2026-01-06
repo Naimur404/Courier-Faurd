@@ -26,8 +26,10 @@ const submit = () => {
 
 <template>
   <Head>
-    <title>Login - FraudShield BD</title>
-    <meta name="description" content="Sign in to your FraudShield BD account" />
+    <title>Login - FraudShield BD | লগইন</title>
+    <meta name="description" content="FraudShield BD এ লগইন করুন। কুরিয়ার ফ্রড ডিটেকশন সিস্টেমে অ্যাক্সেস পান। Sign in to your account." />
+    <link rel="canonical" href="https://fraudshieldbd.site/login" />
+    <meta name="robots" content="noindex, follow" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
   </Head>
 

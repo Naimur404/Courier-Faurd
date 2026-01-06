@@ -22,23 +22,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <!-- SEO Meta Tags - Will be populated by Inertia Head -->
+    <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
     <title inertia>{{ config('app.name', 'FraudShield') }}</title>
+    <meta name="description" content="FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন।">
+    <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার">
+    <meta name="author" content="Tyrodevs">
+    <meta name="language" content="Bengali">
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">
-    <link rel="apple-touch-icon" href="{{ asset('assets/favicon.png') }}">
+    <!-- Default OpenGraph Meta Tags -->
+    <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta property="og:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fraudshieldbd.site">
+    <meta property="og:site_name" content="FraudShield">
+    <meta property="og:locale" content="bn_BD">
+    <meta property="og:image" content="{{ asset('assets/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Default Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন">
+    <meta name="twitter:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta name="twitter:image" content="{{ asset('assets/og-image.png') }}">
+    
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon.png') }}">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="{{ asset('assets/pwa/icon-192x192.png') }}">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('assets/pwa/icon-152x152.png') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/pwa/icon-192x192.png') }}">
+    <link rel="apple-touch-icon" sizes="167x167" href="{{ asset('assets/pwa/icon-192x192.png') }}">
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="{{ asset('manifest.json') }}">
-    <meta name="theme-color" content="#22c55e">
+    <meta name="theme-color" content="#4f46e5" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)">
+    
+    <!-- iOS PWA Configuration -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="FraudShield">
+    
+    <!-- Android PWA Configuration -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="FraudShield">
-    <meta name="msapplication-TileColor" content="#22c55e">
+    
+    <!-- Microsoft Tile Configuration -->
+    <meta name="msapplication-TileColor" content="#4f46e5">
+    <meta name="msapplication-TileImage" content="{{ asset('assets/pwa/icon-144x144.png') }}">
     <meta name="msapplication-tap-highlight" content="no">
+    <meta name="msapplication-config" content="none">
+    
+    <!-- Apple Splash Screens for iOS -->
+    <link rel="apple-touch-startup-image" href="{{ asset('assets/pwa/icon-512x512.png') }}">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
