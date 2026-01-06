@@ -469,7 +469,7 @@ onUnmounted(() => {
     <Head>
         <title>FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন সিস্টেম</title>
         <meta name="description" content="FraudShield - মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস ও রিস্ক স্কোর দেখুন।" />
-        <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, ফ্রড ডিটেকশন, মোবাইল নাম্বার, mobile number check, ডেলিভারি ইতিহাস, delivery history, গ্রাহক যাচাই, customer verification, রিস্ক স্কোর, risk score, বাংলাদেশ কুরিয়ার, bangladesh courier, আমাদের সিস্টেম, courier check bd" />
+        <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, ফ্রড ডিটেকশন, মোবাইল নাম্বার, mobile number check, ডেলিভারি ইতিহাস, delivery history, গ্রাহক যাচাই, customer verification, রিস্ক স্কোর, risk score, বাংলাদেশ কুরিয়ার, bangladesh courier, courier check bd, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং" />
         
         <!-- Canonical URL -->
         <link rel="canonical" href="https://fraudshieldbd.site/" />
