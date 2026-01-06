@@ -42,6 +42,7 @@ const searchResults = ref<any>(null);
 const reviews = ref<any[]>([]);
 const showRatingModal = ref(false);
 const showEmptyState = ref(true);
+const searchError = ref<string | null>(null);
 
 // Stats state
 const stats = ref({
@@ -302,6 +303,7 @@ const performSearch = async () => {
     isSearching.value = true;
     showEmptyState.value = false;
     searchResults.value = null;
+    searchError.value = null;
     
     try {
         const response = await fetch('/courier-check', {
@@ -324,6 +326,17 @@ const performSearch = async () => {
         }
         
         const data = await response.json();
+        
+        // Check if the response indicates an error
+        if (!response.ok || (data.success === false)) {
+            // Handle specific error messages from the API
+            const errorMessage = data.message || 'সার্ভার থেকে ত্রুটির বার্তা পাওয়া গেছে';
+            searchError.value = errorMessage;
+            (window as any).$toast?.({ message: errorMessage, type: 'error' });
+            showEmptyState.value = true;
+            return;
+        }
+        
         searchResults.value = data;
         
         // Load reviews
@@ -334,7 +347,9 @@ const performSearch = async () => {
         
     } catch (error) {
         console.error('Search error:', error);
-        (window as any).$toast?.({ message: 'ডাটা লোড করতে সমস্যা হয়েছে', type: 'error' });
+        const errorMessage = 'ডাটা লোড করতে সমস্যা হয়েছে';
+        searchError.value = errorMessage;
+        (window as any).$toast?.({ message: errorMessage, type: 'error' });
         showEmptyState.value = true;
     } finally {
         isSearching.value = false;
@@ -576,6 +591,29 @@ onUnmounted(() => {
                     <Shield class="absolute inset-0 m-auto w-8 h-8 text-indigo-600" />
                 </div>
                 <p class="text-gray-600 dark:text-gray-400 text-lg">ডেলিভারি ইতিহাস বিশ্লেষণ করা হচ্ছে...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div v-else-if="searchError" class="text-center py-16">
+                <Card class="p-8 bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 max-w-md mx-auto">
+                    <div class="w-16 h-16 mx-auto mb-4 bg-red-100 dark:bg-red-900/50 rounded-full flex items-center justify-center">
+                        <XCircle class="w-8 h-8 text-red-600 dark:text-red-400" />
+                    </div>
+                    <h3 class="text-lg font-bold mb-3 text-red-800 dark:text-red-200 heading-bengali">
+                        সেবা অ্যাক্সেসে সমস্যা
+                    </h3>
+                    <p class="text-red-700 dark:text-red-300 mb-4 text-bengali-body leading-relaxed">
+                        {{ searchError }}
+                    </p>
+                    <Button 
+                        @click="searchError = null; showEmptyState = true" 
+                        variant="outline" 
+                        class="bg-white dark:bg-gray-800 border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                        <RefreshCw class="w-4 h-4 mr-2" />
+                        আবার চেষ্টা করুন
+                    </Button>
+                </Card>
             </div>
             
             <!-- Main Content Grid - Always Show -->

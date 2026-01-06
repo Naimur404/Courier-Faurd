@@ -70,7 +70,7 @@ class ViewSubscription extends ViewRecord
 
     public function infolist(Schema $schema): Schema
     {
-        return $infolist
+        return $schema
             ->schema([
                 Section::make('Subscription Overview')
                     ->schema([
