@@ -622,10 +622,29 @@ class CourierController extends Controller
             ], 403);
         }
 
-        // Process DataTables request
-        return DataTables::of(Customer::query())
-            ->addIndexColumn()
-            ->toJson();
+        try {
+            // Get page from request (default to 1)
+            $page = $request->input('page', 1);
+            
+            // Fetch customer data with pagination
+            $customers = Customer::select(['id', 'phone', 'count', 'data', 'created_at', 'updated_at'])
+                ->orderBy('id', 'desc')
+                ->paginate(100, ['*'], 'page', $page);
+
+            return response()->json([
+                'success' => true,
+                'data' => $customers->items(),
+                'total' => $customers->total(),
+                'per_page' => $customers->perPage(),
+                'current_page' => $customers->currentPage(),
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Error fetching customer data: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to fetch customer data: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
