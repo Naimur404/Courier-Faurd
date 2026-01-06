@@ -190,11 +190,9 @@ class ApiUsageResource extends Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
                     ->label('Request Time')
-                    ->dateTime('M j, Y H:i:s', 'Asia/Dhaka')
+                    ->dateTime('M j, Y H:i:s')
                     ->sortable()
-                    ->description(function ($record) {
-                        return $record->created_at->timezone('Asia/Dhaka')->diffForHumans();
-                    }),
+                    ->description(fn ($record) => $record->created_at->diffForHumans()),
             ])
             ->filters([
                 SelectFilter::make('method')
