@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ request()->cookie('theme') === 'dark' ? 'dark' : '' }}">
+<html lang="bn" class="{{ request()->cookie('theme') === 'dark' ? 'dark' : '' }}">
 <head>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -23,11 +23,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
-    <title inertia>{{ config('app.name', 'FraudShield') }}</title>
-    <meta name="description" content="FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন।">
+    <title inertia>{{ config('app.name', 'FraudShield') }} - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</title>
     <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার">
     <meta name="author" content="Tyrodevs">
-    <meta name="language" content="Bengali">
     
     <!-- Default OpenGraph Meta Tags -->
     <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
