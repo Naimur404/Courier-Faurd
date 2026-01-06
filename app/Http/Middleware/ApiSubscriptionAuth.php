@@ -115,13 +115,7 @@ class ApiSubscriptionAuth
 
         $startTime = microtime(true);
         
-        // Debug log before processing
-        Log::info('API Request Processing', [
-            'api_key_id' => $apiKeyRecord->id,
-            'endpoint' => $request->path(),
-            'method' => $request->method(),
-            'user_id' => $user->id
-        ]);
+   
         
         $response = $next($request);
         
@@ -130,24 +124,15 @@ class ApiSubscriptionAuth
             $statusCode = $response->getStatusCode();
             $responseTime = round((microtime(true) - $startTime) * 1000);
             
-            Log::info('API Request Processed', [
-                'api_key_id' => $apiKeyRecord->id,
-                'endpoint' => $request->path(),
-                'status_code' => $statusCode,
-                'response_time' => $responseTime
-            ]);
+    
             
             // Log API usage immediately after request processing
-            $this->logApiUsage($request, $apiKeyRecord, $startTime, $statusCode);
+            $this->logApiUsage($request, $apiKeyRecord, $startTime, $statusCode, $response);
         } catch (Exception $e) {
-            Log::error('Failed to process API response in middleware', [
-                'api_key_id' => $apiKeyRecord->id,
-                'endpoint' => $request->path(),
-                'error' => $e->getMessage()
-            ]);
+        
             
             // Still try to log usage with default status code
-            $this->logApiUsage($request, $apiKeyRecord, $startTime, 500);
+            $this->logApiUsage($request, $apiKeyRecord, $startTime, 500, null);
         }
 
         // Add rate limit headers to response
@@ -190,18 +175,25 @@ class ApiSubscriptionAuth
     /**
      * Log API usage
      */
-    private function logApiUsage(Request $request, ApiKey $apiKey, float $startTime, int $responseStatus): void
+    private function logApiUsage(Request $request, ApiKey $apiKey, float $startTime, int $responseStatus, ?Response $response = null): void
     {
         $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
         
-        Log::info('Attempting to log API usage', [
-            'api_key_id' => $apiKey->id,
-            'user_id' => $apiKey->user_id,
-            'endpoint' => $request->path(),
-            'method' => $request->method(),
-            'response_code' => $responseStatus,
-            'response_time' => round($responseTime)
-        ]);
+        // Extract response data if available
+        $responseData = null;
+        if ($response) {
+            try {
+                $content = $response->getContent();
+                $decoded = json_decode($content, true);
+                // Only store if it's valid JSON and not too large (limit to 64KB)
+                if ($decoded !== null && strlen($content) < 65536) {
+                    $responseData = $decoded;
+                }
+            } catch (Exception $e) {
+                // If we can't decode, skip storing response data
+            }
+        }
+        
         
         try {
             $apiUsage = ApiUsage::create([
@@ -214,13 +206,10 @@ class ApiSubscriptionAuth
                 'response_code' => $responseStatus,
                 'response_time' => round($responseTime),
                 'request_data' => $request->except(['password', 'password_confirmation', 'api_key']),
+                'response_data' => $responseData,
                 'requested_at' => now(),
             ]);
-            
-            Log::info('API Usage record created successfully', [
-                'api_usage_id' => $apiUsage->id,
-                'api_key_id' => $apiKey->id
-            ]);
+    
             
             // Increment usage count on API key
             $oldCount = $apiKey->usage_count;

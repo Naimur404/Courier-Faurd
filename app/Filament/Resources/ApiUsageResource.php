@@ -81,17 +81,15 @@ class ApiUsageResource extends Resource
                             ->label('Request Data (JSON)')
                             ->columnSpanFull()
                             ->rows(6)
-                            ->formatStateUsing(function ($state) {
+                            ->afterStateHydrated(function ($component, $state) {
                                 if (is_array($state) || is_object($state)) {
-                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-                                }
-                                if (is_string($state)) {
+                                    $component->state(json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                                } elseif (is_string($state)) {
                                     $decoded = json_decode($state, true);
                                     if ($decoded !== null) {
-                                        return json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                        $component->state(json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                                     }
                                 }
-                                return $state;
                             }),
                     ])
                     ->columns(2)
@@ -111,17 +109,15 @@ class ApiUsageResource extends Resource
                             ->label('Response Data (JSON)')
                             ->columnSpanFull()
                             ->rows(10)
-                            ->formatStateUsing(function ($state) {
+                            ->afterStateHydrated(function ($component, $state) {
                                 if (is_array($state) || is_object($state)) {
-                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-                                }
-                                if (is_string($state)) {
+                                    $component->state(json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                                } elseif (is_string($state)) {
                                     $decoded = json_decode($state, true);
                                     if ($decoded !== null) {
-                                        return json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                        $component->state(json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                                     }
                                 }
-                                return $state;
                             }),
                     ])
                     ->columns(2)
