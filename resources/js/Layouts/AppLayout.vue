@@ -8,6 +8,8 @@ import {
     Search, Grid3X3
 } from 'lucide-vue-next';
 import Toast from '@/components/ui/Toast.vue';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt.vue';
+import OfflineIndicator from '@/components/OfflineIndicator.vue';
 import type { PageProps } from '@/types/inertia';
 
 const page = usePage<PageProps>();
@@ -125,6 +127,12 @@ const closeMoreMenu = () => {
     <div class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
         <!-- Toast Component -->
         <Toast />
+        
+        <!-- PWA Install Prompt -->
+        <PWAInstallPrompt />
+        
+        <!-- Offline Indicator -->
+        <OfflineIndicator />
         
         <!-- Header -->
         <header class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg shadow-lg py-4 sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700">

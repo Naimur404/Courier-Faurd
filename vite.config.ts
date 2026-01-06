@@ -42,12 +42,18 @@ export default defineConfig({
                 comments: false,
             },
         },
-        // Split chunks for better caching
+        // Split chunks for better caching (only for client build)
         rollupOptions: {
             output: {
-                manualChunks: {
-                    'vendor': ['vue', '@inertiajs/vue3'],
-                    'chart': ['chart.js'],
+                manualChunks(id) {
+                    if (id.includes('node_modules')) {
+                        if (id.includes('vue') || id.includes('@inertiajs')) {
+                            return 'vendor';
+                        }
+                        if (id.includes('chart.js')) {
+                            return 'chart';
+                        }
+                    }
                 },
             },
         },
