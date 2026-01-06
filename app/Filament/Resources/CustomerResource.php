@@ -89,11 +89,10 @@ class CustomerResource extends Resource
                             ->rows(15)
                             ->columnSpanFull()
                             ->helperText('Complete API response data in JSON format')
-                            ->formatStateUsing(function ($state) {
+                            ->afterStateHydrated(function ($component, $state) {
                                 if (is_array($state) || is_object($state)) {
-                                    return json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+                                    $component->state(json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
                                 }
-                                return $state;
                             })
                             ->dehydrateStateUsing(function ($state) {
                                 if (is_string($state)) {

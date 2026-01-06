@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\ApiKey;
@@ -46,9 +47,6 @@ class ApiAuthentication
             ], 429);
         }
 
-        // Log API usage
-        $this->logApiUsage($request, $apiKeyRecord);
-        
         // Update last used timestamp
         $apiKeyRecord->updateLastUsed();
         
@@ -57,7 +55,14 @@ class ApiAuthentication
             return $apiKeyRecord->user;
         });
 
-        return $next($request);
+        $startTime = microtime(true);
+        
+        $response = $next($request);
+        
+        // Log API usage after response is generated
+        $this->logApiUsage($request, $apiKeyRecord, $startTime, $response);
+
+        return $response;
     }
 
     /**
@@ -84,13 +89,24 @@ class ApiAuthentication
     /**
      * Log API usage
      */
-    private function logApiUsage(Request $request, ApiKey $apiKey): void
+    private function logApiUsage(Request $request, ApiKey $apiKey, float $startTime, Response $response): void
     {
-        $startTime = microtime(true);
+        $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
         
-        register_shutdown_function(function () use ($request, $apiKey, $startTime) {
-            $responseTime = (microtime(true) - $startTime) * 1000; // Convert to milliseconds
-            
+        // Extract response data if available
+        $responseData = null;
+        try {
+            $content = $response->getContent();
+            $decoded = json_decode($content, true);
+            // Only store if it's valid JSON and not too large (limit to 64KB)
+            if ($decoded !== null && strlen($content) < 65536) {
+                $responseData = $decoded;
+            }
+        } catch (Exception $e) {
+            // If we can't decode, skip storing response data
+        }
+        
+        try {
             ApiUsage::create([
                 'user_id' => $apiKey->user_id,
                 'api_key_id' => $apiKey->id,
@@ -98,13 +114,17 @@ class ApiAuthentication
                 'method' => $request->method(),
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
-                'response_status' => http_response_code() ?: 200,
+                'response_code' => $response->getStatusCode(),
                 'response_time' => round($responseTime),
                 'request_data' => $request->except(['password', 'password_confirmation']),
+                'response_data' => $responseData,
+                'requested_at' => now(),
             ]);
             
             // Increment usage count on API key
             $apiKey->increment('usage_count');
-        });
+        } catch (Exception $e) {
+            // Silently fail - don't break the API response
+        }
     }
 }
