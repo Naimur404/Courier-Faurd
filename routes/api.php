@@ -30,7 +30,7 @@ Route::middleware(['api.subscription'])->group(function () {
     });
 
     // Courier endpoints
-    Route::post('/customer/check', [CourierApiController::class, 'check'])->name('api.customer.check');
+    Route::post('/customer/check', [CourierApiController::class, 'check'])->name('api.customer.check')->middleware('api.rate.limit');
     
     // Customer review endpoints
     Route::post('/customer-review', [CustomerReviewController::class, 'storeFromApi'])->name('api.customer.review.store');

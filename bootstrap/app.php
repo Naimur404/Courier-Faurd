@@ -21,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'api.subscription' => \App\Http\Middleware\ApiSubscriptionAuth::class,
             'ip.rate.limit' => \App\Http\Middleware\IpRateLimit::class,
             'web.rate.limit' => \App\Http\Middleware\WebRateLimit::class,
+            'api.rate.limit' => \App\Http\Middleware\ApiRateLimit::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

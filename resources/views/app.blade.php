@@ -24,7 +24,7 @@
     
     <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
     <title inertia>{{ config('app.name', 'FraudShield') }} - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</title>
-    <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার">
+    <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং">
     <meta name="author" content="Tyrodevs">
     
     <!-- Default OpenGraph Meta Tags -->

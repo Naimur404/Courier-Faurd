@@ -80,56 +80,56 @@ onUnmounted(() => {
     >
         <div 
             v-if="showPrompt" 
-            class="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50"
+            class="fixed bottom-20 md:bottom-4 left-2 right-2 md:left-auto md:right-4 md:w-96 z-50"
         >
-            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-5 text-white">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-4 md:p-5 text-white">
                 <!-- Close button -->
                 <button 
                     @click="dismissPrompt"
-                    class="absolute top-3 right-3 p-1 hover:bg-white/20 rounded-full transition-colors"
+                    class="absolute top-2 right-2 md:top-3 md:right-3 p-1.5 hover:bg-white/20 rounded-full transition-colors"
                 >
-                    <X class="w-5 h-5" />
+                    <X class="w-4 h-4 md:w-5 md:h-5" />
                 </button>
                 
                 <!-- Icon and Title -->
-                <div class="flex items-start gap-4 mb-4">
-                    <div class="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Smartphone class="w-8 h-8" />
+                <div class="flex items-start gap-3 md:gap-4 mb-3 md:mb-4">
+                    <div class="w-12 h-12 md:w-14 md:h-14 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0">
+                        <Smartphone class="w-6 h-6 md:w-8 md:h-8" />
                     </div>
-                    <div>
-                        <h3 class="font-bold text-lg">অ্যাপ ইনস্টল করুন</h3>
-                        <p class="text-sm text-white/80">FraudShield আপনার ফোনে ইনস্টল করুন</p>
+                    <div class="pr-6">
+                        <h3 class="font-bold text-base md:text-lg">অ্যাপ ইনস্টল করুন</h3>
+                        <p class="text-xs md:text-sm text-white/80">FraudShield আপনার ফোনে ইনস্টল করুন</p>
                     </div>
                 </div>
                 
-                <!-- Features -->
-                <div class="space-y-2 mb-4 text-sm">
-                    <div class="flex items-center gap-2">
-                        <Zap class="w-4 h-4 text-yellow-300" />
-                        <span>দ্রুত লোড হবে</span>
+                <!-- Features - Hidden on very small screens -->
+                <div class="hidden xs:flex flex-wrap gap-x-4 gap-y-1 mb-3 md:mb-4 text-xs md:text-sm">
+                    <div class="flex items-center gap-1.5">
+                        <Zap class="w-3.5 h-3.5 md:w-4 md:h-4 text-yellow-300" />
+                        <span>দ্রুত লোড</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <WifiOff class="w-4 h-4 text-blue-300" />
-                        <span>অফলাইনেও কাজ করবে</span>
+                    <div class="flex items-center gap-1.5">
+                        <WifiOff class="w-3.5 h-3.5 md:w-4 md:h-4 text-blue-300" />
+                        <span>অফলাইনে কাজ</span>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <Download class="w-4 h-4 text-green-300" />
-                        <span>হোম স্ক্রিনে সেভ হবে</span>
+                    <div class="flex items-center gap-1.5">
+                        <Download class="w-3.5 h-3.5 md:w-4 md:h-4 text-green-300" />
+                        <span>হোম স্ক্রিনে সেভ</span>
                     </div>
                 </div>
                 
                 <!-- Actions -->
-                <div class="flex gap-3">
+                <div class="flex gap-2 md:gap-3">
                     <button
                         @click="installApp"
-                        class="flex-1 bg-white text-indigo-600 font-semibold py-3 px-4 rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center gap-2"
+                        class="flex-1 bg-white text-indigo-600 font-semibold py-2.5 md:py-3 px-3 md:px-4 rounded-xl hover:bg-gray-100 transition-colors flex items-center justify-center gap-2 text-sm md:text-base"
                     >
-                        <Download class="w-5 h-5" />
+                        <Download class="w-4 h-4 md:w-5 md:h-5" />
                         ইনস্টল করুন
                     </button>
                     <button
                         @click="dismissPermanently"
-                        class="py-3 px-4 text-white/70 hover:text-white transition-colors text-sm"
+                        class="py-2.5 md:py-3 px-3 md:px-4 text-white/70 hover:text-white transition-colors text-xs md:text-sm"
                     >
                         পরে
                     </button>
