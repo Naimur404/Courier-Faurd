@@ -57,7 +57,7 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
-            'timezone' => '+06:00', // Bangladesh Time (BDT)
+            // Server is already in Asia/Dhaka timezone - no conversion needed
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],

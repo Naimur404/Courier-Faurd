@@ -151,7 +151,7 @@ class CustomerResource extends Resource
                     ->toggleable(),
                 TextColumn::make('last_searched_at')
                     ->label('Last Search')
-                    ->dateTime('M d, Y H:i', 'Asia/Dhaka')
+                    ->dateTime('M d, Y H:i')
                     ->sortable()
                     ->since(),
                 TextColumn::make('total_parcels')
