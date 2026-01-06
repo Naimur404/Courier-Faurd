@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Yajra\DataTables\Facades\DataTables;
+use Inertia\Inertia;
 
 
 class CourierController extends Controller
@@ -674,6 +675,6 @@ class CourierController extends Controller
 
     public function showTokenForm()
     {
-        return view('list');
+        return Inertia::render('Customer/TokenForm');
     }
 }

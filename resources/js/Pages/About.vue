@@ -66,8 +66,31 @@ const teamMembers = [
 
 <template>
     <Head>
-        <title>About Us - FraudShield</title>
-        <meta name="description" content="FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম" />
+        <title>About Us - FraudShield | আমাদের সম্পর্কে</title>
+        <meta name="description" content="FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। আমাদের মিশন, দল এবং সেবা সম্পর্কে জানুন। Courier fraud detection system in Bangladesh." />
+        <meta name="keywords" content="FraudShield about, কুরিয়ার ফ্রড, about us, আমাদের সম্পর্কে, fraud detection team, বাংলাদেশ কুরিয়ার সেবা" />
+        
+        <!-- Canonical URL -->
+        <link rel="canonical" href="https://fraudshieldbd.site/about" />
+        
+        <!-- OpenGraph Meta Tags -->
+        <meta property="og:title" content="About Us - FraudShield" />
+        <meta property="og:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম সম্পর্কে জানুন।" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://fraudshieldbd.site/about" />
+        <meta property="og:site_name" content="FraudShield" />
+        <meta property="og:locale" content="bn_BD" />
+        <meta property="og:image" content="https://fraudshieldbd.site/assets/og-image.png" />
+        <meta property="og:updated_time" content="2026-01-06T00:00:00+06:00" />
+        
+        <!-- Twitter Card Meta Tags -->
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Us - FraudShield" />
+        <meta name="twitter:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম সম্পর্কে জানুন।" />
+        <meta name="twitter:image" content="https://fraudshieldbd.site/assets/og-image.png" />
+        
+        <!-- Additional SEO Meta Tags -->
+        <meta name="robots" content="index, follow" />
     </Head>
     
     <AppLayout>

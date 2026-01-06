@@ -22,8 +22,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    <!-- SEO Meta Tags - Will be populated by Inertia Head -->
+    <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
     <title inertia>{{ config('app.name', 'FraudShield') }}</title>
+    <meta name="description" content="FraudShield - বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন।">
+    <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার">
+    <meta name="author" content="Tyrodevs">
+    <meta name="language" content="Bengali">
+    
+    <!-- Default OpenGraph Meta Tags -->
+    <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta property="og:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://fraudshieldbd.site">
+    <meta property="og:site_name" content="FraudShield">
+    <meta property="og:locale" content="bn_BD">
+    <meta property="og:image" content="{{ asset('assets/og-image.png') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Default Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন">
+    <meta name="twitter:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta name="twitter:image" content="{{ asset('assets/og-image.png') }}">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('assets/favicon.png') }}">

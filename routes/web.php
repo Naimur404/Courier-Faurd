@@ -11,7 +11,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ApiDocumentationController;
 use App\Http\Controllers\PricingController;
 use App\Http\Controllers\WebsiteSubscriptionController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Middleware\VerifyRequestOrigin;
+
+// SEO Routes
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Public routes
 Route::get('/', [HomeController::class, 'home'])->name('home');

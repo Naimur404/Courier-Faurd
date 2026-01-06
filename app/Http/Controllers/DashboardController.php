@@ -168,6 +168,6 @@ class DashboardController extends Controller
      */
     public function apiDocs()
     {
-        return view('dashboard.api-docs');
+        return Inertia::render('Dashboard/ApiDocs');
     }
 }

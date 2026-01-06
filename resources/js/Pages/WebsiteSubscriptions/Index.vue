@@ -153,8 +153,22 @@ const features = [
 
 <template>
   <Head>
-    <title>ওয়েবসাইট সাবস্ক্রিপশন - সীমাহীন সার্চ | Courier Fraud</title>
-    <meta name="description" content="আমাদের ওয়েবসাইটে সীমাহীন কুরিয়ার ভেরিফিকেশন সার্চের জন্য সাবস্ক্রাইব করুন। দৈনিক ২০ টাকা বা ১৫ দিনের জন্য ৫০ টাকা।" />
+    <title>ওয়েবসাইট সাবস্ক্রিপশন - সীমাহীন সার্চ | FraudShield</title>
+    <meta name="description" content="FraudShield ওয়েবসাইটে সীমাহীন কুরিয়ার ভেরিফিকেশন সার্চের জন্য সাবস্ক্রাইব করুন। দৈনিক ২০ টাকা বা ১৫ দিনের জন্য ৫০ টাকা। Unlimited courier search subscription." />
+    <meta name="keywords" content="সাবস্ক্রিপশন, unlimited search, সীমাহীন সার্চ, কুরিয়ার সার্চ, website subscription" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://fraudshieldbd.site/website-subscriptions" />
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="ওয়েবসাইট সাবস্ক্রিপশন - FraudShield" />
+    <meta property="og:description" content="সীমাহীন কুরিয়ার ভেরিফিকেশন সার্চের জন্য সাবস্ক্রাইব করুন।" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fraudshieldbd.site/website-subscriptions" />
+    <meta property="og:site_name" content="FraudShield" />
+    <meta property="og:image" content="https://fraudshieldbd.site/assets/og-image.png" />
+    
+    <meta name="robots" content="index, follow" />
   </Head>
 
   <AppLayout>

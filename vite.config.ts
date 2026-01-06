@@ -29,4 +29,27 @@ export default defineConfig({
     ssr: {
         noExternal: ['@inertiajs/vue3'],
     },
+    build: {
+        // Enable minification for production builds
+        minify: 'terser',
+        terserOptions: {
+            compress: {
+                drop_console: true,
+                drop_debugger: true,
+            },
+            mangle: true,
+            format: {
+                comments: false,
+            },
+        },
+        // Split chunks for better caching
+        rollupOptions: {
+            output: {
+                manualChunks: {
+                    'vendor': ['vue', '@inertiajs/vue3'],
+                    'chart': ['chart.js'],
+                },
+            },
+        },
+    },
 });

@@ -71,8 +71,28 @@ const faqs = [
 
 <template>
   <Head>
-    <title>API প্ল্যান - FraudShield</title>
-    <meta name="description" content="আপনার ব্যবসার জন্য সঠিক প্ল্যান বেছে নিন। সমস্ত প্ল্যানে রিয়েল-টাইম কুরিয়ার ট্র্যাকিং API এবং ২৪/৭ সাপোর্ট অন্তর্ভুক্ত।" />
+    <title>API প্ল্যান - FraudShield | Courier Fraud Detection API</title>
+    <meta name="description" content="FraudShield API প্ল্যান - আপনার ব্যবসার জন্য সঠিক প্ল্যান বেছে নিন। রিয়েল-টাইম কুরিয়ার ফ্রড ডিটেকশন API এবং ২৪/৭ সাপোর্ট। Courier fraud detection API pricing." />
+    <meta name="keywords" content="FraudShield API, API প্ল্যান, courier fraud API, কুরিয়ার API, fraud detection pricing, API subscription" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://fraudshieldbd.site/pricing" />
+    
+    <!-- OpenGraph Meta Tags -->
+    <meta property="og:title" content="API প্ল্যান - FraudShield" />
+    <meta property="og:description" content="আপনার ব্যবসার জন্য সঠিক API প্ল্যান বেছে নিন।" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://fraudshieldbd.site/pricing" />
+    <meta property="og:site_name" content="FraudShield" />
+    <meta property="og:locale" content="bn_BD" />
+    <meta property="og:image" content="https://fraudshieldbd.site/assets/og-image.png" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="API প্ল্যান - FraudShield" />
+    <meta name="twitter:description" content="আপনার ব্যবসার জন্য সঠিক API প্ল্যান বেছে নিন।" />
+    
+    <meta name="robots" content="index, follow" />
   </Head>
 
   <AppLayout>

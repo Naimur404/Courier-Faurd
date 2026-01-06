@@ -46,7 +46,9 @@ class WebsiteSubscriptionController extends Controller
         $selectedPlan = $plans[$plan];
         $selectedPlan['type'] = $plan;
 
-        return view('website-subscriptions.subscribe', compact('selectedPlan'));
+        return Inertia::render('WebsiteSubscriptions/Subscribe', [
+            'selectedPlan' => $selectedPlan,
+        ]);
     }
 
     /**
