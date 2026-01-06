@@ -45,6 +45,7 @@ class SqliteToMysqlMigrationSeeder extends Seeder
         $this->migrateSubscriptions();
         $this->migrateWebsiteSubscriptions();
         $this->migrateApiUsages();
+        $this->migrateApiTokens();
         $this->migrateAppDownloadTracks();
         $this->migrateDownloadTrackers();
         
@@ -489,6 +490,43 @@ class SqliteToMysqlMigrationSeeder extends Seeder
         $this->command->info("  ✅ download_trackers: {$count} records");
     }
     
+    private function migrateApiTokens(): void
+    {
+        $this->command->info('Migrating api_tokens...');
+        
+        $stmt = $this->sqliteDb->query('SELECT * FROM api_tokens ORDER BY id');
+        $records = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        if (empty($records)) {
+            $this->command->info('  No API tokens to migrate');
+            return;
+        }
+        
+        foreach ($records as $record) {
+            try {
+                DB::table('api_tokens')->updateOrInsert(
+                    ['id' => $record['id']],
+                    [
+                        'name' => $record['name'],
+                        'token' => $record['token'],
+                        'is_active' => $record['is_active'],
+                        'cooldown_until' => $record['cooldown_until'],
+                        'usage_count' => $record['usage_count'],
+                        'last_used_at' => $record['last_used_at'],
+                        'priority' => $record['priority'],
+                        'created_at' => $record['created_at'],
+                        'updated_at' => $record['updated_at'],
+                    ]
+                );
+            } catch (\Exception $e) {
+                $this->command->warn('  Error migrating API token ID ' . $record['id']);
+            }
+        }
+        
+        $count = DB::table('api_tokens')->count();
+        $this->command->info("  ✅ api_tokens: {$count} records");
+    }
+    
     private function verifyAllTables(): void
     {
         $tables = [
@@ -499,6 +537,7 @@ class SqliteToMysqlMigrationSeeder extends Seeder
             'subscriptions',
             'api_keys',
             'api_usages',
+            'api_tokens',
             'website_subscriptions',
             'app_download_tracks',
             'download_trackers',
