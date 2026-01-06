@@ -25,6 +25,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\ApiKey;
 use Filament\Notifications\Notification;
+use Filament\Support\Enums\ActionSize;
 
 class ApiKeysRelationManager extends RelationManager
 {
@@ -67,7 +68,7 @@ class ApiKeysRelationManager extends RelationManager
                     ])
                     ->columns(3),
                 Section::make('Generated Keys')
-                    ->description('Click on the key/secret to copy to clipboard')
+                    ->description('Copy the key/secret values below')
                     ->schema([
                         TextInput::make('key')
                             ->label('API Key')
@@ -75,36 +76,18 @@ class ApiKeysRelationManager extends RelationManager
                             ->dehydrated(false)
                             ->default(fn ($record) => $record?->key)
                             ->extraAttributes(['class' => 'font-mono text-sm'])
-                            ->suffixAction(
-                                \Filament\Forms\Components\Actions\Action::make('copyKey')
-                                    ->icon('heroicon-o-clipboard-document')
-                                    ->action(function ($state, $livewire) {
-                                        $livewire->dispatch('copy-to-clipboard', text: $state);
-                                        Notification::make()
-                                            ->title('API Key copied!')
-                                            ->success()
-                                            ->duration(2000)
-                                            ->send();
-                                    })
-                            ),
+                            ->copyable()
+                            ->copyMessage('API Key copied!')
+                            ->copyMessageDuration(2000),
                         TextInput::make('secret')
                             ->label('API Secret')
                             ->disabled()
                             ->dehydrated(false)
                             ->default(fn ($record) => $record?->secret)
                             ->extraAttributes(['class' => 'font-mono text-sm'])
-                            ->suffixAction(
-                                \Filament\Forms\Components\Actions\Action::make('copySecret')
-                                    ->icon('heroicon-o-clipboard-document')
-                                    ->action(function ($state, $livewire) {
-                                        $livewire->dispatch('copy-to-clipboard', text: $state);
-                                        Notification::make()
-                                            ->title('API Secret copied!')
-                                            ->success()
-                                            ->duration(2000)
-                                            ->send();
-                                    })
-                            ),
+                            ->copyable()
+                            ->copyMessage('API Secret copied!')
+                            ->copyMessageDuration(2000),
                     ])
                     ->columns(2)
                     ->hiddenOn('create'),
