@@ -87,7 +87,8 @@ class BlockedIpResource extends Resource
                             ->default(fn () => Auth::id())
                             ->label('Blocked By'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 

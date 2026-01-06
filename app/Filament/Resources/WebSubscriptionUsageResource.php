@@ -69,7 +69,8 @@ class WebSubscriptionUsageResource extends Resource
                         TextInput::make('endpoint')
                             ->disabled(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 

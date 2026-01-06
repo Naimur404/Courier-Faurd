@@ -75,7 +75,7 @@ class PlanResource extends Resource
                             ->numeric()
                             ->default(0)
                             ->helperText('Order in which plans appear (lower numbers first)'),
-                    ])->columns(2),
+                    ])->columns(2)->columnSpanFull(),
                 
                 Section::make('Plan Content')
                     ->schema([
@@ -84,14 +84,14 @@ class PlanResource extends Resource
                             ->helperText('Short description of the plan'),
                         TagsInput::make('features')
                             ->helperText('List of plan features'),
-                    ]),
+                    ])->columnSpanFull(),
                 
                 Section::make('Settings')
                     ->schema([
                         Toggle::make('is_active')
                             ->default(true)
                             ->helperText('Whether this plan is available for purchase'),
-                    ]),
+                    ])->columnSpanFull(),
             ]);
     }
 

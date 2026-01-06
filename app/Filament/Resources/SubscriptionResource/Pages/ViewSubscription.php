@@ -95,7 +95,8 @@ class ViewSubscription extends ViewRecord
                                 default => ucfirst($state),
                             }),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
 
                 Section::make('Payment Information')
                     ->schema([
@@ -120,7 +121,8 @@ class ViewSubscription extends ViewRecord
                             ->label('Amount Paid')
                             ->money('BDT'),
                     ])
-                    ->columns(3),
+                    ->columns(3)
+                    ->columnSpanFull(),
 
                 Section::make('Timeline')
                     ->schema([
@@ -166,7 +168,8 @@ class ViewSubscription extends ViewRecord
                             ->dateTime('M j, Y g:i A')
                             ->placeholder('Not activated'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Additional Information')
                     ->schema([
@@ -181,7 +184,8 @@ class ViewSubscription extends ViewRecord
                             ->label('Last Updated')
                             ->dateTime('M j, Y g:i A'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 }

@@ -70,7 +70,7 @@ class CustomerResource extends Resource
                             ])
                             ->required()
                             ->default('web'),
-                    ])->columns(3),
+                    ])->columns(3)->columnSpanFull(),
                 
                 Section::make('Tracking Information')
                     ->schema([
@@ -80,7 +80,7 @@ class CustomerResource extends Resource
                         DateTimePicker::make('last_searched_at')
                             ->label('Last Searched')
                             ->displayFormat('Y-m-d H:i:s'),
-                    ])->columns(2),
+                    ])->columns(2)->columnSpanFull(),
                 
                 Section::make('Search Data')
                     ->schema([
@@ -102,7 +102,7 @@ class CustomerResource extends Resource
                                 }
                                 return $state;
                             }),
-                    ]),
+                    ])->columnSpanFull(),
                 
                 Section::make('Courier Summary')
                     ->schema([
@@ -117,6 +117,7 @@ class CustomerResource extends Resource
                             ->content(fn (?Customer $record): string => $record ? count($record->courier_services) . ' services' : 'N/A'),
                     ])
                     ->columns(3)
+                    ->columnSpanFull()
                     ->hiddenOn('create'),
             ]);
     }

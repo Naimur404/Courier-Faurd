@@ -75,14 +75,14 @@ class ApiKeysRelationManager extends RelationManager
                             ->label('API Key')
                             ->disabled()
                             ->dehydrated(false)
-                            ->default(fn ($record) => $record?->key)
+                            ->afterStateHydrated(fn ($component, $record) => $component->state($record?->key))
                             ->extraAttributes(['class' => 'font-mono text-sm'])
                             ->copyable(),
                         TextInput::make('secret')
                             ->label('API Secret')
                             ->disabled()
                             ->dehydrated(false)
-                            ->default(fn ($record) => $record?->secret)
+                            ->afterStateHydrated(fn ($component, $record) => $component->state($record?->secret))
                             ->extraAttributes(['class' => 'font-mono text-sm'])
                             ->copyable(),
                     ])

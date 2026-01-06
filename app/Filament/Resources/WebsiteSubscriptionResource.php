@@ -109,7 +109,8 @@ class WebsiteSubscriptionResource extends Resource
                         DateTimePicker::make('expires_at')
                             ->required(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Status & Verification')
                     ->schema([
@@ -152,7 +153,8 @@ class WebsiteSubscriptionResource extends Resource
                             ->rows(3)
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Payment Information')
                     ->schema([
@@ -164,7 +166,8 @@ class WebsiteSubscriptionResource extends Resource
                             ->placeholder('Transaction/Reference ID')
                             ->maxLength(255),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 
@@ -395,7 +398,8 @@ class WebsiteSubscriptionResource extends Resource
                             ->label('Expires At')
                             ->dateTime(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Status & Verification')
                     ->schema([
@@ -435,7 +439,8 @@ class WebsiteSubscriptionResource extends Resource
                             ->visible(fn (?string $state): bool => filled($state))
                             ->columnSpanFull(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Payment Information')
                     ->schema([
@@ -444,7 +449,8 @@ class WebsiteSubscriptionResource extends Resource
                         TextEntry::make('transaction_id')
                             ->label('Transaction ID'),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
 
                 Section::make('Timestamps')
                     ->schema([
@@ -456,6 +462,7 @@ class WebsiteSubscriptionResource extends Resource
                             ->dateTime(),
                     ])
                     ->columns(2)
+                    ->columnSpanFull()
                     ->collapsible(),
             ]);
     }

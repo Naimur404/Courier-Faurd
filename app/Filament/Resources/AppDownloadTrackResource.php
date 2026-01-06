@@ -64,7 +64,8 @@ class AppDownloadTrackResource extends Resource
                             ->label('Completed At')
                             ->nullable(),
                     ])
-                    ->columns(2),
+                    ->columns(2)
+                    ->columnSpanFull(),
             ]);
     }
 
