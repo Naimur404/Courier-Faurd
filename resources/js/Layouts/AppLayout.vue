@@ -25,6 +25,12 @@ const checkMobile = () => {
 
 const user = computed(() => page.props.auth?.user);
 const isAdmin = computed(() => user.value?.role === 'admin');
+const settings = computed(() => page.props.settings || {});
+const siteTitle = computed(() => settings.value.site_title || 'FraudShield');
+const siteLogo = computed(() => settings.value.site_logo);
+const footerText = computed(() => settings.value.footer_text);
+const phone = computed(() => settings.value.phone);
+const address = computed(() => settings.value.address);
 
 // Helper function to get cookie value
 const getCookie = (name: string): string | null => {
@@ -140,9 +146,14 @@ const closeMoreMenu = () => {
                 <div class="flex justify-between items-center">
                     <!-- Logo -->
                     <Link href="/" class="flex items-center group">
-                        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                            <Shield class="w-5 h-5" />
-                        </div>
+                        <template v-if="siteLogo">
+                            <img :src="`/storage/${siteLogo}`" :alt="siteTitle" class="h-10 mr-3" />
+                        </template>
+                        <template v-else>
+                            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white w-10 h-10 rounded-xl flex items-center justify-center mr-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                                <Shield class="w-5 h-5" />
+                            </div>
+                        </template>
                         <div class="text-xl font-bold">
                             <span class="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Fraud</span>
                             <span class="text-gray-800 dark:text-white">Shield</span>
@@ -521,14 +532,17 @@ const closeMoreMenu = () => {
                     <div>
                         <h3 class="text-lg font-semibold mb-4">যোগাযোগ</h3>
                         <ul class="space-y-2 text-indigo-200">
-                            <li>ঢাকা, বাংলাদেশ</li>
+                            <li v-if="address">{{ address }}</li>
+                            <li v-else>ঢাকা, বাংলাদেশ</li>
+                            <li v-if="phone">{{ phone }}</li>
                             <li>info@fraudshieldbd.site</li>
                         </ul>
                     </div>
                 </div>
                 
                 <div class="border-t border-indigo-800 mt-8 pt-8 text-center text-sm text-indigo-300">
-                    <p>© {{ new Date().getFullYear() }} FraudShield. All rights reserved.</p>
+                    <p v-if="footerText">{{ footerText }}</p>
+                    <p v-else>© {{ new Date().getFullYear() }} {{ siteTitle }}. All rights reserved.</p>
                     <p class="mt-1">Powered by <a href="https://tyrodevs.com" class="text-yellow-400 hover:text-yellow-300 transition">Tyrodevs</a></p>
                 </div>
             </div>
@@ -558,9 +572,14 @@ const closeMoreMenu = () => {
             <div class="px-4 py-4">
                 <!-- Brand -->
                 <div class="flex items-center justify-center mb-2">
-                    <div class="bg-white text-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center mr-2 shadow-lg">
-                        <Shield class="w-4 h-4" />
-                    </div>
+                    <template v-if="siteLogo">
+                        <img :src="`/storage/${siteLogo}`" :alt="siteTitle" class="h-8 mr-2" />
+                    </template>
+                    <template v-else>
+                        <div class="bg-white text-indigo-600 w-8 h-8 rounded-lg flex items-center justify-center mr-2 shadow-lg">
+                            <Shield class="w-4 h-4" />
+                        </div>
+                    </template>
                     <div class="text-lg font-bold">
                         <span class="text-white">Fraud</span>
                         <span class="text-yellow-400">Shield</span>
@@ -581,8 +600,10 @@ const closeMoreMenu = () => {
                 
                 <!-- Contact & Copyright Combined -->
                 <div class="text-center text-[10px] text-indigo-400">
+                    <p v-if="phone">{{ phone }}</p>
                     <p>info@fraudshieldbd.site</p>
-                    <p class="mt-1">© {{ new Date().getFullYear() }} FraudShield | <a href="https://tyrodevs.com" class="text-yellow-400">Tyrodevs</a></p>
+                    <p v-if="footerText" class="mt-1">{{ footerText }}</p>
+                    <p v-else class="mt-1">© {{ new Date().getFullYear() }} {{ siteTitle }} | <a href="https://tyrodevs.com" class="text-yellow-400">Tyrodevs</a></p>
                 </div>
             </div>
         </div>
