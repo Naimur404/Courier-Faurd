@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+use App\Notifications\NewWebsiteSubscriptionNotification;
 
 class WebsiteSubscription extends Model
 {
@@ -320,5 +321,19 @@ class WebsiteSubscription extends Model
         ];
 
         return $classes[$this->verification_status] ?? 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+    }
+
+    /**
+     * Boot the model and notify admins on new subscription
+     */
+    protected static function booted(): void
+    {
+        static::created(function (WebsiteSubscription $subscription) {
+            // Notify all admin users
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewWebsiteSubscriptionNotification($subscription));
+            }
+        });
     }
 }

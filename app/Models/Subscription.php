@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Carbon\Carbon;
+use App\Notifications\NewApiSubscriptionNotification;
 
 class Subscription extends Model
 {
@@ -162,5 +163,19 @@ class Subscription extends Model
             'expires_at' => now()->addMonths($this->plan->duration_months),
             'activated_at' => now(),
         ]);
+    }
+
+    /**
+     * Boot the model and notify admins on new subscription
+     */
+    protected static function booted(): void
+    {
+        static::created(function (Subscription $subscription) {
+            // Notify all admin users
+            $admins = User::where('role', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new NewApiSubscriptionNotification($subscription));
+            }
+        });
     }
 }
