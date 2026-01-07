@@ -1,38 +1,37 @@
 <!DOCTYPE html>
+@php
+    $siteTitle = \App\Models\Setting::get('site_title', config('app.name', 'FraudShield'));
+    $siteFavicon = \App\Models\Setting::get('site_favicon');
+    $gtmId = \App\Models\Setting::get('google_tag_manager', 'GTM-5TNKX5N9');
+@endphp
 <html lang="bn" class="{{ request()->cookie('theme') === 'dark' ? 'dark' : '' }}">
 <head>
+    @if($gtmId)
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
         new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','GTM-5TNKX5N9');
-    </script>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MW75LTD9PG"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-MW75LTD9PG');
+        })(window,document,'script','dataLayer','{{ $gtmId }}');
     </script>
     <!-- End Google Tag Manager -->
+    @endif
     
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
-    <title inertia>{{ config('app.name', 'FraudShield') }} - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</title>
-    <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং">
+    <title inertia>{{ $siteTitle }} - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</title>
+    <meta name="keywords" content="{{ $siteTitle }}, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং">
     <meta name="author" content="Tyrodevs">
     
     <!-- Default OpenGraph Meta Tags -->
-    <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
+    <meta property="og:title" content="{{ $siteTitle }} - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
     <meta property="og:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://fraudshieldbd.site">
-    <meta property="og:site_name" content="FraudShield">
+    <meta property="og:site_name" content="{{ $siteTitle }}">
     <meta property="og:locale" content="bn_BD">
     <meta property="og:image" content="{{ asset('assets/og-image.png') }}">
     <meta property="og:image:width" content="1200">
@@ -40,13 +39,13 @@
     
     <!-- Default Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন">
+    <meta name="twitter:title" content="{{ $siteTitle }} - কুরিয়ার ফ্রড ডিটেকশন">
     <meta name="twitter:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম">
     <meta name="twitter:image" content="{{ asset('assets/og-image.png') }}">
     
     <!-- Favicon & Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicon.png') }}">
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ $siteFavicon ? Storage::url($siteFavicon) : asset('assets/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ $siteFavicon ? Storage::url($siteFavicon) : asset('assets/favicon.png') }}">
     
     <!-- Apple Touch Icons -->
     <link rel="apple-touch-icon" href="{{ asset('assets/pwa/icon-192x192.png') }}">
@@ -62,11 +61,11 @@
     <!-- iOS PWA Configuration -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="FraudShield">
+    <meta name="apple-mobile-web-app-title" content="{{ $siteTitle }}">
     
     <!-- Android PWA Configuration -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="FraudShield">
+    <meta name="application-name" content="{{ $siteTitle }}">
     
     <!-- Microsoft Tile Configuration -->
     <meta name="msapplication-TileColor" content="#4f46e5">
@@ -111,7 +110,7 @@
     {
         "@@context": "https://schema.org",
         "@@type": "WebApplication",
-        "name": "FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
+        "name": "{{ $siteTitle }} - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম",
         "url": "https://fraudshieldbd.site",
         "description": "বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন সিস্টেম। মোবাইল নাম্বার দিয়ে গ্রাহকের ডেলিভারি ইতিহাস দেখুন এবং বিশ্বাসযোগ্যতা যাচাই করুন।",
         "applicationCategory": "BusinessApplication",
@@ -130,9 +129,11 @@
     </script>
 </head>
 <body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+    @if($gtmId)
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5TNKX5N9"
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ $gtmId }}"
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    @endif
     
     @inertia
     

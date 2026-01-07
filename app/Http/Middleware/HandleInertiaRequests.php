@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Models\Setting;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -52,6 +53,14 @@ class HandleInertiaRequests extends Middleware
                 'message' => fn () => $request->session()->get('message'),
                 'error' => fn () => $request->session()->get('error'),
                 'success' => fn () => $request->session()->get('success'),
+            ],
+            'settings' => fn () => [
+                'site_title' => Setting::get('site_title', config('app.name')),
+                'site_logo' => Setting::get('site_logo'),
+                'site_favicon' => Setting::get('site_favicon'),
+                'phone' => Setting::get('phone'),
+                'address' => Setting::get('address'),
+                'footer_text' => Setting::get('footer_text'),
             ],
         ];
     }

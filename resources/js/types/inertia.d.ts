@@ -18,9 +18,19 @@ export interface FlashProps {
   success: string | null
 }
 
+export interface SettingsProps {
+  site_title: string | null
+  site_logo: string | null
+  site_favicon: string | null
+  phone: string | null
+  address: string | null
+  footer_text: string | null
+}
+
 export interface PageProps extends InertiaPageProps {
   auth: AuthProps
   flash: FlashProps
+  settings: SettingsProps
 }
 
 declare module '@inertiajs/vue3' {
