@@ -19,6 +19,7 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 // Public routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/welcome-old', [HomeController::class, 'welcome'])->name('welcome.old'); // Old design for reference
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Offline page for PWA
