@@ -3,8 +3,11 @@
     $siteTitle = \App\Models\Setting::get('site_title', config('app.name', 'FraudShield'));
     $siteFavicon = \App\Models\Setting::get('site_favicon');
     $gtmId = \App\Models\Setting::get('google_tag_manager', 'GTM-5TNKX5N9');
+    // Default to dark mode if no theme cookie is set
+    $theme = request()->cookie('theme');
+    $isDark = $theme === null || $theme === 'dark';
 @endphp
-<html lang="bn" class="{{ request()->cookie('theme') === 'dark' ? 'dark' : '' }}">
+<html lang="bn" class="{{ $isDark ? 'dark' : '' }}">
 <head>
     @if($gtmId)
     <!-- Google Tag Manager -->

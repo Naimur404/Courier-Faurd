@@ -32,11 +32,29 @@ const formatBengaliNumber = (num: number): string => {
     return convertToBengaliNumbers(num);
 };
 
+const formatBengaliTime = (dateTimeStr: string): string => {
+    if (!dateTimeStr) return '';
+    try {
+        const date = new Date(dateTimeStr.replace(' ', 'T') + '+06:00');
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+        const hour12 = hours % 12 || 12;
+        const day = date.getDate();
+        const month = date.toLocaleDateString('bn-BD', { month: 'short' });
+        
+        return `${convertToBengaliNumbers(day)} ${month}, ${convertToBengaliNumbers(hour12)}:${convertToBengaliNumbers(minutes.toString().padStart(2, '0'))} ${ampm}`;
+    } catch {
+        return '';
+    }
+};
+
 const stats = ref({
     lastHour: 0,
     today: 0,
     allTime: 0,
     uniqueNumbers: 0,
+    lastUpdated: '',
 });
 let statsInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -50,6 +68,7 @@ const loadStats = async () => {
                 today: result.data.today,
                 allTime: result.data.all_time,
                 uniqueNumbers: result.data.unique_numbers,
+                lastUpdated: result.data.bangladesh_time,
             };
         }
     } catch (error) {
@@ -114,6 +133,10 @@ const highlights = [
                             <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.uniqueNumbers) }}</span>
                             <span class="text-white/40 text-xs">ইউনিক</span>
                         </div>
+                    </div>
+                    <!-- Last Updated Time -->
+                    <div v-if="stats.lastUpdated" class="mt-1.5 text-center">
+                        <span class="text-white/60 text-xs">সর্বশেষ আপডেট: {{ formatBengaliTime(stats.lastUpdated) }} (BD)</span>
                     </div>
                 </div>
 
