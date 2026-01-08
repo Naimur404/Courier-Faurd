@@ -192,20 +192,19 @@ class WebsiteSubscription extends Model
     }
 
     /**
-     * Create subscription for user
+     * Create subscription for user using plan slug
      */
-    public static function createForUser(int $userId, string $planType): self
+    public static function createForUser(int $userId, string $planSlug): self
     {
-        $amount = $planType === self::PLAN_DAILY ? self::DAILY_PRICE : self::WEEKLY_PRICE;
+        $plan = WebsitePlan::where('slug', $planSlug)->firstOrFail();
+        
         $bangladeshNow = Carbon::now('Asia/Dhaka');
-        $expiresAt = $planType === self::PLAN_DAILY 
-            ? $bangladeshNow->copy()->addDay() 
-            : $bangladeshNow->copy()->addDays(self::WEEKLY_DAYS);
+        $expiresAt = $bangladeshNow->copy()->addDays($plan->duration_days);
 
         return self::create([
             'user_id' => $userId,
-            'plan_type' => $planType,
-            'amount' => $amount,
+            'plan_type' => $planSlug,
+            'amount' => $plan->price,
             'starts_at' => $bangladeshNow,
             'expires_at' => $expiresAt,
             'status' => self::STATUS_ACTIVE,
@@ -214,30 +213,31 @@ class WebsiteSubscription extends Model
     }
 
     /**
-     * Get plan details
+     * Get plan details from database
      */
     public static function getPlanDetails(): array
     {
-        return [
-            self::PLAN_DAILY => [
-                'name' => 'দৈনিক প্ল্যান',
-                'name_en' => 'Daily Plan',
-                'price' => self::DAILY_PRICE,
-                'duration' => '১ দিন',
-                'duration_en' => '1 Day',
-                'description' => 'একদিনের জন্য সীমাহীন সার্চ',
-                'description_en' => 'Unlimited searches for 1 day',
-            ],
-            self::PLAN_WEEKLY => [
-                'name' => '১৫ দিনের প্ল্যান',
-                'name_en' => '15 Days Plan',
-                'price' => self::WEEKLY_PRICE,
-                'duration' => '১৫ দিন',
-                'duration_en' => '15 Days',
-                'description' => '১৫ দিনের জন্য সীমাহীন সার্চ',
-                'description_en' => 'Unlimited searches for 15 days',
-            ],
-        ];
+        $plans = WebsitePlan::active()->get();
+        $result = [];
+        
+        foreach ($plans as $plan) {
+            $result[$plan->slug] = [
+                'name' => $plan->name,
+                'name_en' => $plan->name,
+                'price' => (float) $plan->price,
+                'duration' => $plan->duration_text,
+                'duration_en' => $plan->duration_days . ' Days',
+                'description' => $plan->description,
+                'description_en' => $plan->description,
+                'days' => $plan->duration_days,
+                'features' => $plan->features ?? [],
+                'is_popular' => $plan->is_popular,
+                'icon' => $plan->icon,
+                'color' => $plan->color,
+            ];
+        }
+        
+        return $result;
     }
 
     /**

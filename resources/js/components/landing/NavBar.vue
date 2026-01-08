@@ -5,7 +5,7 @@ import {
     Shield, Menu, X, Moon, Sun, 
     Home, Zap, Calculator, Puzzle, 
     Truck, Tag, Headphones, LogIn, 
-    UserPlus, LayoutDashboard, LogOut, ChevronDown
+    UserPlus, LayoutDashboard, LogOut, ChevronDown, CreditCard
 } from 'lucide-vue-next';
 
 // Props
@@ -29,7 +29,8 @@ const navLinks = [
     { name: 'লাভ/ক্ষতি', href: '#roi', icon: Calculator },
     { name: 'ইন্টিগ্রেশন', href: '#integrations', icon: Puzzle },
     { name: 'কুরিয়ার', href: '#couriers', icon: Truck },
-    { name: 'প্রাইসিং', href: '#pricing', icon: Tag },
+    { name: 'API', href: '#pricing', icon: Tag },
+    { name: 'সাবস্ক্রিপশন', href: '#website-subscription', icon: CreditCard },
     { name: 'কন্টাক্ট', href: '#contact', icon: Headphones },
 ];
 

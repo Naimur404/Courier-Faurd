@@ -9,6 +9,7 @@ import ROICalculator from '@/components/landing/ROICalculator.vue';
 import IntegrationsSection from '@/components/landing/IntegrationsSection.vue';
 import CouriersSection from '@/components/landing/CouriersSection.vue';
 import PricingSection from '@/components/landing/PricingSection.vue';
+import WebsiteSubscriptionSection from '@/components/landing/WebsiteSubscriptionSection.vue';
 import SupportSection from '@/components/landing/SupportSection.vue';
 import FooterSection from '@/components/landing/FooterSection.vue';
 
@@ -83,6 +84,9 @@ const handleSearch = (phone: string) => {
         
         <!-- Pricing Section -->
         <PricingSection />
+
+        <!-- Website Subscription Section -->
+        <WebsiteSubscriptionSection />
         
         <!-- Support Section -->
         <SupportSection />

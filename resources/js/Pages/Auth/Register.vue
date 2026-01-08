@@ -13,6 +13,7 @@ defineProps<Props>()
 
 const form = useForm({
   name: '',
+  phone: '',
   email: '',
   password: '',
   password_confirmation: '',
@@ -71,6 +72,25 @@ const submit = () => {
             />
             <p v-if="form.errors.name" class="mt-1 text-sm text-red-600 dark:text-red-400">
               {{ form.errors.name }}
+            </p>
+          </div>
+
+          <!-- Phone Field -->
+          <div>
+            <Label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              মোবাইল নম্বর
+            </Label>
+            <Input 
+              id="phone" 
+              v-model="form.phone"
+              type="tel" 
+              autocomplete="tel" 
+              required 
+              :error="form.errors.phone"
+              placeholder="01XXXXXXXXX"
+            />
+            <p v-if="form.errors.phone" class="mt-1 text-sm text-red-600 dark:text-red-400">
+              {{ form.errors.phone }}
             </p>
           </div>
           

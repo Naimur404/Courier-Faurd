@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { FileSpreadsheet, Globe, Code2, ArrowRight, Puzzle } from 'lucide-vue-next';
+import { Link } from '@inertiajs/vue3';
 
 const integrations = [
     {
@@ -9,6 +10,7 @@ const integrations = [
         color: 'from-green-500 to-emerald-600',
         iconBg: 'bg-green-500/20',
         iconColor: 'text-green-500',
+        link: '#',
     },
     {
         icon: Globe,
@@ -17,6 +19,7 @@ const integrations = [
         color: 'from-blue-500 to-cyan-600',
         iconBg: 'bg-blue-500/20',
         iconColor: 'text-blue-500',
+        link: '#',
     },
     {
         icon: Code2,
@@ -25,6 +28,7 @@ const integrations = [
         color: 'from-purple-500 to-pink-600',
         iconBg: 'bg-purple-500/20',
         iconColor: 'text-purple-500',
+        link: '/api/documentation',
     },
 ];
 </script>
@@ -80,13 +84,13 @@ const integrations = [
                     </p>
 
                     <!-- Link -->
-                    <a 
-                        href="#"
+                    <Link 
+                        :href="integration.link"
                         class="inline-flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-medium hover:gap-3 transition-all duration-300"
                     >
                         বিস্তারিত দেখুন
                         <ArrowRight class="w-4 h-4" />
-                    </a>
+                    </Link>
                 </div>
             </div>
 

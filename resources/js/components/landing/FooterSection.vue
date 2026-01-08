@@ -1,22 +1,55 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { Shield, CheckCircle, Clock, Lock } from 'lucide-vue-next';
+
+const page = usePage();
+
+const settings = computed(() => page.props.settings as {
+    phone?: string;
+    whatsapp?: string;
+    address?: string;
+    footer_text?: string;
+});
+
+const phoneNumber = computed(() => settings.value.phone || '01841414004');
+const whatsappNumber = computed(() => settings.value.whatsapp || '8801841414004');
+const footerText = computed(() => settings.value.footer_text || '© 2026 FraudShield — All rights reserved.');
 
 const footerLinks = {
     product: [
-        { name: 'প্রাইসিং', href: '/pricing' },
-        { name: 'ফিচারস', href: '#features' },
-        { name: 'ওয়ার্ডপ্রেস প্লাগইন', href: '#' },
+        { name: 'প্রাইসিং', href: '#pricing', isSection: true },
+        { name: 'ফিচারস', href: '#features', isSection: true },
+        { name: 'ওয়ার্ডপ্রেস প্লাগইন', href: '#integrations', isSection: true },
     ],
     account: [
-        { name: 'লগইন', href: '/login' },
-        { name: 'রেজিস্টার', href: '/register' },
-        { name: 'কন্টাক্ট', href: '#contact' },
+        { name: 'লগইন', href: '/login', isSection: false },
+        { name: 'রেজিস্টার', href: '/register', isSection: false },
+        { name: 'কন্টাক্ট', href: '#contact', isSection: true },
     ],
     legal: [
-        { name: 'শর্তাবলী', href: '/terms' },
-        { name: 'গোপনীয়তা নীতি', href: '/privacy' },
+        { name: 'শর্তাবলী', href: '/terms', isSection: false },
+        { name: 'গোপনীয়তা নীতি', href: '/privacy', isSection: false },
     ],
+};
+
+const handleLinkClick = (link: { href: string; isSection: boolean }, event: Event) => {
+    if (!link.isSection) return; // Let default navigation happen for non-section links
+    
+    event.preventDefault();
+    const sectionId = link.href;
+    
+    // Check if we're on the home page
+    if (window.location.pathname === '/') {
+        // Scroll to section on same page
+        const element = document.querySelector(sectionId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+    } else {
+        // Navigate to home page with hash
+        router.visit('/' + sectionId);
+    }
 };
 </script>
 
@@ -63,7 +96,8 @@ const footerLinks = {
                         <li v-for="link in footerLinks.product" :key="link.name">
                             <a 
                                 :href="link.href"
-                                class="text-gray-400 hover:text-white transition-colors duration-300"
+                                @click="(e) => handleLinkClick(link, e)"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
                             >
                                 {{ link.name }}
                             </a>
@@ -78,7 +112,8 @@ const footerLinks = {
                         <li v-for="link in footerLinks.account" :key="link.name">
                             <a 
                                 :href="link.href"
-                                class="text-gray-400 hover:text-white transition-colors duration-300"
+                                @click="(e) => handleLinkClick(link, e)"
+                                class="text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
                             >
                                 {{ link.name }}
                             </a>
@@ -100,11 +135,16 @@ const footerLinks = {
                         </li>
                         <li>
                             <a 
-                                href="tel:01841414004"
+                                :href="`tel:${phoneNumber}`"
                                 class="text-gray-400 hover:text-white transition-colors duration-300"
                             >
-                                হেল্পলাইন: 01841414004
+                                হেল্পলাইন: {{ phoneNumber }}
                             </a>
+                        </li>
+                        <li v-if="settings.address">
+                            <span class="text-gray-400">
+                                {{ settings.address }}
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -116,13 +156,13 @@ const footerLinks = {
             <div class="container mx-auto px-4 py-6">
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4">
                     <p class="text-gray-500 text-sm text-center md:text-left">
-                        © 2026 FraudShield — All rights reserved.
+                        {{ footerText }}
                     </p>
                     
                     <div class="flex items-center gap-6 text-sm text-gray-500">
                         <span>Developed by Tyrodevs</span>
                         <a 
-                            href="https://api.whatsapp.com/send?phone=8801841414004"
+                            :href="`https://api.whatsapp.com/send?phone=${whatsappNumber}`"
                             target="_blank"
                             class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-500 transition-colors duration-300"
                         >

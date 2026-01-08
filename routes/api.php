@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CourierApiController;
 use App\Http\Controllers\CustomerReviewController;
 use App\Http\Controllers\SearchStatsController;
 use App\Models\Plan;
+use App\Models\WebsitePlan;
 
 // Public API endpoints (no authentication required)
 Route::prefix('public')->group(function () {
@@ -14,7 +15,7 @@ Route::prefix('public')->group(function () {
     Route::get('/search-analytics', [SearchStatsController::class, 'getDetailedAnalytics'])->name('api.public.search.analytics');
     Route::get('/live-stats', [SearchStatsController::class, 'getLiveStats'])->name('api.public.live.stats');
     
-    // Plans API
+    // Plans API (for API subscriptions)
     Route::get('/plans', function () {
         $plans = Plan::active()->ordered()->get()->map(function ($plan) {
             return [
@@ -39,6 +40,31 @@ Route::prefix('public')->group(function () {
             'data' => $plans,
         ]);
     })->name('api.public.plans');
+
+    // Website Plans API (for website subscriptions)
+    Route::get('/website-plans', function () {
+        $plans = WebsitePlan::active()->get()->map(function ($plan) {
+            return [
+                'id' => $plan->id,
+                'name' => $plan->name,
+                'slug' => $plan->slug,
+                'description' => $plan->description,
+                'price' => (float) $plan->price,
+                'formatted_price' => $plan->formatted_price,
+                'duration_days' => $plan->duration_days,
+                'duration_text' => $plan->duration_text,
+                'icon' => $plan->icon,
+                'color' => $plan->color,
+                'features' => $plan->features ?? [],
+                'is_popular' => $plan->is_popular,
+            ];
+        });
+        
+        return response()->json([
+            'success' => true,
+            'data' => $plans,
+        ]);
+    })->name('api.public.website-plans');
 });
 
 // Protected API endpoints (require API subscription authentication)

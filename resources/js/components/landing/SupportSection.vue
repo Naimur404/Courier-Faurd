@@ -1,9 +1,26 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 import { 
     MessageCircle, Phone, Headphones, ArrowRight,
     Shield, Clock, Lock, CheckCircle
 } from 'lucide-vue-next';
+
+const page = usePage();
+
+const isLoggedIn = computed(() => !!page.props.auth?.user);
+
+const settings = computed(() => page.props.settings as {
+    phone?: string;
+    whatsapp?: string;
+});
+
+const whatsappLink = computed(() => {
+    const number = settings.value.whatsapp || '8801841414004';
+    return `https://api.whatsapp.com/send?phone=${number}&text=Hi%20FraudShield%2C%20I%20need%20live%20support`;
+});
+
+const phoneNumber = computed(() => settings.value.phone || '01841414004');
 
 const benefits = [
     { icon: Clock, text: 'দ্রুত ফল — স্মার্ট ক্যাশ ও অপ্টিমাইজড কুরিয়ার রাউটিং।' },
@@ -35,7 +52,7 @@ const benefits = [
                     <div class="space-y-4">
                         <!-- WhatsApp -->
                         <a
-                            href="https://api.whatsapp.com/send?phone=8801841414004&text=Hi%20FraudShield%2C%20I%20need%20live%20support"
+                            :href="whatsappLink"
                             target="_blank"
                             class="group flex items-center gap-4 p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 dark:from-green-500/20 dark:to-emerald-500/20 rounded-2xl border border-green-200 dark:border-green-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
@@ -47,7 +64,7 @@ const benefits = [
                                     WhatsApp
                                 </h3>
                                 <p class="text-green-600 dark:text-green-400 font-medium">
-                                    01841414004
+                                    {{ phoneNumber }}
                                 </p>
                             </div>
                             <ArrowRight class="w-6 h-6 text-green-500 group-hover:translate-x-2 transition-transform duration-300" />
@@ -55,7 +72,7 @@ const benefits = [
 
                         <!-- Phone Call -->
                         <a
-                            href="tel:01841414004"
+                            :href="`tel:${phoneNumber}`"
                             class="group flex items-center gap-4 p-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 rounded-2xl border border-blue-200 dark:border-blue-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             <div class="p-4 bg-blue-500 rounded-2xl group-hover:scale-110 transition-transform duration-300">
@@ -66,7 +83,7 @@ const benefits = [
                                     কল করুন
                                 </h3>
                                 <p class="text-blue-600 dark:text-blue-400 font-medium">
-                                    01841414004
+                                    {{ phoneNumber }}
                                 </p>
                             </div>
                             <ArrowRight class="w-6 h-6 text-blue-500 group-hover:translate-x-2 transition-transform duration-300" />
@@ -74,18 +91,36 @@ const benefits = [
 
                         <!-- Quick Actions -->
                         <div class="flex gap-4 pt-4">
-                            <Link
-                                href="/login"
-                                class="flex-1 flex items-center justify-center gap-2 py-4 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-slate-700 transition-all duration-300"
-                            >
-                                লগইন
-                            </Link>
-                            <Link
-                                href="/register"
-                                class="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
-                            >
-                                রেজিস্টার
-                            </Link>
+                            <!-- Show Dashboard & API Docs for logged in users -->
+                            <template v-if="isLoggedIn">
+                                <Link
+                                    href="/dashboard"
+                                    class="flex-1 flex items-center justify-center gap-2 py-4 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-slate-700 transition-all duration-300"
+                                >
+                                    ড্যাশবোর্ড
+                                </Link>
+                                <Link
+                                    href="/api/documentation"
+                                    class="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
+                                >
+                                    API ডকুমেন্টেশন
+                                </Link>
+                            </template>
+                            <!-- Show Login & Register for guests -->
+                            <template v-else>
+                                <Link
+                                    href="/login"
+                                    class="flex-1 flex items-center justify-center gap-2 py-4 bg-gray-100 dark:bg-slate-800 text-gray-900 dark:text-white font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-slate-700 transition-all duration-300"
+                                >
+                                    লগইন
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    class="flex-1 flex items-center justify-center gap-2 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-indigo-500/25 transition-all duration-300"
+                                >
+                                    রেজিস্টার
+                                </Link>
+                            </template>
                         </div>
                     </div>
 

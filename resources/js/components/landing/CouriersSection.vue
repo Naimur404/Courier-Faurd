@@ -37,42 +37,32 @@ const couriers = [
                 <!-- Scrolling Container -->
                 <div class="flex animate-scroll-x">
                     <!-- First Set -->
-                    <div class="flex gap-12 items-center px-6">
+                    <div class="flex gap-6 items-center px-3">
                         <div
                             v-for="(courier, index) in couriers"
                             :key="`first-${index}`"
-                            class="flex flex-col items-center gap-3 p-6 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 min-w-[160px]"
+                            class="flex items-center justify-center px-8 py-5 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
                         >
-                            <div class="w-20 h-20 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl p-3">
-                                <img
-                                    :src="courier.logo"
-                                    :alt="courier.name"
-                                    class="max-w-full max-h-full object-contain"
-                                />
-                            </div>
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {{ courier.name }}
-                            </span>
+                            <img
+                                :src="courier.logo"
+                                :alt="courier.name"
+                                class="max-h-10 w-auto object-contain"
+                            />
                         </div>
                     </div>
 
                     <!-- Duplicate Set for Seamless Loop -->
-                    <div class="flex gap-12 items-center px-6">
+                    <div class="flex gap-6 items-center px-3">
                         <div
                             v-for="(courier, index) in couriers"
                             :key="`second-${index}`"
-                            class="flex flex-col items-center gap-3 p-6 bg-gray-50 dark:bg-slate-800 rounded-2xl border border-gray-100 dark:border-slate-700 hover:border-indigo-200 dark:hover:border-indigo-800 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 min-w-[160px]"
+                            class="flex items-center justify-center px-8 py-5 bg-white rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
                         >
-                            <div class="w-20 h-20 flex items-center justify-center bg-white dark:bg-slate-700 rounded-xl p-3">
-                                <img
-                                    :src="courier.logo"
-                                    :alt="courier.name"
-                                    class="max-w-full max-h-full object-contain"
-                                />
-                            </div>
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {{ courier.name }}
-                            </span>
+                            <img
+                                :src="courier.logo"
+                                :alt="courier.name"
+                                class="max-h-10 w-auto object-contain"
+                            />
                         </div>
                     </div>
                 </div>
