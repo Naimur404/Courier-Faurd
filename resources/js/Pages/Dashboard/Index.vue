@@ -45,12 +45,40 @@ interface WebsiteSubscription {
   admin_notes: string | null
 }
 
+interface CourierBreakdownItem {
+  name: string
+  total_parcel: number
+  success_parcel: number
+  cancelled_parcel: number
+  success_ratio: number
+  logo: string | null
+}
+
+interface SearchHistoryItem {
+  id: number
+  phone: string
+  customer_id: number | null
+  courier_summary: {
+    total_parcel: number
+    success_ratio: number
+    cancel_count: number
+    partial_count: number
+  } | null
+  total_parcels: number
+  success_ratio: number
+  courier_breakdown: CourierBreakdownItem[]
+  searched_at: string | null
+  search_by: string
+}
+
 interface Props {
   apiKeys: ApiKey[]
   todayUsage: number
   monthlyUsage: number
   activeSubscription: Subscription | null
   activeWebsiteSubscription: WebsiteSubscription | null
+  searchHistory: SearchHistoryItem[]
+  csrfToken: string
   flash?: {
     success?: string
     error?: string
@@ -63,18 +91,121 @@ const props = defineProps<Props>()
 const page = usePage<PageProps>()
 const user = computed(() => page.props.auth?.user)
 
+// Search functionality
+const phoneInput = ref('')
+const isSearching = ref(false)
+const searchResults = ref<any>(null)
+const searchError = ref<string | null>(null)
+
+const displayToast = (message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+  const toast = document.createElement('div')
+  const colors = {
+    success: 'bg-green-500',
+    error: 'bg-red-500',
+    warning: 'bg-yellow-500'
+  }
+  toast.className = `fixed top-4 right-4 ${colors[type]} text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300`
+  toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : 'exclamation'} mr-2"></i>${message}`
+  document.body.appendChild(toast)
+  
+  setTimeout(() => toast.classList.remove('translate-x-full'), 100)
+  setTimeout(() => {
+    toast.classList.add('translate-x-full')
+    setTimeout(() => document.body.removeChild(toast), 300)
+  }, 3000)
+}
+
+const performSearch = async () => {
+  if (!phoneInput.value) {
+    displayToast('মোবাইল নাম্বার লিখুন', 'warning')
+    return
+  }
+  
+  const phoneRegex = /^01[0-9]{9}$/
+  if (!phoneRegex.test(phoneInput.value)) {
+    displayToast('সঠিক মোবাইল নাম্বার লিখুন (যেমন: 01600000000)', 'warning')
+    return
+  }
+  
+  isSearching.value = true
+  searchError.value = null
+  searchResults.value = null
+  
+  try {
+    const response = await fetch('/courier-check', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-TOKEN': props.csrfToken,
+      },
+      body: JSON.stringify({ phone: phoneInput.value }),
+    })
+    
+    if (response.status === 429) {
+      const rateLimitData = await response.json()
+      displayToast(rateLimitData.message || `দৈনিক সার্চ সীমা অতিক্রম করা হয়েছে।`, 'warning')
+      searchError.value = 'Rate limit exceeded'
+      return
+    }
+    
+    const data = await response.json()
+    
+    if (!response.ok || data.success === false) {
+      displayToast(data.message || 'সার্ভার থেকে ত্রুটির বার্তা পাওয়া গেছে', 'error')
+      searchError.value = data.message || 'Server error'
+      return
+    }
+    
+    searchResults.value = data
+    displayToast('সার্চ সফল হয়েছে', 'success')
+    
+  } catch (error) {
+    console.error('Search error:', error)
+    displayToast('ডাটা লোড করতে সমস্যা হয়েছে', 'error')
+    searchError.value = 'Network error'
+  } finally {
+    isSearching.value = false
+  }
+}
+
+const searchFromHistory = (phone: string) => {
+  phoneInput.value = phone
+  performSearch()
+}
+
+const getRiskLevel = (successRatio: number) => {
+  if (successRatio >= 80) return { label: 'নিম্ন ঝুঁকি', color: 'bg-green-500', textColor: 'text-green-700' }
+  if (successRatio >= 50) return { label: 'মাঝারি ঝুঁকি', color: 'bg-yellow-500', textColor: 'text-yellow-700' }
+  return { label: 'উচ্চ ঝুঁকি', color: 'bg-red-500', textColor: 'text-red-700' }
+}
+
+const getCourierBreakdown = (results: any) => {
+  if (!results?.courierData) return []
+  
+  const couriers = []
+  for (const [key, value] of Object.entries(results.courierData)) {
+    if (key !== 'summary' && typeof value === 'object' && value !== null) {
+      const courierData = value as any
+      if (courierData.total_parcel !== undefined) {
+        couriers.push({
+          name: key,
+          total_parcel: courierData.total_parcel || 0,
+          success_parcel: courierData.success_parcel || 0,
+          cancelled_parcel: courierData.cancelled_parcel || 0,
+          success_ratio: courierData.success_ratio || 0,
+          logo: courierData.logo || null
+        })
+      }
+    }
+  }
+  
+  // Sort by total_parcel descending
+  return couriers.sort((a, b) => b.total_parcel - a.total_parcel)
+}
+
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
-    const toast = document.createElement('div')
-    toast.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300'
-    toast.innerHTML = '<i class="fas fa-check mr-2"></i>Copied to clipboard!'
-    document.body.appendChild(toast)
-    
-    setTimeout(() => toast.classList.remove('translate-x-full'), 100)
-    setTimeout(() => {
-      toast.classList.add('translate-x-full')
-      setTimeout(() => document.body.removeChild(toast), 300)
-    }, 3000)
+    displayToast('Copied to clipboard!', 'success')
   })
 }
 
@@ -233,6 +364,205 @@ const stats = computed(() => [
           </div>
         </Card>
       </div>
+
+      <!-- Search Section -->
+      <Card class="border border-gray-100 dark:border-gray-700 mb-8">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white">ফোন নম্বর সার্চ</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">কুরিয়ার ফ্রড চেক করুন</p>
+            </div>
+            <div class="p-3 rounded-full bg-gradient-to-r from-primary to-primary/80">
+              <i class="fas fa-search text-white text-xl"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="p-6">
+          <!-- Search Input -->
+          <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <div class="flex-1 relative">
+              <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
+                <i class="fas fa-phone"></i>
+              </span>
+              <input
+                v-model="phoneInput"
+                type="tel"
+                placeholder="মোবাইল নম্বর লিখুন (যেমন: 01600000000)"
+                class="w-full pl-12 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white transition-all"
+                maxlength="11"
+                @keyup.enter="performSearch"
+              />
+            </div>
+            <Button 
+              @click="performSearch"
+              :disabled="isSearching"
+              class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2"
+            >
+              <i :class="['fas', isSearching ? 'fa-spinner fa-spin' : 'fa-search']"></i>
+              {{ isSearching ? 'সার্চ করা হচ্ছে...' : 'সার্চ করুন' }}
+            </Button>
+          </div>
+
+          <!-- Search Results -->
+          <div v-if="searchResults" class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-750 rounded-xl p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                <i class="fas fa-chart-pie text-primary mr-2"></i>
+                সার্চ রেজাল্ট: {{ phoneInput }}
+              </h3>
+              <Badge 
+                :variant="getRiskLevel(searchResults.courierData?.summary?.success_ratio || 0).textColor.includes('green') ? 'success' : getRiskLevel(searchResults.courierData?.summary?.success_ratio || 0).textColor.includes('yellow') ? 'warning' : 'destructive'"
+              >
+                {{ getRiskLevel(searchResults.courierData?.summary?.success_ratio || 0).label }}
+              </Badge>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+              <div class="bg-white dark:bg-gray-700 rounded-lg p-4 text-center shadow-sm">
+                <p class="text-2xl font-bold text-primary">{{ searchResults.courierData?.summary?.total_parcel || 0 }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">মোট পার্সেল</p>
+              </div>
+              <div class="bg-white dark:bg-gray-700 rounded-lg p-4 text-center shadow-sm">
+                <p class="text-2xl font-bold text-green-600">{{ searchResults.courierData?.summary?.success_ratio || 0 }}%</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">সাফল্যের হার</p>
+              </div>
+              <div class="bg-white dark:bg-gray-700 rounded-lg p-4 text-center shadow-sm">
+                <p class="text-2xl font-bold text-red-600">{{ searchResults.courierData?.summary?.cancel_count || 0 }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">ক্যান্সেল</p>
+              </div>
+              <div class="bg-white dark:bg-gray-700 rounded-lg p-4 text-center shadow-sm">
+                <p class="text-2xl font-bold text-yellow-600">{{ searchResults.courierData?.summary?.partial_count || 0 }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">পার্শিয়াল</p>
+              </div>
+            </div>
+
+            <!-- Risk Indicator Bar -->
+            <div class="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">ঝুঁকির মাত্রা</span>
+                <span class="text-sm text-gray-500">{{ searchResults.courierData?.summary?.success_ratio || 0 }}% সফল</span>
+              </div>
+              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-3">
+                <div 
+                  :class="[getRiskLevel(searchResults.courierData?.summary?.success_ratio || 0).color, 'h-3 rounded-full transition-all duration-500']"
+                  :style="{ width: `${searchResults.courierData?.summary?.success_ratio || 0}%` }"
+                ></div>
+              </div>
+            </div>
+
+            <!-- Courier Breakdown -->
+            <div v-if="getCourierBreakdown(searchResults).length > 0" class="mt-4">
+              <h4 class="text-md font-semibold text-gray-900 dark:text-white mb-3">
+                <i class="fas fa-truck text-primary mr-2"></i>কুরিয়ার অনুযায়ী পার্সেল
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div 
+                  v-for="courier in getCourierBreakdown(searchResults)" 
+                  :key="courier.name"
+                  class="bg-white dark:bg-gray-700 rounded-lg p-4 shadow-sm border border-gray-100 dark:border-gray-600"
+                >
+                  <div class="flex items-center gap-3 mb-2">
+                    <img 
+                      v-if="courier.logo" 
+                      :src="courier.logo" 
+                      :alt="courier.name"
+                      class="w-8 h-8 object-contain rounded"
+                    />
+                    <div v-else class="w-8 h-8 bg-gray-200 dark:bg-gray-600 rounded flex items-center justify-center">
+                      <i class="fas fa-truck text-gray-400 text-sm"></i>
+                    </div>
+                    <span class="font-medium text-gray-900 dark:text-white capitalize">{{ courier.name }}</span>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2 text-xs">
+                    <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-800 rounded px-2 py-1">
+                      <span class="text-gray-500">মোট:</span>
+                      <span class="font-semibold text-gray-900 dark:text-white">{{ courier.total_parcel }}</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-green-50 dark:bg-green-900/20 rounded px-2 py-1">
+                      <span class="text-green-600">সফল:</span>
+                      <span class="font-semibold text-green-700">{{ courier.success_parcel }}</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-red-50 dark:bg-red-900/20 rounded px-2 py-1">
+                      <span class="text-red-600">ক্যান্সেল:</span>
+                      <span class="font-semibold text-red-700">{{ courier.cancelled_parcel }}</span>
+                    </div>
+                    <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 rounded px-2 py-1">
+                      <span class="text-blue-600">সফলতা:</span>
+                      <span class="font-semibold text-blue-700">{{ courier.success_ratio }}%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div v-else-if="!isSearching && !searchError" class="text-center py-8 text-gray-500 dark:text-gray-400">
+            <i class="fas fa-search text-4xl mb-3 opacity-30"></i>
+            <p>ফোন নম্বর লিখে সার্চ করুন</p>
+          </div>
+        </div>
+      </Card>
+
+      <!-- Search History Section -->
+      <Card v-if="props.searchHistory && props.searchHistory.length > 0" class="border border-gray-100 dark:border-gray-700 mb-8">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-center">
+            <div>
+              <h2 class="text-xl font-semibold text-gray-900 dark:text-white">সার্চ ইতিহাস</h2>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">আপনার সাম্প্রতিক সার্চসমূহ</p>
+            </div>
+            <Badge variant="outline">{{ props.searchHistory.length }} টি সার্চ</Badge>
+          </div>
+        </div>
+        
+        <div class="p-6">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div 
+              v-for="item in props.searchHistory" 
+              :key="item.id"
+              class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all cursor-pointer group"
+              @click="searchFromHistory(item.phone)"
+            >
+              <div class="flex items-start justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <div class="p-2 rounded-full bg-primary/10 text-primary">
+                    <i class="fas fa-phone text-sm"></i>
+                  </div>
+                  <span class="font-mono font-medium text-gray-900 dark:text-white">{{ item.phone }}</span>
+                </div>
+                <Badge 
+                  v-if="item.success_ratio !== null"
+                  :variant="item.success_ratio >= 80 ? 'success' : item.success_ratio >= 50 ? 'warning' : 'destructive'"
+                  class="text-xs"
+                >
+                  {{ item.success_ratio }}%
+                </Badge>
+              </div>
+              
+              <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                <div class="flex items-center gap-3">
+                  <span v-if="item.total_parcels" class="flex items-center gap-1">
+                    <i class="fas fa-box"></i> {{ item.total_parcels }} পার্সেল
+                  </span>
+                </div>
+                <span v-if="item.searched_at" class="flex items-center gap-1">
+                  <i class="fas fa-clock"></i>
+                  {{ new Date(item.searched_at).toLocaleDateString('bn-BD') }}
+                </span>
+              </div>
+
+              <div class="mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                <Button size="sm" variant="outline" class="w-full text-xs">
+                  <i class="fas fa-search mr-1"></i> আবার সার্চ করুন
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Card>
 
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8">
         <!-- API Keys Section -->

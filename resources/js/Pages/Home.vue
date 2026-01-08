@@ -31,14 +31,14 @@ const handleSearch = (phone: string) => {
     <Head>
         <title>FraudShield - রিটার্ন কমান, খরচ বাঁচান | বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন</title>
         <meta name="description" content="FraudShield - বাংলাদেশের প্রথম ও দ্রুততম কুরিয়ার ফ্রড ডিটেকশন প্ল্যাটফর্ম। বাল্ক সার্চ, API ইন্টিগ্রেশন, রিয়েল-টাইম রিপোর্ট। রিটার্ন কমান, খরচ বাঁচান।" />
-        <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, ফ্রড ডিটেকশন, মোবাইল নাম্বার, bulk search, বাল্ক সার্চ, API, বাংলাদেশ কুরিয়ার, steadfast, pathao, redx, paperfly" />
+        <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, ফ্রড ডিটেকশন, মোবাইল নাম্বার, mobile number check, ডেলিভারি ইতিহাস, delivery history, গ্রাহক যাচাই, customer verification, রিস্ক স্কোর, risk score, বাংলাদেশ কুরিয়ার, bangladesh courier, courier check bd, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং, bulk search, বাল্ক সার্চ, API, steadfast, pathao, redx, paperfly" />
         
         <!-- Canonical URL -->
         <link rel="canonical" href="https://fraudshieldbd.site/" />
         
         <!-- OpenGraph Meta Tags -->
-        <meta property="og:title" content="FraudShield - রিটার্ন কমান, খরচ বাঁচান | কুরিয়ার ফ্রড ডিটেকশন" />
-        <meta property="og:description" content="বাংলাদেশের প্রথম ও দ্রুততম কুরিয়ার ফ্রড ডিটেকশন প্ল্যাটফর্ম। বাল্ক সার্চ ≤৫০০, API ইন্টিগ্রেশন।" />
+        <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন" />
+        <meta property="og:description" content="মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস দেখুন। বাল্ক সার্চ ≤৫০০, API ইন্টিগ্রেশন।" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://fraudshieldbd.site/" />
         <meta property="og:site_name" content="FraudShield" />
@@ -46,15 +46,16 @@ const handleSearch = (phone: string) => {
         <meta property="og:image" content="https://fraudshieldbd.site/assets/og-image.png" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="FraudShield - কুরিয়ার ফ্রড ডিটেকশন সিস্টেম" />
         
         <!-- Twitter Card Meta Tags -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="FraudShield - রিটার্ন কমান, খরচ বাঁচান" />
-        <meta name="twitter:description" content="বাংলাদেশের প্রথম কুরিয়ার ফ্রড ডিটেকশন প্ল্যাটফর্ম।" />
+        <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন" />
+        <meta name="twitter:description" content="মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস দেখুন।" />
         <meta name="twitter:image" content="https://fraudshieldbd.site/assets/og-image.png" />
         
         <!-- Additional SEO Meta Tags -->
-        <meta name="robots" content="index, follow, max-image-preview:large" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="author" content="Tyrodevs" />
         <meta name="geo.region" content="BD" />
         <meta name="geo.placename" content="Bangladesh" />

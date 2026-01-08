@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<{
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
+const isAdmin = computed(() => user.value?.role === 'admin');
 
 const isScrolled = ref(false);
 const isMobileMenuOpen = ref(false);
@@ -197,7 +198,21 @@ onUnmounted(() => {
                     <!-- Auth Buttons (Desktop) -->
                     <div class="hidden md:flex items-center gap-2">
                         <template v-if="user">
+                            <a
+                                v-if="isAdmin"
+                                href="/admin"
+                                :class="[
+                                    'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300',
+                                    props.forceDark
+                                        ? 'bg-white/10 text-white hover:bg-white/20'
+                                        : (isScrolled ? 'bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-slate-700' : 'bg-white/10 text-white hover:bg-white/20')
+                                ]"
+                            >
+                                <LayoutDashboard class="w-4 h-4" />
+                                ড্যাশবোর্ড
+                            </a>
                             <Link
+                                v-else
                                 href="/dashboard"
                                 :class="[
                                     'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300',
@@ -208,6 +223,20 @@ onUnmounted(() => {
                             >
                                 <LayoutDashboard class="w-4 h-4" />
                                 ড্যাশবোর্ড
+                            </Link>
+                            <Link
+                                href="/logout"
+                                method="post"
+                                as="button"
+                                :class="[
+                                    'flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-300',
+                                    props.forceDark
+                                        ? 'text-red-400 hover:bg-red-500/20'
+                                        : (isScrolled ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20' : 'text-red-400 hover:bg-red-500/20')
+                                ]"
+                            >
+                                <LogOut class="w-4 h-4" />
+                                লগআউট
                             </Link>
                         </template>
                         <template v-else>
@@ -290,7 +319,16 @@ onUnmounted(() => {
                     <!-- Auth Buttons -->
                     <div class="border-t border-gray-100 dark:border-slate-800 pt-4 space-y-2">
                         <template v-if="user">
+                            <a
+                                v-if="isAdmin"
+                                href="/admin"
+                                class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg"
+                            >
+                                <LayoutDashboard class="w-5 h-5" />
+                                ড্যাশবোর্ড
+                            </a>
                             <Link
+                                v-else
                                 href="/dashboard"
                                 class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gray-100 dark:bg-slate-800 text-gray-700 dark:text-gray-300 font-medium rounded-lg"
                             >

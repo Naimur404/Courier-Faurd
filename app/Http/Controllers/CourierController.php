@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Exception;
 use App\Models\Customer;
 use App\Models\CustomerReview;
+use App\Models\SearchHistory;
 use App\Models\WebsiteSubscription;
 use App\Models\BdCourierToken;
 use Illuminate\Http\Request;
@@ -53,6 +54,19 @@ class CourierController extends Controller
                 $oldData = $this->ensureLogosInData($oldData);
 
                 Log::info("Returning database data for {$phone}. Data is {$daysSinceLastUpdate} days old, valid for {$cacheDays} days.");
+
+                // Record search history for logged-in users
+                if (Auth::check()) {
+                    $summary = $oldData['courierData']['summary'] ?? null;
+                    SearchHistory::recordSearch(
+                        userId: Auth::id(),
+                        phone: $phone,
+                        customerId: $existingCustomer->id,
+                        searchBy: 'web',
+                        ipAddress: $request->ip(),
+                        resultSummary: $summary
+                    );
+                }
 
                 return $oldData;
             }
@@ -114,6 +128,19 @@ class CourierController extends Controller
                 ]);
             }
 
+            // Record search history for logged-in users
+            if (Auth::check()) {
+                $summary = $oldData['courierData']['summary'] ?? null;
+                SearchHistory::recordSearch(
+                    userId: Auth::id(),
+                    phone: $phone,
+                    customerId: $existingCustomer?->id,
+                    searchBy: 'web',
+                    ipAddress: $request->ip(),
+                    resultSummary: $summary
+                );
+            }
+
             // Return database data (with logos)
             return $this->ensureLogosInData($oldData);
         }
@@ -146,6 +173,7 @@ class CourierController extends Controller
         }
 
         // Update or create customer record with new API data
+        $customerId = null;
         if ($existingCustomer) {
             $existingCustomer->update([
                 'user_id' => $userId,
@@ -157,8 +185,9 @@ class CourierController extends Controller
                 'count' => $existingCustomer->count + 1,
                 'data' => $responseData // Update with new API data
             ]);
+            $customerId = $existingCustomer->id;
         } else {
-            Customer::create([
+            $newCustomer = Customer::create([
                 'phone' => $phone,
                 'user_id' => $userId,
                 'subscription_type' => $subscriptionType,
@@ -169,6 +198,20 @@ class CourierController extends Controller
                 'count' => 1,
                 'data' => $responseData,
             ]);
+            $customerId = $newCustomer->id;
+        }
+
+        // Record search history for logged-in users
+        if ($userId) {
+            $summary = $responseData['courierData']['summary'] ?? null;
+            SearchHistory::recordSearch(
+                userId: $userId,
+                phone: $phone,
+                customerId: $customerId,
+                searchBy: 'web',
+                ipAddress: $request->ip(),
+                resultSummary: $summary
+            );
         }
 
         // Process reports from the API response
