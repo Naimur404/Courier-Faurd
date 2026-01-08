@@ -14,18 +14,26 @@ class Plan extends Model
         'name',
         'slug',
         'price',
+        'monthly_price',
+        'yearly_price',
         'duration_months',
+        'billing_period',
         'request_limit',
+        'daily_limit',
         'description',
         'features',
         'is_active',
+        'is_popular',
         'sort_order',
     ];
 
     protected $casts = [
         'features' => 'array',
         'is_active' => 'boolean',
+        'is_popular' => 'boolean',
         'price' => 'decimal:2',
+        'monthly_price' => 'decimal:2',
+        'yearly_price' => 'decimal:2',
     ];
 
     /**

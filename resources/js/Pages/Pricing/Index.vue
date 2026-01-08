@@ -1,24 +1,32 @@
 <script setup lang="ts">
 import { Head, Link, usePage } from '@inertiajs/vue3'
 import AppLayout from '@/Layouts/AppLayout.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { 
     Crown, Rocket, Gem, Check, Clock, 
     ArrowRight, Copy, CheckCircle, HelpCircle, 
-    Zap, Shield, Phone, Star, ArrowLeft
+    Zap, Shield, Phone, Star, ArrowLeft, Sparkles, Loader2
 } from 'lucide-vue-next'
+import axios from 'axios'
 
 interface Plan {
   id: number
   name: string
+  slug: string
   description: string
+  price: number
   formatted_price: string
+  monthly_price: number
+  yearly_price: number
+  daily_limit: number
+  duration_months: number
   duration_text: string
   features: string[]
+  is_popular: boolean
 }
 
 interface Props {
-  plans: Plan[]
+  plans?: Plan[]
 }
 
 const props = defineProps<Props>()
@@ -28,6 +36,33 @@ const user = computed(() => page.props.auth?.user)
 const hasActiveSubscription = computed(() => page.props.auth?.hasActiveSubscription ?? false)
 
 const copied = ref(false)
+const isYearly = ref(false)
+const loading = ref(false)
+const apiPlans = ref<Plan[]>([])
+
+// Fetch plans from API on mount
+onMounted(async () => {
+  if (!props.plans || props.plans.length === 0) {
+    try {
+      loading.value = true
+      const response = await axios.get('/api/public/plans')
+      if (response.data.success) {
+        apiPlans.value = response.data.data
+      }
+    } catch (error) {
+      console.error('Failed to fetch plans:', error)
+    } finally {
+      loading.value = false
+    }
+  }
+})
+
+// Use API plans or props plans
+const displayPlans = computed(() => {
+  if (apiPlans.value.length > 0) return apiPlans.value
+  if (props.plans && props.plans.length > 0) return props.plans
+  return []
+})
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -38,12 +73,28 @@ const copyToClipboard = (text: string) => {
   })
 }
 
-const planIcons = [Rocket, Crown, Gem]
+const planIcons = [Rocket, Crown, Zap, Sparkles]
 const planColors = [
     { gradient: 'from-emerald-500 to-green-600', light: 'bg-emerald-100 dark:bg-emerald-900/50', text: 'text-emerald-600 dark:text-emerald-400' },
     { gradient: 'from-indigo-500 to-purple-600', light: 'bg-indigo-100 dark:bg-indigo-900/50', text: 'text-indigo-600 dark:text-indigo-400' },
     { gradient: 'from-purple-500 to-pink-600', light: 'bg-purple-100 dark:bg-purple-900/50', text: 'text-purple-600 dark:text-purple-400' },
+    { gradient: 'from-orange-500 to-red-600', light: 'bg-orange-100 dark:bg-orange-900/50', text: 'text-orange-600 dark:text-orange-400' },
 ]
+
+const getPrice = (plan: Plan) => {
+  return isYearly.value ? Number(plan.yearly_price) : Number(plan.monthly_price)
+}
+
+const getPriceSuffix = () => {
+  return isYearly.value ? '/বছর' : '/মাস'
+}
+
+const getDiscount = (plan: Plan) => {
+  const yearlyMonthly = Number(plan.monthly_price) * 12
+  const saved = yearlyMonthly - Number(plan.yearly_price)
+  const percent = Math.round((saved / yearlyMonthly) * 100)
+  return percent
+}
 
 const faqs = [
   {
@@ -117,6 +168,33 @@ const faqs = [
           <p class="text-lg md:text-xl text-slate-300 leading-relaxed">
             আপনার ব্যবসার প্রয়োজনে সঠিক প্ল্যান নির্বাচন করুন। সমস্ত প্ল্যানে রিয়েল-টাইম আপডেট এবং ২৪/৭ সাপোর্ট অন্তর্ভুক্ত।
           </p>
+
+          <!-- Monthly/Yearly Toggle -->
+          <div class="mt-8 inline-flex items-center gap-4 p-2 bg-white/10 backdrop-blur-sm rounded-full">
+            <button
+              @click="isYearly = false"
+              :class="[
+                'px-6 py-2 rounded-full font-medium transition-all duration-300',
+                !isYearly 
+                  ? 'bg-white text-slate-900' 
+                  : 'text-white/70 hover:text-white'
+              ]"
+            >
+              Monthly
+            </button>
+            <button
+              @click="isYearly = true"
+              :class="[
+                'px-6 py-2 rounded-full font-medium transition-all duration-300 flex items-center gap-2',
+                isYearly 
+                  ? 'bg-white text-slate-900' 
+                  : 'text-white/70 hover:text-white'
+              ]"
+            >
+              Yearly
+              <span class="text-xs bg-green-500 text-white px-2 py-0.5 rounded-full">Save 17%</span>
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -124,20 +202,28 @@ const faqs = [
     <!-- Pricing Cards Section -->
     <section class="py-16 bg-white dark:bg-slate-900">
       <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
+        <!-- Loading State -->
+        <div v-if="loading" class="flex justify-center py-12">
+          <div class="flex items-center gap-3 text-slate-500 dark:text-slate-400">
+            <Loader2 class="w-6 h-6 animate-spin" />
+            <span>প্ল্যান লোড হচ্ছে...</span>
+          </div>
+        </div>
+
+        <div v-else class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto">
           <div 
-            v-for="(plan, index) in plans" 
+            v-for="(plan, index) in displayPlans" 
             :key="plan.id"
             :class="[
               'group relative p-6 lg:p-8 rounded-2xl transition-all duration-300',
-              index === 1 
+              plan.is_popular 
                 ? 'bg-gradient-to-br from-indigo-600 to-purple-600 text-white ring-4 ring-indigo-500/30 scale-105 shadow-2xl' 
                 : 'bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 hover:shadow-xl'
             ]"
           >
             <!-- Popular Badge -->
             <div 
-              v-if="index === 1" 
+              v-if="plan.is_popular" 
               class="absolute -top-3 left-1/2 -translate-x-1/2 bg-yellow-400 text-yellow-900 text-xs font-bold px-4 py-1 rounded-full flex items-center gap-1"
             >
               <Star class="w-3 h-3" />
@@ -148,46 +234,64 @@ const faqs = [
             <div 
               :class="[
                 'w-14 h-14 rounded-2xl flex items-center justify-center mb-5',
-                index === 1 ? 'bg-white/20' : planColors[index]?.light
+                plan.is_popular ? 'bg-white/20' : planColors[index % planColors.length]?.light
               ]"
             >
               <component 
-                :is="planIcons[index]" 
+                :is="planIcons[index % planIcons.length]" 
                 :class="[
                   'w-7 h-7',
-                  index === 1 ? 'text-white' : planColors[index]?.text
+                  plan.is_popular ? 'text-white' : planColors[index % planColors.length]?.text
                 ]" 
               />
             </div>
 
             <!-- Plan Name & Description -->
             <h3 :class="[
-              'text-xl font-bold mb-2',
-              index === 1 ? 'text-white' : 'text-slate-900 dark:text-white'
+              'text-xl font-bold mb-1',
+              plan.is_popular ? 'text-white' : 'text-slate-900 dark:text-white'
             ]">
               {{ plan.name }}
             </h3>
             <p :class="[
+              'text-sm mb-1',
+              plan.is_popular ? 'text-indigo-100' : 'text-slate-500 dark:text-slate-400'
+            ]">
+              Daily {{ plan.daily_limit }} সার্চ
+            </p>
+            <p :class="[
               'text-sm mb-6',
-              index === 1 ? 'text-indigo-100' : 'text-slate-500 dark:text-slate-400'
+              plan.is_popular ? 'text-indigo-100' : 'text-slate-500 dark:text-slate-400'
             ]">
               {{ plan.description }}
             </p>
 
             <!-- Price -->
-            <div class="mb-6">
+            <div class="mb-4">
               <span :class="[
                 'text-4xl font-bold',
-                index === 1 ? 'text-white' : 'text-slate-900 dark:text-white'
+                plan.is_popular ? 'text-white' : 'text-slate-900 dark:text-white'
               ]">
-                {{ plan.formatted_price }}
+                ৳{{ getPrice(plan) }}
               </span>
               <span :class="[
                 'text-sm',
-                index === 1 ? 'text-indigo-200' : 'text-slate-500 dark:text-slate-400'
+                plan.is_popular ? 'text-indigo-200' : 'text-slate-500 dark:text-slate-400'
               ]">
-                / {{ plan.duration_text }}
+                {{ getPriceSuffix() }}
               </span>
+            </div>
+
+            <!-- Yearly Discount Badge -->
+            <div 
+              v-if="isYearly && getDiscount(plan) > 0"
+              :class="[
+                'inline-flex items-center gap-1 px-3 py-1 text-sm rounded-full mb-4',
+                plan.is_popular ? 'bg-white/20 text-white' : 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400'
+              ]"
+            >
+              <Sparkles class="w-3 h-3" />
+              {{ getDiscount(plan) }}% সেভ করুন
             </div>
 
             <!-- Features -->
@@ -199,16 +303,16 @@ const faqs = [
               >
                 <div :class="[
                   'w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5',
-                  index === 1 ? 'bg-white/20' : 'bg-green-100 dark:bg-green-900/50'
+                  plan.is_popular ? 'bg-white/20' : 'bg-green-100 dark:bg-green-900/50'
                 ]">
                   <Check :class="[
                     'w-3 h-3',
-                    index === 1 ? 'text-white' : 'text-green-600 dark:text-green-400'
+                    plan.is_popular ? 'text-white' : 'text-green-600 dark:text-green-400'
                   ]" />
                 </div>
                 <span :class="[
                   'text-sm leading-relaxed',
-                  index === 1 ? 'text-indigo-100' : 'text-slate-600 dark:text-slate-300'
+                  plan.is_popular ? 'text-indigo-100' : 'text-slate-600 dark:text-slate-300'
                 ]">
                   {{ feature }}
                 </span>
@@ -222,7 +326,7 @@ const faqs = [
                 disabled 
                 :class="[
                   'w-full py-3 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 cursor-not-allowed',
-                  index === 1 
+                  plan.is_popular 
                     ? 'bg-white/20 text-white/60' 
                     : 'bg-slate-200 dark:bg-slate-700 text-slate-400 dark:text-slate-500'
                 ]"
@@ -232,12 +336,12 @@ const faqs = [
               </button>
               <Link 
                 v-else
-                :href="`/pricing/subscribe/${plan.id}`" 
+                :href="`/pricing/subscribe/${plan.id}?billing=${isYearly ? 'yearly' : 'monthly'}`" 
                 :class="[
                   'w-full py-3 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300',
-                  index === 1 
+                  plan.is_popular 
                     ? 'bg-white text-indigo-600 hover:bg-indigo-50' 
-                    : `bg-gradient-to-r ${planColors[index]?.gradient} text-white hover:shadow-lg hover:-translate-y-0.5`
+                    : `bg-gradient-to-r ${planColors[index % planColors.length]?.gradient} text-white hover:shadow-lg hover:-translate-y-0.5`
                 ]"
               >
                 সাবস্ক্রাইব করুন
@@ -249,9 +353,9 @@ const faqs = [
               href="/login" 
               :class="[
                 'w-full py-3 px-6 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all duration-300',
-                index === 1 
+                plan.is_popular 
                   ? 'bg-white text-indigo-600 hover:bg-indigo-50' 
-                  : `bg-gradient-to-r ${planColors[index]?.gradient} text-white hover:shadow-lg hover:-translate-y-0.5`
+                  : `bg-gradient-to-r ${planColors[index % planColors.length]?.gradient} text-white hover:shadow-lg hover:-translate-y-0.5`
               ]"
             >
               শুরু করুন

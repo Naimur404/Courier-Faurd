@@ -6,12 +6,39 @@ use App\Http\Controllers\CourierController;
 use App\Http\Controllers\Api\CourierApiController;
 use App\Http\Controllers\CustomerReviewController;
 use App\Http\Controllers\SearchStatsController;
+use App\Models\Plan;
 
 // Public API endpoints (no authentication required)
 Route::prefix('public')->group(function () {
     Route::get('/search-stats', [SearchStatsController::class, 'getSearchStatistics'])->name('api.public.search.stats');
     Route::get('/search-analytics', [SearchStatsController::class, 'getDetailedAnalytics'])->name('api.public.search.analytics');
     Route::get('/live-stats', [SearchStatsController::class, 'getLiveStats'])->name('api.public.live.stats');
+    
+    // Plans API
+    Route::get('/plans', function () {
+        $plans = Plan::active()->ordered()->get()->map(function ($plan) {
+            return [
+                'id' => $plan->id,
+                'name' => $plan->name,
+                'slug' => $plan->slug,
+                'description' => $plan->description,
+                'price' => $plan->price,
+                'formatted_price' => $plan->formatted_price,
+                'monthly_price' => $plan->monthly_price,
+                'yearly_price' => $plan->yearly_price,
+                'daily_limit' => $plan->daily_limit,
+                'duration_months' => $plan->duration_months,
+                'duration_text' => $plan->duration_text,
+                'features' => $plan->features ?? [],
+                'is_popular' => $plan->is_popular,
+            ];
+        });
+        
+        return response()->json([
+            'success' => true,
+            'data' => $plans,
+        ]);
+    })->name('api.public.plans');
 });
 
 // Protected API endpoints (require API subscription authentication)

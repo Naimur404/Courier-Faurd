@@ -1,31 +1,61 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { ref, computed, onMounted } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import { 
     Tag, Check, Star, Zap, Crown, Rocket, 
-    Sparkles, ArrowRight, HelpCircle
+    Sparkles, ArrowRight, HelpCircle, Loader2
 } from 'lucide-vue-next';
+import axios from 'axios';
 
-interface Plan {
+// Auth status
+const page = usePage();
+const user = computed(() => page.props.auth?.user);
+const hasActiveSubscription = computed(() => page.props.auth?.hasActiveSubscription ?? false);
+
+interface ApiPlan {
     id: number;
     name: string;
+    slug: string;
     description: string;
+    price: number;
     formatted_price: string;
+    monthly_price: number;
+    yearly_price: number;
+    daily_limit: number;
+    duration_months: number;
     duration_text: string;
     features: string[];
-    daily_limit?: number;
-    monthly_price?: number;
-    yearly_price?: number;
+    is_popular: boolean;
 }
 
-const props = defineProps<{
-    plans?: Plan[];
-}>();
+interface DisplayPlan {
+    id: number;
+    name: string;
+    tagline: string;
+    description: string;
+    monthlyPrice: number;
+    yearlyPrice: number;
+    features: string[];
+    icon: typeof Rocket;
+    color: string;
+    popular: boolean;
+}
 
 const isYearly = ref(false);
+const loading = ref(true);
+const error = ref<string | null>(null);
+const apiPlans = ref<ApiPlan[]>([]);
 
-// Default plans if not provided
-const defaultPlans = [
+// Icon and color mapping based on plan name/slug
+const planStyles: Record<string, { icon: typeof Rocket; color: string }> = {
+    'স্টার্ট': { icon: Rocket, color: 'from-emerald-500 to-green-600' },
+    'গ্রোথ': { icon: Crown, color: 'from-indigo-500 to-purple-600' },
+    'প্রো': { icon: Zap, color: 'from-purple-500 to-pink-600' },
+    'ম্যাক্স': { icon: Sparkles, color: 'from-orange-500 to-red-600' },
+};
+
+// Fallback plans if API fails
+const fallbackPlans: DisplayPlan[] = [
     {
         id: 1,
         name: 'স্টার্ট',
@@ -104,7 +134,59 @@ const defaultPlans = [
     },
 ];
 
-const getPrice = (plan: typeof defaultPlans[0]) => {
+// Convert API plans to display format
+const displayPlans = computed<DisplayPlan[]>(() => {
+    if (apiPlans.value.length === 0) {
+        return fallbackPlans;
+    }
+
+    return apiPlans.value.map((plan) => {
+        const style = planStyles[plan.name] || { icon: Rocket, color: 'from-slate-500 to-gray-600' };
+        return {
+            id: plan.id,
+            name: plan.name,
+            tagline: `Daily ${plan.daily_limit}`,
+            description: plan.description,
+            monthlyPrice: Number(plan.monthly_price),
+            yearlyPrice: Number(plan.yearly_price),
+            features: plan.features || [
+                'Premium Support',
+                'Free API',
+                'Bulk Search Enabled',
+                'Google Sheet Integration',
+                'Free WordPress Plugin',
+                'Free Android Apps',
+            ],
+            icon: style.icon,
+            color: style.color,
+            popular: plan.is_popular,
+        };
+    });
+});
+
+// Fetch plans from API
+const fetchPlans = async () => {
+    try {
+        loading.value = true;
+        error.value = null;
+        const response = await axios.get('/api/public/plans');
+        if (response.data.success) {
+            apiPlans.value = response.data.data;
+        }
+    } catch (err) {
+        console.error('Failed to fetch plans:', err);
+        error.value = 'প্ল্যান লোড করতে সমস্যা হয়েছে';
+        // Will use fallback plans
+    } finally {
+        loading.value = false;
+    }
+};
+
+onMounted(() => {
+    fetchPlans();
+});
+
+const getPrice = (plan: DisplayPlan) => {
     return isYearly.value ? plan.yearlyPrice : plan.monthlyPrice;
 };
 
@@ -112,7 +194,7 @@ const getPriceSuffix = () => {
     return isYearly.value ? '/বছর' : '/মাস';
 };
 
-const getDiscount = (plan: typeof defaultPlans[0]) => {
+const getDiscount = (plan: DisplayPlan) => {
     const yearlyMonthly = plan.monthlyPrice * 12;
     const saved = yearlyMonthly - plan.yearlyPrice;
     const percent = Math.round((saved / yearlyMonthly) * 100);
@@ -187,46 +269,54 @@ const getDiscount = (plan: typeof defaultPlans[0]) => {
             </div>
 
             <!-- Pricing Cards -->
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+            <div v-if="loading" class="flex justify-center py-12">
+                <div class="flex items-center gap-3 text-white/70">
+                    <Loader2 class="w-6 h-6 animate-spin" />
+                    <span>প্ল্যান লোড হচ্ছে...</span>
+                </div>
+            </div>
+
+            <div v-else class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
                 <div
-                    v-for="(plan, index) in defaultPlans"
+                    v-for="(plan, index) in displayPlans"
                     :key="plan.id"
                     :class="[
                         'relative bg-white/10 backdrop-blur-md rounded-3xl border transition-all duration-300 hover:-translate-y-2',
                         plan.popular 
-                            ? 'border-indigo-400 hover:shadow-2xl hover:shadow-indigo-500/20' 
+                            ? 'border-indigo-400 hover:shadow-2xl hover:shadow-indigo-500/20 mt-4 lg:mt-0' 
                             : 'border-white/20 hover:border-white/40 hover:shadow-xl'
                     ]"
                 >
                     <!-- Popular Badge -->
                     <div 
                         v-if="plan.popular"
-                        class="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-sm font-medium rounded-full flex items-center gap-1"
+                        class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-medium rounded-full flex items-center gap-1 whitespace-nowrap shadow-lg"
                     >
-                        <Star class="w-4 h-4" />
-                        Most Popular
+                        <Star class="w-3 h-3" />
+                        <span class="hidden sm:inline">Most Popular</span>
+                        <span class="sm:hidden">Popular</span>
                     </div>
 
-                    <div class="p-6">
+                    <div class="p-5 sm:p-6">
                         <!-- Plan Icon & Name -->
                         <div class="flex items-center gap-3 mb-4">
                             <div 
-                                class="w-12 h-12 rounded-xl flex items-center justify-center"
+                                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                                 :class="`bg-gradient-to-br ${plan.color}`"
                             >
-                                <component :is="plan.icon" class="w-6 h-6 text-white" />
+                                <component :is="plan.icon" class="w-5 h-5 sm:w-6 sm:h-6 text-white" />
                             </div>
-                            <div>
-                                <h3 class="text-lg font-bold text-white">{{ plan.name }}</h3>
-                                <p class="text-sm text-white/60">{{ plan.tagline }}</p>
+                            <div class="min-w-0">
+                                <h3 class="text-base sm:text-lg font-bold text-white truncate">{{ plan.name }}</h3>
+                                <p class="text-xs sm:text-sm text-white/60">{{ plan.tagline }}</p>
                             </div>
                         </div>
 
                         <!-- Price -->
                         <div class="mb-4">
-                            <span class="text-4xl font-bold text-white">৳{{ getPrice(plan) }}</span>
-                            <span class="text-white/60">{{ getPriceSuffix() }}</span>
-                            <p class="text-sm text-white/50 mt-1">{{ plan.description }}</p>
+                            <span class="text-3xl sm:text-4xl font-bold text-white">৳{{ getPrice(plan) }}</span>
+                            <span class="text-white/60 text-sm">{{ getPriceSuffix() }}</span>
+                            <p class="text-xs sm:text-sm text-white/50 mt-1 line-clamp-2">{{ plan.description }}</p>
                         </div>
 
                         <!-- Yearly Discount Badge -->
@@ -239,7 +329,31 @@ const getDiscount = (plan: typeof defaultPlans[0]) => {
                         </div>
 
                         <!-- CTA Button -->
+                        <template v-if="user">
+                            <button
+                                v-if="hasActiveSubscription"
+                                disabled
+                                class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold bg-white/10 text-white/50 cursor-not-allowed mb-6 border border-white/20"
+                            >
+                                <Check class="w-4 h-4" />
+                                ইতিমধ্যে সাবস্ক্রাইব করা
+                            </button>
+                            <Link
+                                v-else
+                                :href="`/pricing/subscribe/${plan.id}?billing=${isYearly ? 'yearly' : 'monthly'}`"
+                                :class="[
+                                    'flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold transition-all duration-300 mb-6',
+                                    plan.popular
+                                        ? 'bg-gradient-to-r from-indigo-500 to-purple-500 text-white hover:shadow-lg hover:shadow-indigo-500/25'
+                                        : 'bg-white/10 text-white hover:bg-white/20 border border-white/20'
+                                ]"
+                            >
+                                সাবস্ক্রাইব করুন
+                                <ArrowRight class="w-4 h-4" />
+                            </Link>
+                        </template>
                         <Link
+                            v-else
                             href="/register"
                             :class="[
                                 'flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold transition-all duration-300 mb-6',

@@ -110,8 +110,8 @@ const features = [
 
                     <!-- Hover Effect -->
                     <div 
-                        class="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
-                        :class="`bg-gradient-to-br ${feature.color} opacity-5`"
+                        class="absolute inset-0 rounded-2xl transition-opacity duration-300 pointer-events-none opacity-0 group-hover:opacity-[0.08]"
+                        :class="`bg-gradient-to-br ${feature.color}`"
                     ></div>
                 </div>
             </div>

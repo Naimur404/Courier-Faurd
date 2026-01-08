@@ -55,7 +55,7 @@ const integrations = [
                 >
                     <!-- Gradient Border Effect on Hover -->
                     <div 
-                        class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-xl"
+                        class="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500 -z-10 blur-xl"
                         :class="`bg-gradient-to-r ${integration.color}`"
                     ></div>
 
