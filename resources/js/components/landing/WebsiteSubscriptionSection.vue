@@ -28,6 +28,7 @@ const isLoggedIn = computed(() => !!page.props.auth?.user);
 const plans = ref<WebsitePlan[]>([]);
 const loading = ref(true);
 const error = ref<string | null>(null);
+const userSubscription = ref<{ plan_type: string; status: string } | null>(null);
 
 const showModal = ref(false);
 const selectedPlan = ref<WebsitePlan | null>(null);
@@ -94,6 +95,31 @@ const fetchPlans = async () => {
     }
 };
 
+const fetchUserSubscription = async () => {
+    if (!isLoggedIn.value) return;
+    
+    try {
+        const response = await fetch('/api/website-subscriptions/status', {
+            headers: {
+                'Accept': 'application/json',
+            },
+        });
+        const data = await response.json();
+        if (data.subscribed && data.subscription) {
+            userSubscription.value = {
+                plan_type: data.subscription.plan,
+                status: 'active',
+            };
+        }
+    } catch (err) {
+        console.error('Failed to fetch subscription:', err);
+    }
+};
+
+const isCurrentPlan = (planSlug: string) => {
+    return userSubscription.value?.plan_type === planSlug && userSubscription.value?.status === 'active';
+};
+
 const openSubscribeModal = (plan: WebsitePlan) => {
     if (!isLoggedIn.value) {
         router.visit('/register');
@@ -147,7 +173,10 @@ const handleSubmit = async () => {
     }
 };
 
-onMounted(fetchPlans);
+onMounted(() => {
+    fetchPlans();
+    fetchUserSubscription();
+});
 </script>
 
 <template>
@@ -179,9 +208,19 @@ onMounted(fetchPlans);
                     :key="plan.id"
                     class="relative group"
                 >
+                    <!-- Current Plan Badge -->
+                    <div 
+                        v-if="isCurrentPlan(plan.slug)"
+                        class="absolute -top-3 left-1/2 -translate-x-1/2 z-10"
+                    >
+                        <span class="px-4 py-1 text-xs font-semibold text-white bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center gap-1">
+                            <Check class="w-3 h-3" />
+                            সাবস্ক্রাইবড
+                        </span>
+                    </div>
                     <!-- Popular Badge -->
                     <div 
-                        v-if="plan.is_popular"
+                        v-else-if="plan.is_popular"
                         class="absolute -top-3 left-1/2 -translate-x-1/2 z-10"
                     >
                         <span class="px-4 py-1 text-xs font-semibold text-white bg-gradient-to-r from-purple-600 to-pink-600 rounded-full">
@@ -237,6 +276,15 @@ onMounted(fetchPlans);
 
                         <!-- CTA Button -->
                         <button
+                            v-if="isCurrentPlan(plan.slug)"
+                            disabled
+                            class="w-full py-4 rounded-xl font-semibold bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 border-2 border-green-500 dark:border-green-500/50 cursor-not-allowed flex items-center justify-center gap-2"
+                        >
+                            <CheckCircle class="w-5 h-5" />
+                            বর্তমান প্ল্যান
+                        </button>
+                        <button
+                            v-else
                             @click="openSubscribeModal(plan)"
                             class="w-full py-4 rounded-xl font-semibold transition-all duration-300"
                             :class="[

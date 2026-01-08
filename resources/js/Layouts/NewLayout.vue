@@ -15,9 +15,12 @@ const props = withDefaults(defineProps<{
 const navHeight = ref(80);
 
 onMounted(() => {
-    // Check saved theme
+    // Check saved theme - default to dark mode
     const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+    } else {
+        // Default to dark mode
         document.documentElement.classList.add('dark');
     }
 });

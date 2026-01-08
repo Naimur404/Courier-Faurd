@@ -48,7 +48,7 @@ class AuthController extends Controller
                 // Use Inertia location for full page redirect to Filament admin
                 return Inertia::location('/admin');
             } else {
-                return redirect()->intended('/dashboard');
+                return redirect()->intended('/dashboard')->with('success', 'Welcome back! You have logged in successfully.');
             }
         }
 

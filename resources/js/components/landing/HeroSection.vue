@@ -74,7 +74,7 @@ const highlights = [
 </script>
 
 <template>
-    <section class="relative min-h-[90vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 pt-20 md:pt-24">
+    <section class="relative min-h-[75vh] flex items-center overflow-hidden bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 pt-24 md:pt-16">
         <!-- Animated Background -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute -top-40 -right-40 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl animate-pulse"></div>
@@ -88,43 +88,43 @@ const highlights = [
         <div class="container mx-auto px-4 relative z-10">
             <div class="max-w-4xl mx-auto text-center">
                 <!-- Live Stats -->
-                <div class="mb-6">
-                    <div class="flex flex-wrap justify-center gap-3 md:gap-4">
-                        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                <div class="mb-2">
+                    <div class="flex flex-wrap justify-center gap-2">
+                        <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                             <span class="relative flex h-2 w-2">
                                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
-                            <Clock class="w-3.5 h-3.5 text-cyan-400" />
-                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.lastHour) }}</span>
+                            <Clock class="w-3 h-3 text-cyan-400" />
+                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.lastHour) }}</span>
                             <span class="text-white/40 text-xs">ঘন্টায়</span>
                         </div>
-                        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                            <Calendar class="w-3.5 h-3.5 text-green-400" />
-                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.today) }}</span>
+                        <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                            <Calendar class="w-3 h-3 text-green-400" />
+                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.today) }}</span>
                             <span class="text-white/40 text-xs">আজকে</span>
                         </div>
-                        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                            <Activity class="w-3.5 h-3.5 text-purple-400" />
-                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.allTime) }}</span>
+                        <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                            <Activity class="w-3 h-3 text-purple-400" />
+                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.allTime) }}</span>
                             <span class="text-white/40 text-xs">মোট</span>
                         </div>
-                        <div class="flex items-center gap-2 px-3 py-1.5 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
-                            <Users class="w-3.5 h-3.5 text-orange-400" />
-                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.uniqueNumbers) }}</span>
+                        <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
+                            <Users class="w-3 h-3 text-orange-400" />
+                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.uniqueNumbers) }}</span>
                             <span class="text-white/40 text-xs">ইউনিক</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Badge -->
-                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-8 animate-fade-in">
-                    <Sparkles class="w-4 h-4 text-yellow-400" />
-                    <span class="text-sm text-white/90">বাংলাদেশে প্রথম — Bulk Search (≤ ৫০০)</span>
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-3 animate-fade-in">
+                    <Sparkles class="w-3.5 h-3.5 text-yellow-400" />
+                    <span class="text-xs text-white/90">বাংলাদেশে প্রথম — Bulk Search (≤ ৫০০)</span>
                 </div>
 
                 <!-- Main Headline -->
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 leading-tight">
                     রিটার্ন কমান, খরচ বাঁচান —
                     <span class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                         FraudShield
@@ -133,28 +133,28 @@ const highlights = [
                 </h1>
 
                 <!-- Subheadline -->
-                <p class="text-lg md:text-xl text-white/70 mb-8 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-base md:text-lg text-white/70 mb-4 max-w-2xl mx-auto leading-relaxed">
                     নম্বরভিত্তিক (সিঙ্গেল + বাল্ক≤৫০০) সার্চ, শক্তিশালী ফিল্টার, বাল্ক এক্সপোর্ট ও REST API।
                     রিয়েল-টাইম ইনসাইটে দ্রুত সিদ্ধান্ত—কম সময়ে বেশি ডেলিভারি।
                 </p>
 
                 <!-- Search Box -->
-                <div class="max-w-xl mx-auto mb-8">
-                    <div class="relative flex flex-col sm:flex-row gap-3 p-2 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                <div class="max-w-xl mx-auto mb-4">
+                    <div class="relative flex flex-col sm:flex-row gap-2 p-1.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
                         <div class="relative flex-1">
                             <Phone class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
                             <input
                                 v-model="phoneInput"
                                 type="text"
                                 placeholder="মোবাইল নাম্বার লিখুন (01XXXXXXXXX)"
-                                class="w-full pl-12 pr-4 py-4 bg-white/10 text-white placeholder-white/40 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                class="w-full pl-12 pr-4 py-3 bg-white/10 text-white placeholder-white/40 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                                 @keypress.enter="performSearch"
                             />
                         </div>
                         <button
                             @click="performSearch"
                             :disabled="isSearching"
-                            class="flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 disabled:opacity-50"
+                            class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 disabled:opacity-50"
                         >
                             <Search class="w-5 h-5" />
                             <span>সার্চ করুন</span>
@@ -163,39 +163,39 @@ const highlights = [
                 </div>
 
                 <!-- CTA Buttons -->
-                <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <div class="flex flex-wrap justify-center gap-2 mb-3">
                     <Link
                         href="/register"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl hover:bg-white/90 transition-all duration-300 hover:shadow-lg"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white text-slate-900 font-semibold rounded-xl hover:bg-white/90 transition-all duration-300 hover:shadow-lg text-sm"
                     >
                         ফ্রি রেজিস্টার করুন
                         <ArrowRight class="w-4 h-4" />
                     </Link>
                     <a
                         href="#features"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300 text-sm"
                     >
                         ফিচারস দেখুন
                     </a>
                     <a
                         href="#pricing"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-white/10 text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300"
+                        class="inline-flex items-center gap-2 px-5 py-2.5 bg-white/10 text-white font-semibold rounded-xl border border-white/20 hover:bg-white/20 transition-all duration-300 text-sm"
                     >
                         প্ল্যান দেখুন
                     </a>
                 </div>
 
                 <!-- Highlights -->
-                <div class="flex flex-wrap justify-center gap-6 pb-8">
+                <div class="flex flex-wrap justify-center gap-4 pb-2">
                     <div
                         v-for="(item, index) in highlights"
                         :key="index"
-                        class="flex items-center gap-2 text-white/80"
+                        class="flex items-center gap-1.5 text-white/80"
                     >
-                        <div class="p-1.5 rounded-lg bg-white/10">
-                            <component :is="item.icon" class="w-4 h-4 text-indigo-400" />
+                        <div class="p-1 rounded-lg bg-white/10">
+                            <component :is="item.icon" class="w-3.5 h-3.5 text-indigo-400" />
                         </div>
-                        <span class="text-sm">{{ item.text }}</span>
+                        <span class="text-xs">{{ item.text }}</span>
                     </div>
                 </div>
             </div>

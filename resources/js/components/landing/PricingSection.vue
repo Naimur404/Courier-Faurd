@@ -3,7 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { 
     Tag, Check, Star, Zap, Crown, Rocket, 
-    Sparkles, ArrowRight, HelpCircle, Loader2
+    Sparkles, ArrowRight, HelpCircle, Loader2, CheckCircle
 } from 'lucide-vue-next';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ import axios from 'axios';
 const page = usePage();
 const user = computed(() => page.props.auth?.user);
 const hasActiveSubscription = computed(() => page.props.auth?.hasActiveSubscription ?? false);
+const userSubscription = ref<{ plan_id: number; plan_name: string; status: string } | null>(null);
 
 interface ApiPlan {
     id: number;
@@ -182,8 +183,32 @@ const fetchPlans = async () => {
     }
 };
 
+// Fetch user's active subscription
+const fetchUserSubscription = async () => {
+    if (!user.value) return;
+    
+    try {
+        const response = await axios.get('/api/api-subscriptions/status');
+        if (response.data.subscribed && response.data.subscription) {
+            userSubscription.value = {
+                plan_id: response.data.subscription.plan_id,
+                plan_name: response.data.subscription.plan_name,
+                status: response.data.subscription.status,
+            };
+        }
+    } catch (err) {
+        console.error('Failed to fetch subscription:', err);
+    }
+};
+
+// Check if a plan is the user's current plan
+const isCurrentPlan = (planId: number) => {
+    return userSubscription.value?.plan_id === planId && userSubscription.value?.status === 'active';
+};
+
 onMounted(() => {
     fetchPlans();
+    fetchUserSubscription();
 });
 
 const getPrice = (plan: DisplayPlan) => {
@@ -287,9 +312,17 @@ const getDiscount = (plan: DisplayPlan) => {
                             : 'border-white/20 hover:border-white/40 hover:shadow-xl'
                     ]"
                 >
+                    <!-- Current Plan Badge -->
+                    <div 
+                        v-if="isCurrentPlan(plan.id)"
+                        class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-medium rounded-full flex items-center gap-1 whitespace-nowrap shadow-lg"
+                    >
+                        <Check class="w-3 h-3" />
+                        <span>সাবস্ক্রাইবড</span>
+                    </div>
                     <!-- Popular Badge -->
                     <div 
-                        v-if="plan.popular"
+                        v-else-if="plan.popular"
                         class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-medium rounded-full flex items-center gap-1 whitespace-nowrap shadow-lg"
                     >
                         <Star class="w-3 h-3" />
@@ -331,7 +364,15 @@ const getDiscount = (plan: DisplayPlan) => {
                         <!-- CTA Button -->
                         <template v-if="user">
                             <button
-                                v-if="hasActiveSubscription"
+                                v-if="isCurrentPlan(plan.id)"
+                                disabled
+                                class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold bg-green-500/20 text-green-400 cursor-not-allowed mb-6 border-2 border-green-500/50"
+                            >
+                                <CheckCircle class="w-5 h-5" />
+                                বর্তমান প্ল্যান
+                            </button>
+                            <button
+                                v-else-if="hasActiveSubscription"
                                 disabled
                                 class="flex items-center justify-center gap-2 w-full py-3 rounded-xl font-semibold bg-white/10 text-white/50 cursor-not-allowed mb-6 border border-white/20"
                             >

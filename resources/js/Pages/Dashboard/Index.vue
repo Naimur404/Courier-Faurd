@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head, Link, usePage } from '@inertiajs/vue3'
+import { Head, Link, usePage, router } from '@inertiajs/vue3'
 import Card from '@/components/ui/Card.vue'
 import Button from '@/components/ui/Button.vue'
 import Badge from '@/components/ui/Badge.vue'
@@ -7,7 +7,7 @@ import Progress from '@/components/ui/Progress.vue'
 import Alert from '@/components/ui/alert/Alert.vue'
 import AlertTitle from '@/components/ui/alert/AlertTitle.vue'
 import AlertDescription from '@/components/ui/alert/AlertDescription.vue'
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import type { PageProps } from '@/types/inertia'
 
 interface ApiKey {
@@ -90,6 +90,7 @@ interface Props {
 const props = defineProps<Props>()
 const page = usePage<PageProps>()
 const user = computed(() => page.props.auth?.user)
+const isLoggingOut = ref(false)
 
 // Search functionality
 const phoneInput = ref('')
@@ -114,6 +115,34 @@ const displayToast = (message: string, type: 'success' | 'error' | 'warning' = '
     setTimeout(() => document.body.removeChild(toast), 300)
   }, 3000)
 }
+
+// Logout function
+const handleLogout = () => {
+  isLoggingOut.value = true
+  router.post('/logout', {}, {
+    onSuccess: () => {
+      // Toast will show on the landing page
+    },
+    onError: () => {
+      isLoggingOut.value = false
+      displayToast('Logout failed. Please try again.', 'error')
+    }
+  })
+}
+
+// Show flash messages as toast on mount
+onMounted(() => {
+  const flash = page.props.flash as { success?: string; error?: string; message?: string } | undefined
+  if (flash?.success) {
+    displayToast(flash.success, 'success')
+  }
+  if (flash?.error) {
+    displayToast(flash.error, 'error')
+  }
+  if (flash?.message) {
+    displayToast(flash.message, 'success')
+  }
+})
 
 const performSearch = async () => {
   if (!phoneInput.value) {
@@ -285,11 +314,19 @@ const stats = computed(() => [
                 <i class="fas fa-book mr-2"></i>API Documentation
               </Button>
             </Link>
-            <Link href="/pricing">
+            <a href="/#pricing">
               <Button variant="outline" class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto">
                 <i class="fas fa-crown mr-2"></i>Upgrade Plan
               </Button>
-            </Link>
+            </a>
+            <Button 
+              @click="handleLogout" 
+              :disabled="isLoggingOut"
+              class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto disabled:opacity-50"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i>
+              {{ isLoggingOut ? 'Logging out...' : 'Logout' }}
+            </Button>
           </div>
         </div>
       </div>
