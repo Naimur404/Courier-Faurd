@@ -401,19 +401,19 @@ const maskPhoneNumber = (phone: string): string => {
             </div>
 
             <!-- Results -->
-            <div v-else-if="searchResults" class="grid lg:grid-cols-3 gap-4 max-w-6xl mx-auto">
-                <!-- Left: Success Ratio -->
-                <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
-                    <h3 class="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
+            <div v-else-if="searchResults" class="max-w-5xl mx-auto space-y-4">
+                <!-- Success Ratio Card -->
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-4 sm:p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
+                    <h3 class="text-base sm:text-lg font-bold mb-4 sm:mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
                         <div class="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
-                            <PieChart class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                            <PieChart class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
                         </div>
                         Delivery Success Ratio
                     </h3>
                     
                     <!-- Progress Ring -->
-                    <div class="flex justify-center mb-6">
-                        <div class="relative w-36 h-36">
+                    <div class="flex justify-center mb-4 sm:mb-6">
+                        <div class="relative w-28 h-28 sm:w-36 sm:h-36">
                             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                                 <circle class="text-gray-200 dark:text-slate-700 stroke-current" stroke-width="8" fill="transparent" r="42" cx="50" cy="50"/>
                                 <circle
@@ -430,8 +430,8 @@ const maskPhoneNumber = (phone: string): string => {
                                 />
                             </svg>
                             <div class="absolute inset-0 flex items-center justify-center flex-col">
-                                <span class="text-3xl font-bold text-gray-900 dark:text-white">{{ successRatio.toFixed(0) }}%</span>
-                                <span class="text-xs font-semibold px-3 py-1 rounded-full mt-1" :class="{
+                                <span class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">{{ successRatio.toFixed(0) }}%</span>
+                                <span class="text-[10px] sm:text-xs font-semibold px-2 sm:px-3 py-1 rounded-full mt-1" :class="{
                                     'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400': ratingText === 'Excellent',
                                     'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/50 dark:text-yellow-400': ratingText === 'Good',
                                     'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400': ratingText === 'Poor',
@@ -443,7 +443,7 @@ const maskPhoneNumber = (phone: string): string => {
 
                     <!-- Risk Indicator -->
                     <div 
-                        class="text-center py-3 px-4 rounded-2xl flex items-center justify-center gap-2 font-semibold text-white shadow-lg"
+                        class="text-center py-2.5 sm:py-3 px-4 rounded-2xl flex items-center justify-center gap-2 font-semibold text-white shadow-lg text-sm sm:text-base"
                         :class="{
                             'bg-gradient-to-r from-green-500 to-emerald-600 shadow-green-500/25': riskLevel.level === 'low',
                             'bg-gradient-to-r from-yellow-500 to-orange-500 shadow-yellow-500/25': riskLevel.level === 'medium',
@@ -451,47 +451,47 @@ const maskPhoneNumber = (phone: string): string => {
                             'bg-gradient-to-r from-gray-400 to-gray-500': riskLevel.level === 'unknown',
                         }"
                     >
-                        <component :is="riskLevel.icon" class="w-5 h-5" />
+                        <component :is="riskLevel.icon" class="w-4 h-4 sm:w-5 sm:h-5" />
                         {{ riskLevel.label }}
                     </div>
 
-                    <!-- Quick Stats -->
-                    <div class="mt-6 grid grid-cols-2 gap-3">
-                        <div class="text-center p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
-                            <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ searchResults.courierData?.summary?.total_parcel || 0 }}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">মোট অর্ডার</div>
+                    <!-- Quick Stats - 2x2 Grid -->
+                    <div class="mt-4 sm:mt-6 grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+                        <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
+                            <div class="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ searchResults.courierData?.summary?.total_parcel || 0 }}</div>
+                            <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">মোট অর্ডার</div>
                         </div>
-                        <div class="text-center p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
-                            <div class="text-2xl font-bold text-green-600 dark:text-green-400">{{ searchResults.courierData?.summary?.success_parcel || 0 }}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">সফল</div>
+                        <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
+                            <div class="text-xl sm:text-2xl font-bold text-green-600 dark:text-green-400">{{ searchResults.courierData?.summary?.success_parcel || 0 }}</div>
+                            <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">সফল</div>
                         </div>
-                        <div class="text-center p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
-                            <div class="text-2xl font-bold text-red-600 dark:text-red-400">{{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">বাতিল</div>
+                        <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
+                            <div class="text-xl sm:text-2xl font-bold text-red-600 dark:text-red-400">{{ searchResults.courierData?.summary?.cancelled_parcel || 0 }}</div>
+                            <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">বাতিল</div>
                         </div>
-                        <div class="text-center p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
-                            <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ courierList.length }}</div>
-                            <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">কুরিয়ার</div>
+                        <div class="text-center p-3 sm:p-4 bg-white dark:bg-slate-700/50 rounded-xl border border-gray-100 dark:border-slate-600">
+                            <div class="text-xl sm:text-2xl font-bold text-purple-600 dark:text-purple-400">{{ courierList.length }}</div>
+                            <div class="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1">কুরিয়ার</div>
                         </div>
                     </div>
 
                     <!-- Recommendation -->
-                    <div class="mt-6 p-4 rounded-2xl border" :class="{
+                    <div class="mt-4 sm:mt-6 p-3 sm:p-4 rounded-2xl border" :class="{
                         'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800': riskLevel.level === 'low',
                         'bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800': riskLevel.level === 'medium',
                         'bg-red-50 border-red-200 dark:bg-red-900/20 dark:border-red-800': riskLevel.level === 'high',
                         'bg-gray-50 border-gray-200 dark:bg-gray-800 dark:border-gray-700': riskLevel.level === 'unknown'
                     }">
-                        <h4 class="font-semibold text-sm mb-2 flex items-center gap-2" :class="{
+                        <h4 class="font-semibold text-xs sm:text-sm mb-2 flex items-center gap-2" :class="{
                             'text-green-800 dark:text-green-300': riskLevel.level === 'low',
                             'text-yellow-800 dark:text-yellow-300': riskLevel.level === 'medium',
                             'text-red-800 dark:text-red-300': riskLevel.level === 'high',
                             'text-gray-800 dark:text-gray-300': riskLevel.level === 'unknown'
                         }">
-                            <TrendingUp class="w-4 h-4" />
+                            <TrendingUp class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                             সুপারিশ
                         </h4>
-                        <p class="text-sm leading-relaxed" :class="{
+                        <p class="text-xs sm:text-sm leading-relaxed" :class="{
                             'text-green-700 dark:text-green-400': riskLevel.level === 'low',
                             'text-yellow-700 dark:text-yellow-400': riskLevel.level === 'medium',
                             'text-red-700 dark:text-red-400': riskLevel.level === 'high',
@@ -505,23 +505,51 @@ const maskPhoneNumber = (phone: string): string => {
                     </div>
                 </div>
 
-                <!-- Right: Chart & Table -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- Chart -->
-                    <div v-if="courierList.length > 0" class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
-                        <h3 class="text-lg font-bold mb-6 flex items-center gap-2 text-gray-900 dark:text-white">
-                            <div class="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
-                                <Truck class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+                <!-- Courier Table -->
+                <div v-if="courierList.length > 0" class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-4 sm:p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
+                    <h3 class="text-base sm:text-lg font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+                        <div class="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
+                            <Truck class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
+                        </div>
+                        কুরিয়ার বিবরণ
+                    </h3>
+                    
+                    <!-- Mobile Card View -->
+                    <div class="sm:hidden space-y-3">
+                        <div v-for="courier in courierList" :key="courier.name" class="bg-white dark:bg-slate-700/50 p-4 rounded-xl border border-gray-100 dark:border-slate-600">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-slate-600 p-1.5 flex items-center justify-center border border-gray-100 dark:border-slate-500">
+                                        <img v-if="courier.logo" :src="courier.logo" :alt="courier.name" class="max-w-full max-h-full object-contain" />
+                                    </div>
+                                    <span class="font-medium text-sm text-gray-900 dark:text-white">{{ courier.name }}</span>
+                                </div>
+                                <span class="inline-flex items-center px-2 py-0.5 text-xs font-semibold rounded-full" :class="{
+                                    'bg-green-100 text-green-700 dark:bg-green-900/50 dark:text-green-400': courier.successRatio >= 70,
+                                    'bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-400': courier.successRatio < 70,
+                                }">
+                                    {{ courier.successRatio.toFixed(1) }}%
+                                </span>
                             </div>
-                            কুরিয়ার পারফরম্যান্স
-                        </h3>
-                        <div class="h-72">
-                            <canvas ref="chartCanvas"></canvas>
+                            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                                <div class="bg-gray-50 dark:bg-slate-600/50 rounded-lg p-2">
+                                    <div class="font-bold text-indigo-600 dark:text-indigo-400">{{ courier.totalParcel }}</div>
+                                    <div class="text-gray-500 dark:text-gray-400 text-[10px]">মোট</div>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-slate-600/50 rounded-lg p-2">
+                                    <div class="font-bold text-green-600 dark:text-green-400">{{ courier.successParcel }}</div>
+                                    <div class="text-gray-500 dark:text-gray-400 text-[10px]">সফল</div>
+                                </div>
+                                <div class="bg-gray-50 dark:bg-slate-600/50 rounded-lg p-2">
+                                    <div class="font-bold text-red-600 dark:text-red-400">{{ courier.cancelledParcel }}</div>
+                                    <div class="text-gray-500 dark:text-gray-400 text-[10px]">বাতিল</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
-                    <!-- Courier Table -->
-                    <div v-if="courierList.length > 0" class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-6 border border-gray-200 dark:border-slate-700 shadow-xl overflow-x-auto">
+                    
+                    <!-- Desktop Table View -->
+                    <div class="hidden sm:block overflow-x-auto">
                         <table class="w-full">
                             <thead>
                                 <tr class="text-left text-sm font-semibold text-gray-500 dark:text-gray-400 border-b border-gray-200 dark:border-slate-600">
@@ -557,41 +585,41 @@ const maskPhoneNumber = (phone: string): string => {
                             </tbody>
                         </table>
                     </div>
+                </div>
 
-                    <!-- Reviews -->
-                    <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
-                        <div class="flex justify-between items-center mb-6">
-                            <h3 class="text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-white">
-                                <div class="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
-                                    <MessageSquare class="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
-                                </div>
-                                গ্রাহক রিভিউ
-                            </h3>
-                            <button @click="showRatingModal = true" class="flex items-center gap-2 px-4 py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rounded-xl text-sm font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-900 transition-colors">
-                                <Plus class="w-4 h-4" />
-                                নতুন রিভিউ
-                            </button>
-                        </div>
-                        
-                        <div v-if="reviews.length === 0" class="text-center py-10 text-gray-500">
-                            <MessageSquare class="w-12 h-12 mx-auto mb-3 opacity-30" />
-                            <p>এই নাম্বারের জন্য কোন রিভিউ নেই</p>
-                            <p class="text-sm mt-1">প্রথম রিভিউ দিয়ে অন্যদের সাহায্য করুন</p>
-                        </div>
-                        
-                        <div v-else class="space-y-4 max-h-72 overflow-y-auto">
-                            <div v-for="review in reviews" :key="review.id" class="bg-white dark:bg-slate-700/50 p-4 rounded-2xl border border-gray-100 dark:border-slate-600">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div>
-                                        <span class="font-semibold text-gray-900 dark:text-white">{{ review.name }}</span>
-                                        <span class="text-gray-400 text-sm ml-2">({{ maskPhoneNumber(review.commenter_phone) }})</span>
-                                    </div>
-                                    <div class="flex text-lg">
-                                        <span v-for="i in 5" :key="i" :class="i <= review.rating ? 'text-yellow-400' : 'text-gray-200 dark:text-gray-600'">★</span>
-                                    </div>
-                                </div>
-                                <p class="text-gray-700 dark:text-gray-300">{{ review.comment }}</p>
+                <!-- Reviews -->
+                <div class="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-4 sm:p-6 border border-gray-200 dark:border-slate-700 shadow-xl">
+                    <div class="flex justify-between items-center mb-4 sm:mb-6">
+                        <h3 class="text-base sm:text-lg font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                            <div class="p-2 bg-indigo-100 dark:bg-indigo-900/50 rounded-xl">
+                                <MessageSquare class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-600 dark:text-indigo-400" />
                             </div>
+                            গ্রাহক রিভিউ
+                        </h3>
+                        <button @click="showRatingModal = true" class="flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 rounded-xl text-xs sm:text-sm font-semibold hover:bg-indigo-200 dark:hover:bg-indigo-900 transition-colors">
+                            <Plus class="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            <span class="hidden xs:inline">নতুন</span> রিভিউ
+                        </button>
+                    </div>
+                    
+                    <div v-if="reviews.length === 0" class="text-center py-8 sm:py-10 text-gray-500">
+                        <MessageSquare class="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 opacity-30" />
+                        <p class="text-sm sm:text-base">এই নাম্বারের জন্য কোন রিভিউ নেই</p>
+                        <p class="text-xs sm:text-sm mt-1">প্রথম রিভিউ দিয়ে অন্যদের সাহায্য করুন</p>
+                    </div>
+                    
+                    <div v-else class="space-y-3 sm:space-y-4 max-h-60 sm:max-h-72 overflow-y-auto">
+                        <div v-for="review in reviews" :key="review.id" class="bg-white dark:bg-slate-700/50 p-3 sm:p-4 rounded-2xl border border-gray-100 dark:border-slate-600">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <span class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white">{{ review.name }}</span>
+                                    <span class="text-gray-400 text-xs sm:text-sm ml-2">({{ maskPhoneNumber(review.commenter_phone) }})</span>
+                                </div>
+                                <div class="flex text-base sm:text-lg">
+                                    <span v-for="i in 5" :key="i" :class="i <= review.rating ? 'text-yellow-400' : 'text-gray-200 dark:text-gray-600'">★</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-300">{{ review.comment }}</p>
                         </div>
                     </div>
                 </div>
@@ -600,55 +628,55 @@ const maskPhoneNumber = (phone: string): string => {
 
         <!-- Review Modal -->
         <Teleport to="body">
-            <div v-if="showRatingModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div v-if="showRatingModal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
                 <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="showRatingModal = false"></div>
-                <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-8 w-full max-w-md shadow-2xl border border-gray-200 dark:border-slate-700">
-                    <div class="text-center mb-6">
-                        <div class="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
-                            <MessageSquare class="w-8 h-8 text-white" />
+                <div class="relative bg-white dark:bg-slate-800 rounded-t-3xl sm:rounded-3xl p-5 sm:p-8 w-full sm:max-w-md max-h-[90vh] overflow-y-auto shadow-2xl border-t sm:border border-gray-200 dark:border-slate-700">
+                    <div class="text-center mb-4 sm:mb-6">
+                        <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/25">
+                            <MessageSquare class="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                         </div>
-                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">রিভিউ দিন</h3>
-                        <p class="text-gray-600 dark:text-gray-400 mt-2">
+                        <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">রিভিউ দিন</h3>
+                        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1 sm:mt-2">
                             <span class="font-semibold text-indigo-600 dark:text-indigo-400">{{ phoneInput }}</span> সম্পর্কে আপনার অভিজ্ঞতা শেয়ার করুন
                         </p>
                     </div>
                     
-                    <form @submit.prevent="submitReview" class="space-y-5">
+                    <form @submit.prevent="submitReview" class="space-y-4 sm:space-y-5">
                         <div>
-                            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">আপনার নম্বর</label>
-                            <input v-model="reviewForm.ownNumber" type="text" placeholder="01XXXXXXXXX" class="w-full p-4 border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" required />
+                            <label class="block text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 text-gray-700 dark:text-gray-300">আপনার নম্বর</label>
+                            <input v-model="reviewForm.ownNumber" type="text" placeholder="01XXXXXXXXX" class="w-full p-3 sm:p-4 text-sm sm:text-base border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" required />
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">আপনার নাম</label>
-                            <input v-model="reviewForm.name" type="text" placeholder="আপনার নাম লিখুন" class="w-full p-4 border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" required />
+                            <label class="block text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 text-gray-700 dark:text-gray-300">আপনার নাম</label>
+                            <input v-model="reviewForm.name" type="text" placeholder="আপনার নাম লিখুন" class="w-full p-3 sm:p-4 text-sm sm:text-base border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all" required />
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-3 text-gray-700 dark:text-gray-300">রেটিং</label>
-                            <div class="flex justify-center gap-3">
+                            <label class="block text-xs sm:text-sm font-semibold mb-2 sm:mb-3 text-gray-700 dark:text-gray-300">রেটিং</label>
+                            <div class="flex justify-center gap-2 sm:gap-3">
                                 <button 
                                     v-for="i in 5" 
                                     :key="i" 
                                     type="button" 
                                     @click="reviewForm.rating = i" 
-                                    class="text-4xl transition-all duration-200 hover:scale-110"
+                                    class="text-3xl sm:text-4xl transition-all duration-200 hover:scale-110"
                                     :class="i <= reviewForm.rating ? 'text-yellow-400 drop-shadow-lg' : 'text-gray-300 dark:text-gray-600 hover:text-yellow-300'"
                                 >★</button>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">মন্তব্য</label>
-                            <textarea v-model="reviewForm.comment" rows="3" placeholder="আপনার অভিজ্ঞতা লিখুন..." class="w-full p-4 border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none" required></textarea>
+                            <label class="block text-xs sm:text-sm font-semibold mb-1.5 sm:mb-2 text-gray-700 dark:text-gray-300">মন্তব্য</label>
+                            <textarea v-model="reviewForm.comment" rows="3" placeholder="আপনার অভিজ্ঞতা লিখুন..." class="w-full p-3 sm:p-4 text-sm sm:text-base border border-gray-200 dark:border-slate-600 rounded-xl bg-gray-50 dark:bg-slate-700/50 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none" required></textarea>
                         </div>
-                        <div class="flex gap-4 pt-2">
-                            <button type="button" @click="showRatingModal = false" class="flex-1 py-4 border border-gray-300 dark:border-slate-600 rounded-xl text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <div class="flex gap-3 sm:gap-4 pt-1 sm:pt-2">
+                            <button type="button" @click="showRatingModal = false" class="flex-1 py-3 sm:py-4 text-sm sm:text-base border border-gray-300 dark:border-slate-600 rounded-xl text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
                                 বাতিল
                             </button>
                             <button 
                                 type="submit" 
                                 :disabled="isSubmittingReview" 
-                                class="flex-1 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition-all"
+                                class="flex-1 py-3 sm:py-4 text-sm sm:text-base bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold hover:from-indigo-500 hover:to-purple-500 disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/25 transition-all"
                             >
-                                <Send class="w-5 h-5" />
+                                <Send class="w-4 h-4 sm:w-5 sm:h-5" />
                                 জমা দিন
                             </button>
                         </div>
