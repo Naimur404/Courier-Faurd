@@ -59,6 +59,7 @@ class HandleInertiaRequests extends Middleware
                 'site_logo' => Setting::get('site_logo'),
                 'site_favicon' => Setting::get('site_favicon'),
                 'phone' => Setting::get('phone'),
+                'whatsapp' => Setting::get('whatsapp'),
                 'address' => Setting::get('address'),
                 'footer_text' => Setting::get('footer_text'),
             ],

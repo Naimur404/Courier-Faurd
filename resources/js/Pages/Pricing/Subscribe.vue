@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Head, Link, useForm } from '@inertiajs/vue3'
-import { ref } from 'vue'
-import AppLayout from '@/Layouts/AppLayout.vue'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3'
+import { ref, computed } from 'vue'
+import NewLayout from '@/Layouts/NewLayout.vue'
+import { 
+    Crown, Check, ArrowLeft, ArrowRight, Copy, 
+    CheckCircle, Clock, CreditCard, Phone, 
+    AlertTriangle, Headphones, Loader2
+} from 'lucide-vue-next'
 
 interface Plan {
   id: number
@@ -13,19 +14,49 @@ interface Plan {
   description: string
   price: number
   formatted_price: string
+  monthly_price: number
+  yearly_price: number
+  daily_limit: number
   duration_text: string
   features: string[]
 }
 
 interface Props {
   plan: Plan
+  billing?: 'monthly' | 'yearly'
 }
 
 const props = defineProps<Props>()
 
+// Get billing period from URL or default to monthly
+const page = usePage()
+const urlParams = new URLSearchParams(window.location.search)
+const billingPeriod = ref<'monthly' | 'yearly'>(
+  (urlParams.get('billing') as 'monthly' | 'yearly') || props.billing || 'monthly'
+)
+
+// Calculate the price based on billing period
+const currentPrice = computed(() => {
+  if (billingPeriod.value === 'yearly' && props.plan.yearly_price) {
+    return props.plan.yearly_price
+  }
+  return props.plan.monthly_price || props.plan.price
+})
+
+const formattedCurrentPrice = computed(() => {
+  return `৳${Number(currentPrice.value).toLocaleString()}`
+})
+
+const billingText = computed(() => {
+  return billingPeriod.value === 'yearly' ? '১ বছর' : '১ মাস'
+})
+
+const copied = ref(false)
+
 const form = useForm({
   payment_method: 'bkash',
   transaction_id: '',
+  billing_period: billingPeriod.value,
   terms: false,
 })
 
@@ -46,7 +77,9 @@ function showNotification(message: string, type: 'success' | 'error' = 'success'
 function copyNumber() {
   const number = '01309092748'
   navigator.clipboard.writeText(number).then(() => {
-    showNotification('Number copied to clipboard!', 'success')
+    copied.value = true
+    showNotification('নম্বর কপি হয়েছে!', 'success')
+    setTimeout(() => { copied.value = false }, 2000)
   }).catch(() => {
     const textArea = document.createElement('textarea')
     textArea.value = number
@@ -54,13 +87,15 @@ function copyNumber() {
     textArea.select()
     document.execCommand('copy')
     document.body.removeChild(textArea)
-    showNotification('Number copied to clipboard!', 'success')
+    copied.value = true
+    showNotification('নম্বর কপি হয়েছে!', 'success')
+    setTimeout(() => { copied.value = false }, 2000)
   })
 }
 
 function submit() {
   if (!form.terms) {
-    showNotification('Please confirm the payment and agree to terms', 'error')
+    showNotification('পেমেন্ট নিশ্চিত করুন এবং শর্তাবলী মেনে নিন', 'error')
     return
   }
   form.post(`/pricing/subscribe/${props.plan.id}`)
@@ -69,264 +104,283 @@ function submit() {
 
 <template>
   <Head>
-    <title>Subscribe to {{ plan.name }} - Courier Fraud</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <title>{{ plan.name }} সাবস্ক্রাইব করুন - FraudShield</title>
   </Head>
 
-  <AppLayout>
+  <NewLayout>
     <!-- Notification Toast -->
     <Teleport to="body">
       <Transition
         enter-active-class="transition ease-out duration-300"
-        enter-from-class="translate-x-full opacity-0"
-        enter-to-class="translate-x-0 opacity-100"
+        enter-from-class="translate-y-full opacity-0"
+        enter-to-class="translate-y-0 opacity-100"
         leave-active-class="transition ease-in duration-200"
-        leave-from-class="translate-x-0 opacity-100"
-        leave-to-class="translate-x-full opacity-0"
+        leave-from-class="translate-y-0 opacity-100"
+        leave-to-class="translate-y-full opacity-0"
       >
         <div
           v-if="notification.show"
           :class="[
-            'fixed top-4 right-4 z-50 px-4 py-3 rounded-xl shadow-lg text-white',
+            'fixed top-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-xl shadow-2xl text-white flex items-center gap-2',
             notification.type === 'success' ? 'bg-green-500' : 'bg-red-500'
           ]"
         >
-          <i :class="notification.type === 'success' ? 'fas fa-check mr-2' : 'fas fa-exclamation-circle mr-2'"></i>
+          <CheckCircle v-if="notification.type === 'success'" class="w-5 h-5" />
+          <AlertTriangle v-else class="w-5 h-5" />
           {{ notification.message }}
         </div>
       </Transition>
     </Teleport>
 
-    <div class="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 sm:py-12">
-      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl mx-auto">
-          <!-- Header -->
-          <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl mb-4">
-              <i class="fas fa-credit-card text-white text-lg"></i>
-            </div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
-              Subscribe to <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">{{ plan.name }}</span>
-            </h1>
-            <p class="text-sm text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
-              Complete your subscription with secure manual payment verification
-            </p>
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-slate-900 py-16">
+      <div class="absolute inset-0 bg-gradient-to-b from-transparent via-indigo-950/30 to-slate-900">
+        <div class="absolute top-20 left-1/4 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-1/4 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="container mx-auto px-4 relative z-10">
+        <div class="text-center max-w-3xl mx-auto">
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
+            <CreditCard class="w-4 h-4 text-indigo-400" />
+            <span class="text-white text-sm font-medium">সাবস্ক্রিপশন</span>
           </div>
+          
+          <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">{{ plan.name }}</span> প্ল্যানে সাবস্ক্রাইব করুন
+          </h1>
+          <p class="text-lg text-slate-300">
+            নিরাপদ ম্যানুয়াল পেমেন্ট ভেরিফিকেশনের মাধ্যমে সাবস্ক্রিপশন সম্পন্ন করুন
+          </p>
+        </div>
+      </div>
+    </section>
 
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <!-- Main Content -->
+    <section class="py-12 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+      <div class="container mx-auto px-4">
+        <div class="max-w-5xl mx-auto">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
             <!-- Plan Summary Card -->
             <div class="lg:col-span-1">
-              <Card class="overflow-hidden">
-                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-4">
-                  <div class="text-center">
-                    <div class="inline-flex items-center justify-center w-10 h-10 bg-white/20 rounded-lg mb-3">
-                      <i class="fas fa-crown text-white"></i>
-                    </div>
-                    <h2 class="text-lg font-bold mb-1">{{ plan.name }}</h2>
-                    <p class="text-blue-100 text-xs">{{ plan.description }}</p>
+              <div class="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 overflow-hidden sticky top-24">
+                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 p-6 text-center">
+                  <div class="inline-flex items-center justify-center w-14 h-14 bg-white/20 rounded-2xl mb-4">
+                    <Crown class="w-7 h-7 text-white" />
                   </div>
+                  <h2 class="text-2xl font-bold text-white mb-1">{{ plan.name }}</h2>
+                  <p class="text-indigo-100 text-sm">{{ plan.description }}</p>
                 </div>
                 
-                <div class="p-4">
-                  <div class="text-center mb-4">
-                    <div class="text-3xl font-bold text-gray-900 dark:text-white">{{ plan.formatted_price }}</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">for {{ plan.duration_text }}</div>
+                <div class="p-6">
+                  <div class="text-center mb-6">
+                    <div class="text-4xl font-bold text-white">{{ formattedCurrentPrice }}</div>
+                    <div class="text-sm text-white/60">{{ billingText }} এর জন্য</div>
+                    <div v-if="plan.daily_limit" class="inline-flex items-center gap-2 mt-3 px-3 py-1 bg-indigo-500/20 text-indigo-300 text-sm rounded-full">
+                      Daily {{ plan.daily_limit }} সার্চ
+                    </div>
                   </div>
                   
                   <!-- Plan Features -->
                   <div>
-                    <h3 class="font-medium text-gray-900 dark:text-white mb-3 flex items-center text-sm">
-                      <i class="fas fa-check-circle text-green-500 mr-2"></i>
-                      What's included:
+                    <h3 class="font-medium text-white mb-4 flex items-center text-sm">
+                      <CheckCircle class="w-4 h-4 text-green-400 mr-2" />
+                      যা অন্তর্ভুক্ত:
                     </h3>
-                    <ul class="space-y-2">
-                      <li v-for="feature in plan.features" :key="feature" class="flex items-start text-gray-700 dark:text-gray-300">
-                        <div class="flex-shrink-0 w-4 h-4 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mr-2 mt-0.5">
-                          <i class="fas fa-check text-green-600 dark:text-green-400 text-[8px]"></i>
+                    <ul class="space-y-3">
+                      <li v-for="feature in plan.features" :key="feature" class="flex items-start text-white/80">
+                        <div class="flex-shrink-0 w-5 h-5 bg-green-500/20 rounded-full flex items-center justify-center mr-3 mt-0.5">
+                          <Check class="w-3 h-3 text-green-400" />
                         </div>
-                        <span class="text-xs leading-relaxed">{{ feature }}</span>
+                        <span class="text-sm">{{ feature }}</span>
                       </li>
                     </ul>
                   </div>
                 </div>
-              </Card>
+              </div>
             </div>
 
             <!-- Payment & Form Section -->
-            <div class="lg:col-span-2">
-              <Card class="overflow-hidden">
-                <!-- Payment Instructions -->
-                <div class="bg-gradient-to-r from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700">
-                  <h3 class="text-base font-bold text-gray-900 dark:text-white mb-4 flex items-center">
-                    <div class="w-8 h-8 bg-pink-100 dark:bg-pink-800 rounded-lg flex items-center justify-center mr-2">
-                      <i class="fas fa-mobile-alt text-pink-600 dark:text-pink-400 text-sm"></i>
+            <div class="lg:col-span-2 space-y-6">
+              
+              <!-- Payment Instructions -->
+              <div class="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 overflow-hidden">
+                <div class="bg-gradient-to-r from-pink-500/20 to-rose-500/20 p-6 border-b border-white/10">
+                  <h3 class="text-lg font-bold text-white mb-6 flex items-center">
+                    <div class="w-10 h-10 bg-pink-500/20 rounded-xl flex items-center justify-center mr-3">
+                      <Phone class="w-5 h-5 text-pink-400" />
                     </div>
-                    Payment Instructions
+                    পেমেন্ট নির্দেশনা
                   </h3>
                   
                   <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-700 rounded-xl p-4 text-center">
-                      <div class="inline-flex items-center justify-center w-8 h-8 bg-pink-100 dark:bg-pink-800 rounded-lg mb-2">
-                        <i class="fas fa-money-bill-wave text-pink-600 dark:text-pink-400 text-sm"></i>
+                    <div class="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5 text-center">
+                      <div class="inline-flex items-center justify-center w-10 h-10 bg-pink-500/20 rounded-xl mb-3">
+                        <CreditCard class="w-5 h-5 text-pink-400" />
                       </div>
-                      <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Send exactly</p>
-                      <div class="text-xl font-bold text-pink-600 dark:text-pink-400">{{ plan.formatted_price }}</div>
-                      <p class="text-xs text-gray-500 dark:text-gray-400">via Bkash</p>
+                      <p class="text-xs text-white/60 mb-2">পরিমাণ পাঠান</p>
+                      <div class="text-2xl font-bold text-pink-400">{{ formattedCurrentPrice }}</div>
+                      <p class="text-xs text-white/50 mt-1">বিকাশে</p>
                     </div>
                     
-                    <div class="bg-white dark:bg-gray-800 border-2 border-pink-200 dark:border-pink-700 rounded-xl p-4 text-center">
-                      <div class="inline-flex items-center justify-center w-8 h-8 bg-pink-100 dark:bg-pink-800 rounded-lg mb-2">
-                        <i class="fas fa-phone text-pink-600 dark:text-pink-400 text-sm"></i>
+                    <div class="bg-white/10 backdrop-blur-sm border border-white/10 rounded-2xl p-5 text-center">
+                      <div class="inline-flex items-center justify-center w-10 h-10 bg-pink-500/20 rounded-xl mb-3">
+                        <Phone class="w-5 h-5 text-pink-400" />
                       </div>
-                      <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">Send to</p>
-                      <div class="text-lg font-bold text-pink-600 dark:text-pink-400">01309092748</div>
-                      <button @click="copyNumber" class="text-xs text-pink-600 dark:text-pink-400 hover:text-pink-700 font-medium">
-                        <i class="fas fa-copy mr-1"></i>Copy
+                      <p class="text-xs text-white/60 mb-2">নম্বরে পাঠান</p>
+                      <div class="text-xl font-bold text-pink-400">01309092748</div>
+                      <button 
+                        @click="copyNumber" 
+                        class="inline-flex items-center gap-1 text-xs text-pink-400 hover:text-pink-300 font-medium mt-2 transition-colors"
+                      >
+                        <Copy v-if="!copied" class="w-3 h-3" />
+                        <CheckCircle v-else class="w-3 h-3" />
+                        {{ copied ? 'কপি হয়েছে!' : 'কপি করুন' }}
                       </button>
                     </div>
                   </div>
                   
-                  <div class="mt-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg p-3">
+                  <div class="mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-4">
                     <div class="flex items-start">
-                      <div class="flex-shrink-0 w-6 h-6 bg-yellow-100 dark:bg-yellow-800 rounded flex items-center justify-center mr-2">
-                        <i class="fas fa-exclamation-triangle text-yellow-600 dark:text-yellow-400 text-xs"></i>
-                      </div>
-                      <p class="text-xs text-yellow-700 dark:text-yellow-300">
-                        After sending the payment, enter the transaction ID below to complete your subscription.
+                      <AlertTriangle class="w-5 h-5 text-yellow-400 flex-shrink-0 mr-3 mt-0.5" />
+                      <p class="text-sm text-yellow-200">
+                        পেমেন্ট পাঠানোর পর, নিচে ট্রানজেকশন আইডি দিন এবং সাবস্ক্রিপশন সম্পন্ন করুন।
                       </p>
                     </div>
                   </div>
                 </div>
 
                 <!-- Subscription Form -->
-                <form @submit.prevent="submit" class="p-4 sm:p-6">
-                  <div class="space-y-4">
+                <form @submit.prevent="submit" class="p-6">
+                  <div class="space-y-5">
                     <div>
-                      <Label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                        <i class="fas fa-credit-card text-blue-500 mr-2 text-xs"></i>
-                        Payment Method
-                      </Label>
+                      <label class="text-sm font-medium text-white mb-2 flex items-center">
+                        <CreditCard class="w-4 h-4 text-indigo-400 mr-2" />
+                        পেমেন্ট মেথড
+                      </label>
                       <select 
                         v-model="form.payment_method"
-                        class="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-50 dark:bg-gray-700 dark:text-white text-sm"
+                        class="w-full px-4 py-3 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/10 text-white text-sm mt-2"
                       >
-                        <option value="bkash">🏦 Bkash Mobile Banking</option>
+                        <option value="bkash" class="bg-slate-800">🏦 বিকাশ মোবাইল ব্যাংকিং</option>
                       </select>
                     </div>
 
                     <div>
-                      <Label class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 flex items-center">
-                        <i class="fas fa-receipt text-green-500 mr-2 text-xs"></i>
-                        Transaction ID
-                      </Label>
-                      <Input 
+                      <label class="text-sm font-medium text-white mb-2 flex items-center">
+                        <CheckCircle class="w-4 h-4 text-green-400 mr-2" />
+                        ট্রানজেকশন আইডি
+                      </label>
+                      <input 
                         v-model="form.transaction_id"
                         type="text" 
                         required 
-                        placeholder="Enter your Bkash transaction ID"
-                        :error="form.errors.transaction_id"
+                        placeholder="আপনার বিকাশ ট্রানজেকশন আইডি দিন"
+                        class="w-full px-4 py-3 border border-white/20 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white/10 text-white placeholder-white/40 text-sm mt-2"
                       />
-                      <p v-if="form.errors.transaction_id" class="mt-1 text-xs text-red-600 dark:text-red-400">
+                      <p v-if="form.errors.transaction_id" class="mt-2 text-xs text-red-400">
                         {{ form.errors.transaction_id }}
                       </p>
-                      <p class="mt-1 text-xs text-gray-500 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded p-2">
-                        <i class="fas fa-info-circle text-blue-500 mr-1"></i>
-                        You'll receive this ID after completing the Bkash payment
+                      <p class="mt-2 text-xs text-white/50 bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-3">
+                        💡 বিকাশ পেমেন্ট সম্পন্ন করার পর আপনি এই আইডি পাবেন
                       </p>
                     </div>
 
-                    <div class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-3">
+                    <div class="bg-white/5 border border-white/10 rounded-xl p-4">
                       <div class="flex items-start">
                         <input 
                           id="terms" 
                           v-model="form.terms"
                           type="checkbox" 
-                          class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-0.5 flex-shrink-0"
+                          class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-white/30 rounded mt-0.5 flex-shrink-0 bg-white/10"
                         >
-                        <label for="terms" class="ml-2 block text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
-                          <span class="font-medium">I confirm that:</span>
-                          <ul class="mt-1 space-y-0.5 text-gray-600 dark:text-gray-400">
-                            <li>• I have completed the payment of <strong class="text-gray-900 dark:text-white">{{ plan.formatted_price }}</strong></li>
-                            <li>• I agree to the Terms of Service and Privacy Policy</li>
+                        <label for="terms" class="ml-3 block text-sm text-white/80 leading-relaxed">
+                          <span class="font-medium text-white">আমি নিশ্চিত করছি যে:</span>
+                          <ul class="mt-2 space-y-1 text-white/60">
+                            <li>• আমি <strong class="text-white">{{ formattedCurrentPrice }}</strong> পেমেন্ট সম্পন্ন করেছি</li>
+                            <li>• আমি সেবার শর্তাবলী এবং গোপনীয়তা নীতি মেনে নিচ্ছি</li>
                           </ul>
                         </label>
                       </div>
                     </div>
                   </div>
 
-                  <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                  <div class="mt-8 flex flex-col sm:flex-row gap-4">
                     <Link 
                       href="/pricing" 
-                      class="flex-1 bg-gray-100 dark:bg-gray-600 hover:bg-gray-200 dark:hover:bg-gray-500 text-gray-700 dark:text-white py-2.5 px-4 rounded-lg text-center font-medium transition-all text-sm"
+                      class="flex-1 bg-white/10 hover:bg-white/20 border border-white/20 text-white py-3 px-6 rounded-xl text-center font-medium transition-all flex items-center justify-center gap-2"
                     >
-                      <i class="fas fa-arrow-left mr-2"></i>Back
+                      <ArrowLeft class="w-4 h-4" />
+                      ফিরে যান
                     </Link>
                     <button 
                       type="submit" 
                       :disabled="form.processing"
-                      class="flex-1 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white py-2.5 px-4 rounded-lg font-medium transition-all text-sm shadow-md disabled:opacity-50"
+                      class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white py-3 px-6 rounded-xl font-medium transition-all shadow-lg hover:shadow-indigo-500/25 disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      <i v-if="form.processing" class="fas fa-spinner fa-spin mr-2"></i>
-                      <i v-else class="fas fa-check-circle mr-2"></i>
-                      Complete Subscription
+                      <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
+                      <CheckCircle v-else class="w-4 h-4" />
+                      সাবস্ক্রিপশন সম্পন্ন করুন
                     </button>
                   </div>
                 </form>
-              </Card>
+              </div>
+
+              <!-- Verification Timeline -->
+              <div class="bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-6">
+                <div class="text-center mb-8">
+                  <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl mb-4">
+                    <Clock class="w-6 h-6 text-white" />
+                  </div>
+                  <h3 class="text-xl font-bold text-white mb-2">এরপর কি হবে?</h3>
+                  <p class="text-sm text-white/60">আপনার সাবস্ক্রিপশন যাত্রা</p>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div class="flex items-center sm:flex-col sm:text-center p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full flex items-center justify-center text-lg font-bold mr-4 sm:mr-0 sm:mb-3">
+                      ১
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-white">ফর্ম জমা দিন</h4>
+                      <p class="text-xs text-white/50 mt-1">ট্রানজেকশন আইডি সহ</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center sm:flex-col sm:text-center p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-full flex items-center justify-center text-lg font-bold mr-4 sm:mr-0 sm:mb-3">
+                      ২
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-white">যাচাইকরণ</h4>
+                      <p class="text-xs text-white/50 mt-1">২-২৪ ঘন্টার মধ্যে</p>
+                    </div>
+                  </div>
+                  
+                  <div class="flex items-center sm:flex-col sm:text-center p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <div class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full flex items-center justify-center mr-4 sm:mr-0 sm:mb-3">
+                      <Check class="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-white">সক্রিয়!</h4>
+                      <p class="text-xs text-white/50 mt-1">API ব্যবহার শুরু করুন</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="mt-6 bg-indigo-500/10 border border-indigo-500/20 rounded-xl p-4 text-center">
+                  <Headphones class="w-5 h-5 text-indigo-400 inline mr-2" />
+                  <span class="text-sm text-indigo-200">
+                    সাহায্য প্রয়োজন? যোগাযোগ করুন 
+                    <a href="mailto:support@fraudshield.com" class="underline text-indigo-400 hover:text-indigo-300">support@fraudshield.com</a>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
-
-          <!-- Verification Timeline -->
-          <Card class="p-4 sm:p-6">
-            <div class="text-center mb-6">
-              <div class="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 rounded-lg mb-3">
-                <i class="fas fa-clock text-white"></i>
-              </div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">What happens next?</h3>
-              <p class="text-sm text-gray-600 dark:text-gray-400">Your subscription journey</p>
-            </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="flex items-center sm:flex-col sm:text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 sm:mr-0 sm:mb-2">
-                  1
-                </div>
-                <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white text-sm">Submit Form</h4>
-                  <p class="text-xs text-gray-600 dark:text-gray-400">Submit with transaction ID</p>
-                </div>
-              </div>
-              
-              <div class="flex items-center sm:flex-col sm:text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3 sm:mr-0 sm:mb-2">
-                  2
-                </div>
-                <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white text-sm">Verification</h4>
-                  <p class="text-xs text-gray-600 dark:text-gray-400">Verified within 2-24 hours</p>
-                </div>
-              </div>
-              
-              <div class="flex items-center sm:flex-col sm:text-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                <div class="flex-shrink-0 w-10 h-10 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-full flex items-center justify-center mr-3 sm:mr-0 sm:mb-2">
-                  <i class="fas fa-check text-sm"></i>
-                </div>
-                <div>
-                  <h4 class="font-medium text-gray-900 dark:text-white text-sm">Active!</h4>
-                  <p class="text-xs text-gray-600 dark:text-gray-400">Start using the API</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3 text-center">
-              <i class="fas fa-headset text-blue-600 dark:text-blue-400 mr-2"></i>
-              <span class="text-xs text-blue-800 dark:text-blue-300">
-                Need help? Contact <a href="mailto:support@fraudshield.com" class="underline">support@fraudshield.com</a>
-              </span>
-            </div>
-          </Card>
         </div>
       </div>
-    </div>
-  </AppLayout>
+    </section>
+  </NewLayout>
 </template>

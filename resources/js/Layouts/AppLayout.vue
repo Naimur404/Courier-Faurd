@@ -13,7 +13,7 @@ import OfflineIndicator from '@/components/OfflineIndicator.vue';
 import type { PageProps } from '@/types/inertia';
 
 const page = usePage<PageProps>();
-const isDark = ref(false);
+const isDark = ref(true);
 const isMobileMenuOpen = ref(false);
 const isUserDropdownOpen = ref(false);
 const isMobile = ref(false);
@@ -41,16 +41,16 @@ const getCookie = (name: string): string | null => {
 };
 
 onMounted(() => {
-    // Check for saved theme preference (localStorage takes priority, then cookie, then system)
+    // Check for saved theme preference - default to dark mode
     const savedTheme = localStorage.getItem('theme') || getCookie('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        isDark.value = true;
-        document.documentElement.classList.add('dark');
-    } else {
+    if (savedTheme === 'light') {
         isDark.value = false;
         document.documentElement.classList.remove('dark');
+    } else {
+        // Default to dark mode
+        isDark.value = true;
+        document.documentElement.classList.add('dark');
     }
     
     // Check if mobile

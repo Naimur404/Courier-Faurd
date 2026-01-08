@@ -19,6 +19,7 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap')
 
 // Public routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
+Route::get('/welcome-old', [HomeController::class, 'welcome'])->name('welcome.old'); // Old design for reference
 Route::get('/about', [HomeController::class, 'about'])->name('about');
 
 // Offline page for PWA
@@ -36,6 +37,28 @@ Route::middleware('auth')->group(function () {
     Route::get('/website-subscriptions/subscribe/{plan}', [WebsiteSubscriptionController::class, 'subscribe'])->name('website.subscriptions.subscribe');
     Route::post('/website-subscriptions/subscribe/{plan}', [WebsiteSubscriptionController::class, 'processSubscription'])->name('website.subscriptions.process');
     Route::get('/api/website-subscriptions/status', [WebsiteSubscriptionController::class, 'getStatus'])->name('website.subscriptions.status');
+    
+    // API subscription status endpoint
+    Route::get('/api/api-subscriptions/status', function () {
+        $user = auth()->user();
+        $subscription = $user->activeSubscription;
+        
+        if (!$subscription) {
+            return response()->json(['subscribed' => false]);
+        }
+        
+        return response()->json([
+            'subscribed' => true,
+            'subscription' => [
+                'plan_id' => $subscription->plan_id,
+                'plan_name' => $subscription->plan->name,
+                'plan_slug' => $subscription->plan->slug,
+                'expires_at' => $subscription->expires_at?->format('d M Y'),
+                'days_remaining' => $subscription->days_remaining,
+                'status' => $subscription->status,
+            ]
+        ]);
+    })->name('api.subscriptions.status');
 });
 
 // Authentication routes

@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Customer;
+use App\Models\SearchHistory;
 use App\Models\ApiKey;
 use App\Models\ApiUsage;
 use App\Models\Plan;
 use App\Models\WebsiteSubscription;
+use App\Models\WebSubscriptionUsage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -35,15 +37,43 @@ class DashboardController extends Controller
             ];
         });
         
-        // Get usage statistics
-        $todayUsage = ApiUsage::where('user_id', $user->id)
+        // Get usage statistics - combine API usage and website usage
+        $today = Carbon::now('Asia/Dhaka')->toDateString();
+        $thisMonth = Carbon::now('Asia/Dhaka');
+        
+        // API usage (from API keys)
+        $apiTodayUsage = ApiUsage::where('user_id', $user->id)
                             ->whereDate('created_at', today())
                             ->count();
                             
-        $monthlyUsage = ApiUsage::where('user_id', $user->id)
+        $apiMonthlyUsage = ApiUsage::where('user_id', $user->id)
                               ->whereMonth('created_at', now()->month)
                               ->whereYear('created_at', now()->year)
                               ->count();
+        
+        // Website usage (from web searches)
+        $webTodayUsage = WebSubscriptionUsage::where('user_id', $user->id)
+                            ->where('usage_date', $today)
+                            ->sum('hit_count');
+                            
+        $webMonthlyUsage = WebSubscriptionUsage::where('user_id', $user->id)
+                              ->whereMonth('usage_date', $thisMonth->month)
+                              ->whereYear('usage_date', $thisMonth->year)
+                              ->sum('hit_count');
+        
+        // Also count from Customer table for searches
+        $customerTodayUsage = Customer::where('user_id', $user->id)
+                            ->whereDate('last_searched_at', $today)
+                            ->count();
+                            
+        $customerMonthlyUsage = Customer::where('user_id', $user->id)
+                              ->whereMonth('last_searched_at', $thisMonth->month)
+                              ->whereYear('last_searched_at', $thisMonth->year)
+                              ->count();
+        
+        // Total usage
+        $todayUsage = $apiTodayUsage + $webTodayUsage + $customerTodayUsage;
+        $monthlyUsage = $apiMonthlyUsage + $webMonthlyUsage + $customerMonthlyUsage;
         
         // Get current API subscription
         $activeSubscription = $user->activeSubscription;
@@ -86,12 +116,68 @@ class DashboardController extends Controller
             ];
         }
         
+        // Get user's search history from SearchHistory table
+        $searchHistory = SearchHistory::where('user_id', $user->id)
+            ->with('customer')
+            ->orderBy('searched_at', 'desc')
+            ->take(20)
+            ->get()
+            ->map(function ($search) {
+                $customer = $search->customer;
+                $courierBreakdown = [];
+                $courierSummary = null;
+                $totalParcels = 0;
+                $successRatio = 0;
+                
+                // Get data from the related customer record if available
+                if ($customer) {
+                    $courierServices = $customer->courier_services;
+                    $courierSummary = $customer->courier_summary;
+                    $totalParcels = $customer->total_parcels;
+                    $successRatio = $customer->success_ratio;
+                    
+                    if (is_array($courierServices)) {
+                        foreach ($courierServices as $courierName => $courierData) {
+                            if (is_array($courierData) && isset($courierData['total_parcel'])) {
+                                $courierBreakdown[] = [
+                                    'name' => $courierName,
+                                    'total_parcel' => $courierData['total_parcel'] ?? 0,
+                                    'success_parcel' => $courierData['success_parcel'] ?? 0,
+                                    'cancelled_parcel' => $courierData['cancelled_parcel'] ?? 0,
+                                    'success_ratio' => $courierData['success_ratio'] ?? 0,
+                                    'logo' => $courierData['logo'] ?? null,
+                                ];
+                            }
+                        }
+                    }
+                } elseif ($search->result_summary) {
+                    // Use stored summary if customer record not available
+                    $courierSummary = $search->result_summary;
+                    $totalParcels = $search->result_summary['total_parcel'] ?? 0;
+                    $successRatio = $search->result_summary['success_ratio'] ?? 0;
+                }
+                
+                return [
+                    'id' => $search->id,
+                    'phone' => $search->phone,
+                    'customer_id' => $search->customer_id,
+                    'courier_summary' => $courierSummary,
+                    'total_parcels' => $totalParcels,
+                    'success_ratio' => $successRatio,
+                    'courier_breakdown' => $courierBreakdown,
+                    'searched_at' => $search->searched_at?->toISOString(),
+                    'search_by' => $search->search_by,
+                ];
+            });
+        
         return Inertia::render('Dashboard/Index', [
             'apiKeys' => $apiKeys,
             'todayUsage' => $todayUsage,
             'monthlyUsage' => $monthlyUsage,
             'activeSubscription' => $subscriptionData,
             'activeWebsiteSubscription' => $websiteSubscriptionData,
+            'searchHistory' => $searchHistory,
+            'csrfToken' => csrf_token(),
             'flash' => [
                 'success' => session('success'),
                 'error' => session('error'),
