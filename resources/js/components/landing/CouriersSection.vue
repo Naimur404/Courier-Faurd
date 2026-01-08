@@ -41,7 +41,7 @@ const couriers = [
                         <div
                             v-for="(courier, index) in couriers"
                             :key="`first-${index}`"
-                            class="flex items-center justify-center px-8 py-5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
+                            class="flex items-center justify-center px-8 py-5 bg-gray-50 dark:bg-white/95 border border-gray-200 dark:border-gray-300 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
                         >
                             <img
                                 :src="courier.logo"
@@ -56,7 +56,7 @@ const couriers = [
                         <div
                             v-for="(courier, index) in couriers"
                             :key="`second-${index}`"
-                            class="flex items-center justify-center px-8 py-5 bg-gray-50 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
+                            class="flex items-center justify-center px-8 py-5 bg-gray-50 dark:bg-white/95 border border-gray-200 dark:border-gray-300 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 min-w-[140px] h-[70px]"
                         >
                             <img
                                 :src="courier.logo"

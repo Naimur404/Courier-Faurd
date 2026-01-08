@@ -109,14 +109,22 @@ const updateActiveSection = () => {
     activeSection.value = '#';
 };
 
+// Helper to set cookie
+const setCookie = (name: string, value: string, days: number = 365) => {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/; SameSite=Lax`;
+};
+
 const toggleTheme = () => {
     isDark.value = !isDark.value;
     if (isDark.value) {
         document.documentElement.classList.add('dark');
         localStorage.setItem('theme', 'dark');
+        setCookie('theme', 'dark');
     } else {
         document.documentElement.classList.remove('dark');
         localStorage.setItem('theme', 'light');
+        setCookie('theme', 'light');
     }
 };
 
@@ -154,10 +162,16 @@ onMounted(() => {
     if (savedTheme === 'light') {
         isDark.value = false;
         document.documentElement.classList.remove('dark');
+        setCookie('theme', 'light');
     } else {
         // Default to dark mode
         isDark.value = true;
         document.documentElement.classList.add('dark');
+        // Set cookie for SSR on next request
+        if (!savedTheme) {
+            localStorage.setItem('theme', 'dark');
+        }
+        setCookie('theme', 'dark');
     }
 });
 

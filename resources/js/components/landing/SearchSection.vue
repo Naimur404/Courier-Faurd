@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onUnmounted, onMounted } from 'vue';
 import { 
     Search, Phone, Shield, PieChart, BarChart3, History,
     CheckCircle, XCircle, AlertCircle, HelpCircle,
     TrendingUp, RefreshCw, Truck, MessageSquare, Plus, Send
 } from 'lucide-vue-next';
-import { Chart, registerables } from 'chart.js';
 
-// Register Chart.js
-Chart.register(...registerables);
+// Chart.js will be dynamically imported on client side only
+let Chart: any = null;
+let chartRegistered = false;
 
 const props = defineProps<{
     csrfToken: string;
@@ -50,7 +50,23 @@ const reviewForm = ref({
 
 // Chart
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
-let chartInstance: Chart | null = null;
+let chartInstance: any = null;
+const isClient = ref(false);
+
+// Initialize Chart.js on client side only
+const initChartJs = async () => {
+    if (typeof window === 'undefined') return;
+    if (Chart && chartRegistered) return;
+    
+    try {
+        const chartModule = await import('chart.js');
+        Chart = chartModule.Chart;
+        Chart.register(...chartModule.registerables);
+        chartRegistered = true;
+    } catch (e) {
+        console.error('Failed to load Chart.js:', e);
+    }
+};
 
 // Computed
 const successRatio = computed(() => {
@@ -210,7 +226,13 @@ const submitReview = async () => {
     }
 };
 
-const updateChart = () => {
+const updateChart = async () => {
+    // Ensure Chart.js is loaded
+    if (!Chart) {
+        await initChartJs();
+    }
+    if (!Chart) return;
+    
     const canvas = chartCanvas.value;
     if (!canvas || courierList.value.length === 0) return;
     
@@ -273,6 +295,12 @@ watch(courierList, (newVal) => {
         nextTick(() => setTimeout(updateChart, 200));
     }
 }, { deep: true });
+
+onMounted(async () => {
+    isClient.value = true;
+    // Preload Chart.js
+    await initChartJs();
+});
 
 onUnmounted(() => {
     if (chartInstance) {
