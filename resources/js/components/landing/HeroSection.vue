@@ -156,31 +156,31 @@ const highlights = [
                 </h1>
 
                 <!-- Subheadline -->
-                <p class="text-base md:text-lg text-white/70 mb-4 max-w-2xl mx-auto leading-relaxed">
+                <p class="text-base md:text-sm text-white/70 mb-4 max-w-2xl mx-auto leading-relaxed">
                     নম্বরভিত্তিক (সিঙ্গেল + বাল্ক≤৫০০) সার্চ, শক্তিশালী ফিল্টার, বাল্ক এক্সপোর্ট ও REST API।
                     রিয়েল-টাইম ইনসাইটে দ্রুত সিদ্ধান্ত—কম সময়ে বেশি ডেলিভারি।
                 </p>
 
                 <!-- Search Box -->
-                <div class="max-w-xl mx-auto mb-4">
-                    <div class="relative flex flex-col sm:flex-row gap-2 p-1.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/20">
+                <div class="max-w-md mx-auto mb-4">
+                    <div class="relative flex flex-col sm:flex-row gap-1.5 p-1 bg-white/10 backdrop-blur-md rounded-xl border border-white/20">
                         <div class="relative flex-1">
-                            <Phone class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/50" />
+                            <Phone class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/50" />
                             <input
                                 v-model="phoneInput"
                                 type="text"
-                                placeholder="মোবাইল নাম্বার লিখুন (01XXXXXXXXX)"
-                                class="w-full pl-12 pr-4 py-3 bg-white/10 text-white placeholder-white/40 rounded-xl border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                                placeholder="মোবাইল নাম্বার (01XXXXXXXXX)"
+                                class="w-full pl-9 pr-3 py-2 text-sm bg-white/10 text-white placeholder-white/40 rounded-lg border border-white/10 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                                 @keypress.enter="performSearch"
                             />
                         </div>
                         <button
                             @click="performSearch"
                             :disabled="isSearching"
-                            class="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 disabled:opacity-50"
+                            class="flex items-center justify-center gap-1.5 px-4 py-2 text-sm bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/25 disabled:opacity-50"
                         >
-                            <Search class="w-5 h-5" />
-                            <span>সার্চ করুন</span>
+                            <Search class="w-4 h-4" />
+                            <span>সার্চ</span>
                         </button>
                     </div>
                 </div>
