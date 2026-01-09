@@ -54,6 +54,7 @@ const benefits = [
                         <a
                             :href="whatsappLink"
                             target="_blank"
+                            rel="noopener noreferrer"
                             class="group flex items-center gap-4 p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10 dark:from-green-500/20 dark:to-emerald-500/20 rounded-2xl border border-green-200 dark:border-green-800 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
                         >
                             <div class="p-4 bg-green-500 rounded-2xl group-hover:scale-110 transition-transform duration-300">

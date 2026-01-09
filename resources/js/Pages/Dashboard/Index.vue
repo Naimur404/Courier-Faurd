@@ -309,7 +309,7 @@ const stats = computed(() => [
             <p class="text-gray-600 dark:text-gray-300 mt-1">Welcome back, {{ user?.name }}!</p>
           </div>
           <div class="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-3">
-            <Link href="/api/documentation" target="_blank">
+            <Link href="/api/documentation" target="_blank" rel="noopener noreferrer">
               <Button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full sm:w-auto">
                 <i class="fas fa-book mr-2"></i>API Documentation
               </Button>

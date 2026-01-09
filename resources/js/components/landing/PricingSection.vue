@@ -437,6 +437,7 @@ const getDiscount = (plan: DisplayPlan) => {
                     <a
                         href="https://api.whatsapp.com/send?phone=8801841414004&text=Hi%20FraudShield%2C%20I%20need%20enterprise%20plan"
                         target="_blank"
+                        rel="noopener noreferrer"
                         class="px-6 py-3 bg-white text-slate-900 font-semibold rounded-xl hover:bg-white/90 transition-all duration-300 flex items-center gap-2"
                     >
                         সেলস টিমের সাথে কথা বলুন

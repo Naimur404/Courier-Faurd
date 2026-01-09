@@ -164,6 +164,7 @@ const handleLinkClick = (link: { href: string; isSection: boolean }, event: Even
                         <a 
                             :href="`https://api.whatsapp.com/send?phone=${whatsappNumber}`"
                             target="_blank"
+                            rel="noopener noreferrer"
                             class="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-500 transition-colors duration-300"
                         >
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
