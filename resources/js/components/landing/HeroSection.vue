@@ -115,22 +115,22 @@ const highlights = [
                                 <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                             </span>
                             <Clock class="w-3 h-3 text-cyan-400" />
-                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.lastHour) }}</span>
+                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.lastHour) }}</span>
                             <span class="text-white/40 text-xs">ঘন্টায়</span>
                         </div>
                         <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                             <Calendar class="w-3 h-3 text-green-400" />
-                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.today) }}</span>
+                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.today) }}</span>
                             <span class="text-white/40 text-xs">আজকে</span>
                         </div>
                         <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                             <Activity class="w-3 h-3 text-purple-400" />
-                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.allTime) }}</span>
+                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.allTime) }}</span>
                             <span class="text-white/40 text-xs">মোট</span>
                         </div>
                         <div class="flex items-center gap-1.5 px-2.5 py-1 bg-white/5 backdrop-blur-sm rounded-full border border-white/10">
                             <Users class="w-3 h-3 text-orange-400" />
-                            <span class="text-white font-medium text-xs">{{ formatBengaliNumber(stats.uniqueNumbers) }}</span>
+                            <span class="text-white font-medium text-sm">{{ formatBengaliNumber(stats.uniqueNumbers) }}</span>
                             <span class="text-white/40 text-xs">ইউনিক</span>
                         </div>
                     </div>

@@ -42,16 +42,22 @@ export default defineConfig({
                 comments: false,
             },
         },
-        // Split chunks for better caching (only for client build)
+        // Split chunks for better caching and lazy loading
         rollupOptions: {
             output: {
                 manualChunks(id) {
                     if (id.includes('node_modules')) {
+                        // Core Vue framework - keep small
                         if (id.includes('vue') || id.includes('@inertiajs')) {
                             return 'vendor';
                         }
+                        // Chart.js - lazy loaded only when needed
                         if (id.includes('chart.js')) {
                             return 'chart';
+                        }
+                        // Lucide icons - used across app
+                        if (id.includes('lucide-vue-next')) {
+                            return 'icons';
                         }
                     }
                 },

@@ -25,10 +25,24 @@ import {
     maskPhoneNumber,
     formatBengaliDate
 } from '@/lib/utils';
-import { Chart, registerables } from 'chart.js';
 
-// Register Chart.js components
-Chart.register(...registerables);
+// Chart.js will be dynamically imported when needed
+let Chart: any = null;
+let chartRegistered = false;
+
+const initChartJs = async () => {
+    if (typeof window === 'undefined') return;
+    if (Chart && chartRegistered) return;
+    
+    try {
+        const chartModule = await import('chart.js');
+        Chart = chartModule.Chart;
+        Chart.register(...chartModule.registerables);
+        chartRegistered = true;
+    } catch (e) {
+        console.error('Failed to load Chart.js:', e);
+    }
+};
 
 // Props from controller
 const props = defineProps<{
@@ -108,10 +122,14 @@ const courierList = computed(() => {
 
 // Chart.js instance
 const chartCanvas = ref<HTMLCanvasElement | null>(null);
-let chartInstance: Chart | null = null;
+let chartInstance: any = null;
 
 // Function to update chart
-const updateChart = () => {
+const updateChart = async () => {
+    // Ensure Chart.js is loaded
+    await initChartJs();
+    if (!Chart) return;
+    
     const canvas = chartCanvas.value;
     if (!canvas) {
         console.log('Chart canvas not found');
@@ -467,15 +485,16 @@ onUnmounted(() => {
 
 <template>
     <Head>
-        <title>FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন সিস্টেম</title>
+        <title>FraudShield - কুরিয়ার ফ্রড চেকার (Old)</title>
         <meta name="description" content="FraudShield - মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস ও রিস্ক স্কোর দেখুন।" />
         <meta name="keywords" content="FraudShield, courier fraud, কুরিয়ার ফ্রড, fraud detection, ফ্রড ডিটেকশন, মোবাইল নাম্বার, mobile number check, ডেলিভারি ইতিহাস, delivery history, গ্রাহক যাচাই, customer verification, রিস্ক স্কোর, risk score, বাংলাদেশ কুরিয়ার, bangladesh courier, courier check bd, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং" />
         
-        <!-- Canonical URL -->
+        <!-- Canonical points to main page - this is old design -->
         <link rel="canonical" href="https://fraudshieldbd.site/" />
+        <meta name="robots" content="noindex, follow" />
         
         <!-- OpenGraph Meta Tags -->
-        <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন" />
+        <meta property="og:title" content="FraudShield - কুরিয়ার ফ্রড চেকার" />
         <meta property="og:description" content="মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস দেখুন।" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://fraudshieldbd.site/" />
@@ -488,7 +507,7 @@ onUnmounted(() => {
         
         <!-- Twitter Card Meta Tags -->
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড চেক | বাংলাদেশী ফ্রড ডিটেকশন" />
+        <meta name="twitter:title" content="FraudShield - কুরিয়ার ফ্রড চেকার" />
         <meta name="twitter:description" content="মোবাইল নাম্বার দিয়ে কুরিয়ার ফ্রড চেক করুন। গ্রাহকের ডেলিভারি ইতিহাস দেখুন।" />
         <meta name="twitter:image" content="https://fraudshieldbd.site/assets/og-image.png" />
         

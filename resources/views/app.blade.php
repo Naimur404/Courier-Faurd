@@ -10,12 +10,22 @@
 <html lang="bn" class="{{ $isDark ? 'dark' : '' }}">
 <head>
     @if($gtmId)
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-        })(window,document,'script','dataLayer','{{ $gtmId }}');
+    <!-- Google Tag Manager - Deferred loading for better performance -->
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        // Defer GTM loading until after page is interactive
+        if (typeof requestIdleCallback === 'function') {
+            requestIdleCallback(function() { loadGTM(); });
+        } else {
+            setTimeout(loadGTM, 2000);
+        }
+        function loadGTM() {
+            var gtmScript = document.createElement('script');
+            gtmScript.async = true;
+            gtmScript.src = 'https://www.googletagmanager.com/gtm.js?id={{ $gtmId }}';
+            document.head.appendChild(gtmScript);
+            window.dataLayer.push({'gtm.start': new Date().getTime(), event: 'gtm.js'});
+        }
     </script>
     <!-- End Google Tag Manager -->
     @endif
@@ -25,7 +35,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <!-- Default SEO Meta Tags (will be overridden by Inertia Head) -->
-    <title inertia>{{ $siteTitle }} - বাংলাদেশী কুরিয়ার ফ্রড ডিটেকশন সিস্টেম</title>
+    <title inertia>{{ $siteTitle }} - কুরিয়ার ফ্রড চেকার</title>
     <meta name="keywords" content="{{ $siteTitle }}, courier fraud, কুরিয়ার ফ্রড, fraud detection, মোবাইল নাম্বার চেক, ডেলিভারি ইতিহাস, বাংলাদেশ কুরিয়ার, courier checker, sundarban courier tracking, কুরিয়ার চেকার, সুন্দরবন কুরিয়ার ট্র্যাকিং">
     <meta name="author" content="Tyrodevs">
     
@@ -82,25 +92,18 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Bengali Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@300;400;500;600;700;800&family=Hind+Siliguri:wght@300;400;500;600;700&family=Kalpurush&family=SolaimanLipi&display=swap" rel="stylesheet">
-    <!-- English Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Bengali Web Fonts from local CDN -->
+    <!-- Bengali Fonts - async loading to prevent render blocking -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;600;700&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- English Fonts - async loading -->
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
+    <!-- Bengali Web Fonts - simplified to reduce HTTP requests -->
     <style>
-        @import url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/banglafont.css');
-        
-        /* Custom Bengali font loading */
-        @font-face {
-            font-family: 'Mukti';
-            src: url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/fonts/Mukti.woff2') format('woff2');
-            font-display: swap;
-        }
-        
-        @font-face {
-            font-family: 'SutonnyMJ';
-            src: url('https://cdn.jsdelivr.net/gh/banglafonts/bangla-web-fonts@main/fonts/SutonnyMJ.woff2') format('woff2');
-            font-display: swap;
+        /* Use system fonts as fallback for better performance */
+        :root {
+            --font-bengali: 'Noto Sans Bengali', 'Hind Siliguri', 'SolaimanLipi', system-ui, sans-serif;
+            --font-english: 'Inter', system-ui, -apple-system, sans-serif;
         }
     </style>
     
